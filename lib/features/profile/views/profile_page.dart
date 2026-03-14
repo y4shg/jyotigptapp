@@ -103,7 +103,7 @@ class ProfilePage extends ConsumerWidget {
   }) {
     final topPadding =
         useAdaptivePlatformChrome
-            ? 24
+            ? 24.0
             : (MediaQuery.of(context).padding.top + kToolbarHeight + 24);
     return Padding(
       padding: EdgeInsets.fromLTRB(
@@ -125,7 +125,7 @@ class ProfilePage extends ConsumerWidget {
   ) {
     final topPadding =
         useAdaptivePlatformChrome
-            ? 24
+            ? 24.0
             : (MediaQuery.of(context).padding.top + kToolbarHeight + 24);
     return ListView(
       physics: const BouncingScrollPhysics(
