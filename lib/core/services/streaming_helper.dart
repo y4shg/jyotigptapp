@@ -222,6 +222,60 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
 }) {
   // Track if streaming has been finished to avoid duplicate cleanup
   bool hasFinished = false;
+  bool completionPersisted = false;
+  DateTime lastSocketActivityAt = DateTime.now();
+  bool sawAnySocketActivity = false;
+  Timer? completionWatchdogTimer;
+  bool watchdogPollInFlight = false;
+
+  void markSocketActivity([String? eventType]) {
+    // Keep this extremely cheap; it runs for every socket delta.
+    sawAnySocketActivity = true;
+    lastSocketActivityAt = DateTime.now();
+    if (kSocketVerboseLogging && eventType != null) {
+      DebugLogger.log(
+        'socket-activity',
+        scope: 'streaming/helper',
+        data: {'type': eventType},
+      );
+    }
+  }
+
+  bool isCurrentStreamTargetActive() {
+    final msgs = getMessages();
+    if (msgs.isEmpty) return false;
+    final last = msgs.last;
+    return last.role == 'assistant' &&
+        last.id == assistantMessageId &&
+        last.isStreaming;
+  }
+
+  String? resolveAssistantTargetId(String? eventMessageId) {
+    final msgs = getMessages();
+
+    // Prefer the assistant message this streaming session is responsible for.
+    final assistantIdx = msgs.indexWhere((m) => m.id == assistantMessageId);
+    if (assistantIdx != -1) {
+      return assistantMessageId;
+    }
+
+    // If the event provides an id, only accept it if it refers to an assistant
+    // message we actually have. (Some servers send user message ids here.)
+    if (eventMessageId != null && eventMessageId.isNotEmpty) {
+      final idx = msgs.indexWhere(
+        (m) => m.id == eventMessageId && m.role == 'assistant',
+      );
+      if (idx != -1) {
+        return eventMessageId;
+      }
+    }
+
+    // Fall back to the last assistant message if any.
+    for (final m in msgs.reversed) {
+      if (m.role == 'assistant') return m.id;
+    }
+    return null;
+  }
 
   // Start background execution to keep app alive during streaming (iOS/Android)
   // Uses the assistantMessageId as a unique stream identifier
@@ -366,6 +420,63 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
     }
   }
 
+  Future<void> persistCompletion({required String source}) async {
+    if (completionPersisted) return;
+
+    final chatId = activeConversationId;
+    if (chatId == null || chatId.isEmpty || isTemporaryChat(chatId)) {
+      return;
+    }
+    completionPersisted = true;
+
+    try {
+      final currentMessages = getMessages();
+      final messagesForCompleted = currentMessages.map((m) {
+        final msgMap = <String, dynamic>{
+          'id': m.id,
+          'role': m.role,
+          'content': m.content,
+          'timestamp': m.timestamp.millisecondsSinceEpoch ~/ 1000,
+        };
+        if (m.role == 'assistant' && m.usage != null) {
+          msgMap['usage'] = m.usage;
+        }
+        if (m.sources.isNotEmpty) {
+          msgMap['sources'] = m.sources.map((s) => s.toJson()).toList();
+        }
+        return msgMap;
+      }).toList();
+
+      await api.sendChatCompleted(
+        chatId: chatId,
+        messageId: assistantMessageId,
+        messages: messagesForCompleted,
+        model: modelId,
+        modelItem: modelItem,
+        sessionId: sessionId,
+      );
+
+      // chatCompleted does not persist messages; syncConversationMessages does.
+      await api.syncConversationMessages(
+        chatId,
+        currentMessages,
+        model: modelId,
+      );
+
+      DebugLogger.log(
+        'completion-persisted',
+        scope: 'streaming/helper',
+        data: {'source': source, 'chatId': chatId},
+      );
+    } catch (e) {
+      // Non-critical; keep the UI responsive even if server-side filters fail.
+      DebugLogger.log(
+        'completion-persist-failed: $e',
+        scope: 'streaming/helper',
+      );
+    }
+  }
+
   // Helper to apply server content if it's better than local.
   // Returns true if content was applied, so caller can trigger image sync.
   bool applyServerContent(
@@ -451,6 +562,9 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
     try {
       httpSubscription.cancel();
     } catch (_) {}
+
+    completionWatchdogTimer?.cancel();
+    completionWatchdogTimer = null;
 
     // Cancel socket subscriptions
     for (final dispose in socketSubscriptions) {
@@ -630,8 +744,77 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
     }
   }
 
+  void startCompletionWatchdog() {
+    // WebSocket-only flows should normally complete via socket events.
+    // If the socket stream stalls (proxy/websocket drops, event schema drift,
+    // etc.), we poll the server for the assistant message and finalize locally.
+    if (completionWatchdogTimer != null) return;
+    final chatId = activeConversationId;
+    if (chatId == null || chatId.isEmpty || isTemporaryChat(chatId)) {
+      return;
+    }
+
+    completionWatchdogTimer = Timer.periodic(
+      const Duration(seconds: 3),
+      (_) async {
+        if (hasFinished) {
+          completionWatchdogTimer?.cancel();
+          completionWatchdogTimer = null;
+          return;
+        }
+        if (watchdogPollInFlight) return;
+
+        final msgs = getMessages();
+        if (msgs.isEmpty) return;
+        final last = msgs.last;
+        if (last.role != 'assistant' || !last.isStreaming) {
+          completionWatchdogTimer?.cancel();
+          completionWatchdogTimer = null;
+          return;
+        }
+
+        // Let real socket deltas do their job; only poll after a quiet window.
+        final quietFor = DateTime.now().difference(lastSocketActivityAt);
+        final shouldPoll =
+            !sawAnySocketActivity ||
+            quietFor >= const Duration(seconds: 8);
+        if (!shouldPoll) return;
+
+        watchdogPollInFlight = true;
+        try {
+          final result = await pollServerForMessage(maxAttempts: 1);
+          if (result == null) return;
+
+          final applied = applyServerContent(
+            result.content,
+            result.followUps,
+            finishIfDone: false,
+            isDone: result.isDone,
+            source: 'Watchdog',
+          );
+          if (applied) {
+            syncImages();
+          } else if (result.followUps.isNotEmpty) {
+            setFollowUps(assistantMessageId, result.followUps);
+          }
+
+          if (result.isDone) {
+            await persistCompletion(source: 'watchdog');
+            wrappedFinishStreaming();
+            Future.microtask(refreshConversationSnapshot);
+            completionWatchdogTimer?.cancel();
+            completionWatchdogTimer = null;
+          }
+        } finally {
+          watchdogPollInFlight = false;
+        }
+      },
+    );
+  }
+
   void channelLineHandlerFactory(String channel) {
     void handler(dynamic line) {
+      markSocketActivity('channel:$channel');
       try {
         if (line is String) {
           final s = line.trim();
@@ -775,6 +958,7 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
       final data = ev['data'];
       if (data == null) return;
       final type = data['type'];
+      markSocketActivity(type?.toString());
 
       // Basic logging to see if chat events are being received
       if (type != null &&
@@ -801,7 +985,7 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
           // Usage may come in a separate payload before the done:true payload
           final usageData = payload['usage'];
           if (usageData is Map<String, dynamic> && usageData.isNotEmpty) {
-            final targetId = _resolveTargetMessageId(messageId, getMessages);
+            final targetId = resolveAssistantTargetId(messageId);
             if (targetId != null) {
               updateMessageById(targetId, (current) {
                 return current.copyWith(usage: usageData);
@@ -814,7 +998,7 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
           if (normalizedSources != null && normalizedSources.isNotEmpty) {
             final parsedSources = parseJyotiGPTSourceList(normalizedSources);
             if (parsedSources.isNotEmpty) {
-              final targetId = _resolveTargetMessageId(messageId, getMessages);
+              final targetId = resolveAssistantTargetId(messageId);
               if (targetId != null) {
                 for (final source in parsedSources) {
                   appendSourceReference(targetId, source);
@@ -823,11 +1007,10 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
             }
           }
           if (payload.containsKey('tool_calls')) {
-            // Validate message ID to prevent late events from previous turns
-            // from corrupting the current assistant message
-            if (messageId == null ||
-                messageId.isEmpty ||
-                messageId == assistantMessageId) {
+            // Apply only while the current stream target is still the active
+            // last assistant message. This prevents late events from previous
+            // turns from corrupting the next assistant response.
+            if (isCurrentStreamTargetActive()) {
               final tc = payload['tool_calls'];
               if (tc is List) {
                 for (final call in tc) {
@@ -854,17 +1037,7 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
             }
           }
           if (payload.containsKey('choices')) {
-            // Validate message ID to prevent late events from previous turns
-            // from corrupting the current assistant message
-            if (messageId != null &&
-                messageId.isNotEmpty &&
-                messageId != assistantMessageId) {
-              DebugLogger.log(
-                'Ignoring completion choices for wrong message: '
-                '$messageId (expected $assistantMessageId)',
-                scope: 'streaming/helper',
-              );
-            } else {
+            if (isCurrentStreamTargetActive()) {
               final choices = payload['choices'];
               if (choices is List && choices.isNotEmpty) {
                 final choice = choices.first;
@@ -905,17 +1078,7 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
             }
           }
           if (payload.containsKey('content')) {
-            // Validate message ID to prevent late events from previous turns
-            // from corrupting the current assistant message
-            if (messageId != null &&
-                messageId.isNotEmpty &&
-                messageId != assistantMessageId) {
-              DebugLogger.log(
-                'Ignoring completion content for wrong message: '
-                '$messageId (expected $assistantMessageId)',
-                scope: 'streaming/helper',
-              );
-            } else {
+            if (isCurrentStreamTargetActive()) {
               final raw = payload['content']?.toString() ?? '';
               if (raw.isNotEmpty) {
                 replaceLastMessageContent(raw);
@@ -924,61 +1087,12 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
             }
           }
           if (payload['done'] == true) {
-            // Validate message ID to prevent late done events from previous
-            // turns from prematurely terminating the current stream
-            if (messageId != null &&
-                messageId.isNotEmpty &&
-                messageId != assistantMessageId) {
-              DebugLogger.log(
-                'Ignoring completion done for wrong message: '
-                '$messageId (expected $assistantMessageId)',
-                scope: 'streaming/helper',
-              );
-              return;
-            }
+            // Only finalize if this streaming session is still the active one.
+            if (!isCurrentStreamTargetActive()) return;
             try {
-              // Get current messages to send with usage data (issue #274)
-              final currentMessages = getMessages();
-              final messagesForCompleted = currentMessages.map((m) {
-                final msgMap = <String, dynamic>{
-                  'id': m.id,
-                  'role': m.role,
-                  'content': m.content,
-                  'timestamp': m.timestamp.millisecondsSinceEpoch ~/ 1000,
-                };
-                if (m.role == 'assistant' && m.usage != null) {
-                  msgMap['usage'] = m.usage;
-                }
-                if (m.sources.isNotEmpty) {
-                  msgMap['sources'] = m.sources.map((s) => s.toJson()).toList();
-                }
-                return msgMap;
-              }).toList();
-
-              if (!isTemporaryChat(activeConversationId)) {
-                // Send chatCompleted to run any filters/actions
-                // ignore: unawaited_futures
-                api.sendChatCompleted(
-                  chatId: activeConversationId ?? '',
-                  messageId: assistantMessageId,
-                  messages: messagesForCompleted,
-                  model: modelId,
-                  modelItem: modelItem,
-                  sessionId: sessionId,
-                );
-
-                // Sync conversation to persist usage data (issue #274)
-                // chatCompleted doesn't persist - syncConversationMessages does
-                final chatId = activeConversationId;
-                if (chatId != null && chatId.isNotEmpty) {
-                  // ignore: unawaited_futures
-                  api.syncConversationMessages(
-                    chatId,
-                    currentMessages,
-                    model: modelId,
-                  );
-                }
-              }
+              // Persist completion metadata for parity with the Web client.
+              // ignore: unawaited_futures
+              persistCompletion(source: 'socket-done');
             } catch (_) {
               // Non-critical - continue if sync fails
             }
@@ -1068,7 +1182,7 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
         }
       } else if (type == 'status' && payload != null) {
         final statusMap = _asStringMap(payload);
-        final targetId = _resolveTargetMessageId(messageId, getMessages);
+        final targetId = resolveAssistantTargetId(messageId);
         if (statusMap != null && targetId != null) {
           try {
             final statusUpdate = ChatStatusUpdate.fromJson(statusMap);
@@ -1083,7 +1197,8 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
           } catch (_) {}
         }
       } else if (type == 'chat:tasks:cancel') {
-        final targetId = _resolveTargetMessageId(messageId, getMessages);
+        markSocketActivity('chat:tasks:cancel');
+        final targetId = resolveAssistantTargetId(messageId);
         if (targetId != null) {
           updateMessageById(targetId, (current) {
             final metadata = {...?current.metadata, 'tasksCancelled': true};
@@ -1093,13 +1208,14 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
         disposeSocketSubscriptions();
         wrappedFinishStreaming();
       } else if (type == 'chat:message:follow_ups' && payload != null) {
+        markSocketActivity('chat:message:follow_ups');
         DebugLogger.log('Received follow-ups event', scope: 'streaming/helper');
         final followMap = _asStringMap(payload);
         if (followMap != null) {
           final followUpsRaw =
               followMap['follow_ups'] ?? followMap['followUps'];
           final suggestions = _parseFollowUpsField(followUpsRaw);
-          final targetId = _resolveTargetMessageId(messageId, getMessages);
+          final targetId = resolveAssistantTargetId(messageId);
           DebugLogger.log(
             'Follow-ups: ${suggestions.length} suggestions for message $targetId',
             scope: 'streaming/helper',
@@ -1170,7 +1286,7 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
               if (targetId != null) {
                 upsertCodeExecution(targetId, exec);
               }
-            } catch (_) {}
+  } catch (_) {}
           } else {
             try {
               final sources = parseJyotiGPTSourceList([map]);
@@ -1488,6 +1604,7 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
         requireFocus: false,
       ),
       onDelta: (event) {
+        markSocketActivity(event.type);
         chatHandler(event.raw, event.ack);
       },
       onError: (error, stackTrace) {
@@ -1517,6 +1634,7 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
         requireFocus: false,
       ),
       onDelta: (event) {
+        markSocketActivity(event.type);
         channelEventsHandler(event.raw, event.ack);
       },
       onError: (error, stackTrace) {
@@ -1600,6 +1718,9 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
           'Socket subscriptions active - waiting for socket done signal',
           scope: 'streaming/helper',
         );
+        // If socket completion never arrives (e.g. websocket drop), the watchdog
+        // will finalize by polling for the persisted assistant message.
+        startCompletionWatchdog();
       }
     },
     onError: (error, stackTrace) async {
@@ -1653,7 +1774,10 @@ ActiveSocketStream attachUnifiedChunkedStreaming({
   return ActiveSocketStream(
     controller: controller,
     socketSubscriptions: socketSubscriptions,
-    disposeWatchdog: () {},
+    disposeWatchdog: () {
+      completionWatchdogTimer?.cancel();
+      completionWatchdogTimer = null;
+    },
   );
 }
 

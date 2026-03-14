@@ -3191,6 +3191,8 @@ class ApiService {
     final sessionId =
         (sessionIdOverride != null && sessionIdOverride.isNotEmpty)
         ? sessionIdOverride
+        : (socketSessionId != null && socketSessionId.isNotEmpty)
+        ? socketSessionId
         : const Uuid().v4().substring(0, 20);
 
     // NOTE: Previously used to branch for Gemini-specific handling; not needed now.
@@ -3285,22 +3287,25 @@ class ApiService {
     final uiMemorySettings = userSettings?['ui'] as Map<String, dynamic>?;
     final bool memoryEnabled = uiMemorySettings?['memory'] == true;
 
-    if (enableWebSearch || enableImageGeneration || memoryEnabled) {
-      data['features'] = {
-        'web_search': enableWebSearch,
-        'image_generation': enableImageGeneration,
-        'code_interpreter': false,
-        'memory': memoryEnabled,
-      };
-      if (enableWebSearch) {
-        _traceApi('Web search enabled in streaming request');
-      }
-      if (enableImageGeneration) {
-        _traceApi('Image generation enabled in streaming request');
-      }
-      if (memoryEnabled) {
-        _traceApi('Memory enabled in streaming request (from user settings)');
-      }
+    // Always include `features` as an object (even if all false).
+    //
+    // Server-side middleware expects `features` to be a dict and may crash if
+    // it's missing and then later treated like a dict (e.g. `.get(...)`).
+    // The web client always sends this object, so we mirror that behavior.
+    data['features'] = {
+      'web_search': enableWebSearch,
+      'image_generation': enableImageGeneration,
+      'code_interpreter': false,
+      'memory': memoryEnabled,
+    };
+    if (enableWebSearch) {
+      _traceApi('Web search enabled in streaming request');
+    }
+    if (enableImageGeneration) {
+      _traceApi('Image generation enabled in streaming request');
+    }
+    if (memoryEnabled) {
+      _traceApi('Memory enabled in streaming request (from user settings)');
     }
 
     data['id'] = messageId;
@@ -3483,7 +3488,8 @@ class ApiService {
       stream: streamController.stream,
       messageId: messageId,
       sessionId: sessionId,
-      socketSessionId: socketSessionId,
+      // Prefer the effective session we actually bound to when callers rely on it.
+      socketSessionId: socketSessionId ?? sessionIdOverride,
       isBackgroundFlow: isBackgroundFlow,
     );
   }
