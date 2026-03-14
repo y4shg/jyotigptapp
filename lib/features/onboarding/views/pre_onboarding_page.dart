@@ -29,7 +29,7 @@ class _PreOnboardingPageState extends ConsumerState<PreOnboardingPage> {
     _OnboardingPageModel(
       title: 'Welcome to JyotiGPT',
       body: 'Your AI, always on.',
-      icon: Icons.hub,
+      useLauncherIcon: true,
     ),
     _OnboardingPageModel(
       title: 'Instant chats',
@@ -154,12 +154,14 @@ class _OnboardingPageModel {
   const _OnboardingPageModel({
     required this.title,
     required this.body,
-    required this.icon,
+    this.icon,
+    this.useLauncherIcon = false,
   });
 
   final String title;
   final String body;
-  final IconData icon;
+  final IconData? icon;
+  final bool useLauncherIcon;
 }
 
 class _OnboardingPage extends StatelessWidget {
@@ -184,13 +186,15 @@ class _OnboardingPage extends StatelessWidget {
         ),
       ),
       child: Center(
-        child: BrandService.createBrandIcon(
-          size: 44,
-          icon: model.icon,
-          useGradient: true,
-          addShadow: true,
-          context: context,
-        ),
+        child: model.useLauncherIcon
+            ? BrandService.createLauncherIcon(size: 44, addShadow: true)
+            : BrandService.createBrandIcon(
+                size: 44,
+                icon: model.icon,
+                useGradient: true,
+                addShadow: true,
+                context: context,
+              ),
       ),
     );
 
@@ -261,4 +265,3 @@ class _Dots extends StatelessWidget {
     );
   }
 }
-

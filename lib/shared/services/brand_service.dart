@@ -1,21 +1,25 @@
-import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
-import 'package:flutter/material.dart';
-import '../theme/theme_extensions.dart';
-import 'package:flutter/cupertino.dart';
 import 'dart:io' show Platform;
+
+import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import '../theme/color_tokens.dart';
+import '../theme/theme_extensions.dart';
 import '../theme/tweakcn_themes.dart';
 
 /// Centralized service for consistent brand identity throughout the app
-/// Uses the hub icon as the primary brand element
 class BrandService {
   BrandService._();
 
-  /// Primary brand icon - the hub icon (consistent across platforms)
-  static IconData get primaryIcon => Icons.hub;
+  /// The primary brand mark shown throughout the app.
+  static const String brandMarkSvgAssetPath = 'assets/icons/icon.svg';
 
-  /// Alternative brand icons for different contexts
-  static IconData get primaryIconOutlined => Icons.hub_outlined;
+  /// The full-color launcher icon used for onboarding and first sign-in.
+  static const String launcherIconPngAssetPath = 'assets/icons/icon.png';
+
+  /// Alternative icons for different contexts.
   static IconData get connectivityIcon =>
       Platform.isIOS ? CupertinoIcons.wifi : Icons.wifi;
   static IconData get networkIcon =>
@@ -57,27 +61,52 @@ class BrandService {
     bool useGradient = false,
     bool addShadow = false,
     BuildContext? context,
+    String? semanticsLabel,
   }) {
-    final iconData = icon ?? primaryIcon;
     final resolvedColor = color ?? primaryBrandColor(context: context);
 
-    Widget iconWidget = Icon(
-      iconData,
-      size: size,
-      color: useGradient ? null : resolvedColor,
-    );
-
-    if (useGradient) {
-      iconWidget = ShaderMask(
-        blendMode: BlendMode.srcIn,
-        shaderCallback: (bounds) => LinearGradient(
-          colors: [
-            primaryBrandColor(context: context),
-            secondaryBrandColor(context: context),
-          ],
-        ).createShader(bounds),
-        child: Icon(iconData, size: size),
+    Widget iconWidget;
+    if (icon == null) {
+      iconWidget = _buildBrandSvg(
+        size: size,
+        color: useGradient ? null : resolvedColor,
+        semanticsLabel: semanticsLabel,
       );
+      if (useGradient) {
+        iconWidget = ShaderMask(
+          blendMode: BlendMode.srcIn,
+          shaderCallback: (bounds) => LinearGradient(
+            colors: [
+              primaryBrandColor(context: context),
+              secondaryBrandColor(context: context),
+            ],
+          ).createShader(bounds),
+          child: _buildBrandSvg(
+            size: size,
+            color: null,
+            semanticsLabel: semanticsLabel,
+          ),
+        );
+      }
+    } else {
+      iconWidget = Icon(
+        icon,
+        size: size,
+        color: useGradient ? null : resolvedColor,
+      );
+
+      if (useGradient) {
+        iconWidget = ShaderMask(
+          blendMode: BlendMode.srcIn,
+          shaderCallback: (bounds) => LinearGradient(
+            colors: [
+              primaryBrandColor(context: context),
+              secondaryBrandColor(context: context),
+            ],
+          ).createShader(bounds),
+          child: Icon(icon, size: size),
+        );
+      }
     }
 
     if (addShadow) {
@@ -98,7 +127,7 @@ class BrandService {
     return iconWidget;
   }
 
-  /// Creates a branded avatar with the hub icon
+  /// Creates a branded avatar with the brand mark.
   static Widget createBrandAvatar({
     double size = 40,
     Color? backgroundColor,
@@ -148,7 +177,12 @@ class BrandService {
                 ),
               ),
             )
-          : Icon(primaryIcon, size: size * 0.5, color: iColor),
+          : createBrandIcon(
+              size: size * 0.5,
+              color: iColor,
+              context: context,
+              semanticsLabel: brandName,
+            ),
     );
   }
 
@@ -186,7 +220,6 @@ class BrandService {
       return createBrandIcon(
         size: size,
         color: iconColor,
-        icon: primaryIconOutlined,
         context: context,
       );
     }
@@ -205,13 +238,12 @@ class BrandService {
       child: createBrandIcon(
         size: size * 0.5,
         color: iconColor,
-        icon: primaryIconOutlined,
         context: context,
       ),
     );
   }
 
-  /// Creates a branded button with hub icon
+  /// Creates a branded button with the brand mark (by default).
   static Widget createBrandButton({
     required String text,
     required VoidCallback? onPressed,
@@ -243,7 +275,7 @@ class BrandService {
                   )
                 : createBrandIcon(
                     size: IconSize.md,
-                    icon: icon ?? primaryIcon,
+                    icon: icon,
                     color: theme?.textInverse ?? tokens.neutralTone00,
                     context: context,
                   ),
@@ -258,8 +290,43 @@ class BrandService {
   /// Brand-specific semantic labels for accessibility
   static String get brandName => 'JyotiGPTapp';
   static String get brandDescription => 'Your AI Conversation Hub';
-  static String get connectionLabel => 'Hub Connection';
-  static String get networkLabel => 'Network Hub';
+  static String get connectionLabel => 'Connection';
+  static String get networkLabel => 'Network';
+
+  /// Creates the full-color launcher icon (PNG).
+  ///
+  /// Use this for onboarding and first sign-in screens, where the full icon
+  /// (not the SVG brand mark) should be displayed.
+  static Widget createLauncherIcon({
+    double size = 56,
+    bool addShadow = false,
+    String? semanticsLabel,
+  }) {
+    Widget iconWidget = Image.asset(
+      launcherIconPngAssetPath,
+      width: size,
+      height: size,
+      fit: BoxFit.contain,
+      semanticLabel: semanticsLabel ?? brandName,
+    );
+
+    if (addShadow) {
+      iconWidget = DecoratedBox(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.22),
+              blurRadius: size * 0.22,
+              offset: Offset(0, size * 0.08),
+            ),
+          ],
+        ),
+        child: iconWidget,
+      );
+    }
+
+    return iconWidget;
+  }
 
   /// Creates branded AppBar with consistent styling
   static PreferredSizeWidget createBrandAppBar({
@@ -322,10 +389,11 @@ class BrandService {
             ? JyotiGPTappShadows.glow(context)
             : JyotiGPTappShadows.glowWithTokens(tokens),
       ),
-      child: Icon(
-        primaryIcon,
+      child: createBrandIcon(
         size: size * 0.5,
         color: theme?.textInverse ?? tokens.neutralTone00,
+        context: context,
+        semanticsLabel: brandName,
       ),
     );
   }
@@ -344,5 +412,21 @@ class BrandService {
     return brightness == Brightness.dark
         ? AppColorTokens.dark(theme: palette)
         : AppColorTokens.light(theme: palette);
+  }
+
+  static Widget _buildBrandSvg({
+    required double size,
+    required Color? color,
+    required String? semanticsLabel,
+  }) {
+    return SvgPicture.asset(
+      brandMarkSvgAssetPath,
+      width: size,
+      height: size,
+      semanticsLabel: semanticsLabel ?? brandName,
+      colorFilter: color == null
+          ? null
+          : ColorFilter.mode(color, BlendMode.srcIn),
+    );
   }
 }
