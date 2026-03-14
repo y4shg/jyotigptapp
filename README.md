@@ -135,7 +135,6 @@ This project is licensed under the GPL-3.0 License — see the [LICENSE](LICENSE
 
 ## Acknowledgments
 
-- <a href="https://vercel.com/oss"><img alt="Vercel OSS Program" src="https://vercel.com/oss/program-badge.svg" /></a>
 - The Brahma Kumaris community for their timeless spiritual teachings
 - Flutter team for the excellent cross-platform mobile framework
 
