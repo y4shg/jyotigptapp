@@ -1,0 +1,685 @@
+{
+  "@@locale": "ko",
+  "appTitle": "JyotiGPT",
+  "requiredField": "This field is required",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+  "retry": "다시 시도",
+  "back": "뒤로",
+  "you": "프로필",
+  "loadingProfile": "프로필 로딩 중...",
+  "pleaseCheckConnection": "연결을 확인하고 다시 시도해주세요",
+  "connectionIssueTitle": "서버에 연결할 수 없습니다",
+  "connectionIssueSubtitle": "다시 연결하거나 로그아웃하여 다른 서버를 선택하세요.",
+  "account": "계정",
+  "supportJyotiGPTapp": "JyotiGPTapp 지원하기",
+  "supportJyotiGPTappSubtitle": "지속적인 개발을 위해 자금을 지원하여 JyotiGPTapp을 독립적으로 유지하세요.",
+  "githubSponsorsTitle": "GitHub Sponsors",
+  "githubSponsorsSubtitle": "반복 후원자가 되어 로드맵 항목에 자금을 지원하세요.",
+  "buyMeACoffeeTitle": "Buy Me a Coffee",
+  "buyMeACoffeeSubtitle": "일회성 기부로 감사를 표하세요.",
+  "signOut": "로그아웃",
+  "endYourSession": "세션 종료",
+  "defaultModel": "기본 모델",
+  "autoSelect": "서버 기본값",
+  "loadingModels": "모델 로딩 중...",
+  "failedToLoadModels": "모델을 불러오지 못했습니다",
+  "availableModels": "사용 가능한 모델",
+  "modelCapabilityMultimodal": "멀티모달",
+  "modelCapabilityReasoning": "추론",
+  "noResults": "결과 없음",
+  "searchModels": "모델 검색...",
+  "errorMessage": "문제가 발생했습니다. 다시 시도해주세요.",
+  "closeButtonSemantic": "닫기",
+  "loadingContent": "콘텐츠 로딩 중",
+  "loadingShort": "로딩 중",
+  "loadingAnnouncement": "로딩 중: {message}",
+  "@loadingAnnouncement": {
+    "description": "Screen reader announcement when loading a resource.",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Messages"
+      }
+    }
+  },
+  "errorAnnouncement": "오류: {error}",
+  "@errorAnnouncement": {
+    "description": "Screen reader announcement for an error.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network timeout"
+      }
+    }
+  },
+  "errorAnnouncementWithSuggestion": "오류: {error}. {suggestion}",
+  "@errorAnnouncementWithSuggestion": {
+    "description": "Screen reader announcement for an error with a follow-up suggestion.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network timeout"
+      },
+      "suggestion": {
+        "type": "String",
+        "example": "Please try again later."
+      }
+    }
+  },
+  "successAnnouncement": "성공: {message}",
+  "@successAnnouncement": {
+    "description": "Screen reader announcement for successful actions.",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Profile updated"
+      }
+    }
+  },
+  "noItems": "항목 없음",
+  "noItemsToDisplay": "표시할 항목이 없습니다",
+  "knowledgeBase": "지식 베이스",
+  "attachments": "첨부 파일",
+  "takePhoto": "사진 촬영",
+  "document": "문서",
+  "backToServerSetup": "서버 설정으로 돌아가기",
+  "connectedToServer": "서버에 연결됨",
+  "signIn": "로그인",
+  "enterCredentials": "AI 대화에 액세스하려면 자격 증명을 입력하세요",
+  "credentials": "자격 증명",
+  "apiKey": "API 키",
+  "token": "토큰",
+  "usernameOrEmail": "사용자 이름 또는 이메일",
+  "password": "비밀번호",
+  "signInWithToken": "토큰으로 로그인",
+  "connectToServer": "서버 연결",
+  "enterServerAddress": "시작하려면 JyotiGPT 서버 주소를 입력하세요",
+  "serverUrl": "서버 URL",
+  "serverUrlHint": "https://your-server.com",
+  "enterServerUrlSemantic": "서버 URL 또는 IP 주소를 입력하세요",
+  "headerName": "헤더 이름",
+  "headerValue": "헤더 값",
+  "headerValueHint": "api-key-123 또는 Bearer 토큰",
+  "addHeader": "헤더 추가",
+  "maximumHeadersReached": "최대 헤더 수에 도달했습니다",
+  "removeHeader": "헤더 제거",
+  "connecting": "연결 중...",
+  "connectToServerButton": "서버 연결",
+  "demoModeActive": "데모 모드 활성화",
+  "skipServerSetupTryDemo": "서버 설정 건너뛰고 데모 사용해보기",
+  "enterDemo": "데모 시작",
+  "demoBadge": "데모",
+  "serverNotJyotiGPT": "이것은 JyotiGPT 서버가 아닌 것 같습니다.",
+  "serverUrlEmpty": "서버 URL은 비어 있을 수 없습니다",
+  "invalidUrlFormat": "잘못된 URL 형식입니다. 입력을 확인해주세요.",
+  "onlyHttpHttps": "HTTP 및 HTTPS 프로토콜만 지원됩니다.",
+  "serverAddressRequired": "서버 주소가 필요합니다 (예: 192.168.1.10 또는 example.com).",
+  "portRange": "포트는 1부터 65535 사이여야 합니다.",
+  "invalidIpFormat": "잘못된 IP 주소 형식입니다. 192.168.1.10과 같은 형식을 사용하세요.",
+  "couldNotConnectGeneric": "연결할 수 없습니다. 주소를 다시 확인하고 시도해주세요.",
+  "weCouldntReachServer": "서버에 연결할 수 없습니다. 연결과 서버 실행 상태를 확인하세요.",
+  "connectionTimedOut": "연결 시간이 초과되었습니다. 서버가 바쁘거나 방화벽에 의해 차단되었을 수 있습니다.",
+  "useHttpOrHttpsOnly": "http:// 또는 https:// 만 사용하세요.",
+  "loginFailed": "로그인 실패",
+  "invalidCredentials": "사용자 이름 또는 비밀번호가 잘못되었습니다. 다시 시도해주세요.",
+  "serverRedirectingHttps": "서버가 요청을 리디렉션하고 있습니다. 서버의 HTTPS 구성을 확인하세요.",
+  "unableToConnectServer": "서버에 연결할 수 없습니다. 연결을 확인해주세요.",
+  "requestTimedOut": "요청 시간이 초과되었습니다. 다시 시도해주세요.",
+  "genericSignInFailed": "로그인할 수 없습니다. 자격 증명과 서버 설정을 확인하세요.",
+  "attachmentLabel": "첨부",
+  "tools": "도구",
+  "filters": "필터",
+  "voiceInput": "음성 입력",
+  "voice": "음성",
+  "voiceStatusListening": "듣는 중…",
+  "voiceStatusRecording": "녹음 중…",
+  "voiceHoldToTalk": "누르고 말하기",
+  "voiceAutoSend": "자동 전송",
+  "voiceTranscript": "전사",
+  "voicePromptSpeakNow": "지금 말하세요…",
+  "voicePromptTapStart": "시작을 탭하여 시작",
+  "voiceActionStop": "중지",
+  "voiceActionStart": "시작",
+  "voiceCallTitle": "음성 통화",
+  "voiceCallPause": "일시 정지",
+  "voiceCallResume": "재개",
+  "voiceCallStop": "중지",
+  "voiceCallEnd": "통화 종료",
+  "voiceCallReady": "준비됨",
+  "voiceCallConnecting": "연결 중...",
+  "voiceCallListening": "듣는 중",
+  "voiceCallPaused": "일시 정지됨",
+  "voiceCallProcessing": "생각 중...",
+  "voiceCallSpeaking": "말하는 중",
+  "voiceCallDisconnected": "연결 끊김",
+  "voiceCallErrorHelp": "다음을 확인하세요:\n• 마이크 권한이 부여되었는지\n• 기기에서 음성 인식이 사용 가능한지\n• 서버에 연결되어 있는지",
+  "messageHintText": "JyotiGPTapp에게 물어보기",
+  "stopGenerating": "생성 중지",
+  "send": "전송",
+  "codeCopiedToClipboard": "코드가 클립보드에 복사되었습니다.",
+  "sendMessage": "메시지 전송",
+  "file": "파일",
+  "chooseDifferentFile": "다른 파일 선택",
+  "photo": "사진",
+  "camera": "카메라",
+  "pasteImage": "이미지 붙여넣기",
+  "apiUnavailable": "API 서비스를 사용할 수 없습니다",
+  "unableToLoadImage": "이미지를 불러올 수 없습니다",
+  "notAnImageFile": "이미지 파일이 아닙니다: {fileName}",
+  "@notAnImageFile": {
+    "description": "Error when a referenced file is not an image.",
+    "placeholders": {
+      "fileName": {
+        "type": "String",
+        "example": "image.txt"
+      }
+    }
+  },
+  "failedToLoadImage": "이미지 로드 실패: {error}",
+  "@failedToLoadImage": {
+    "description": "Error including the underlying reason when image loading fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "invalidDataUrl": "잘못된 데이터 URL 형식",
+  "failedToDecodeImage": "이미지 디코딩 실패",
+  "invalidImageFormat": "잘못된 이미지 형식",
+  "emptyImageData": "빈 이미지 데이터",
+  "confirm": "확인",
+  "continueAction": "계속",
+  "cancel": "취소",
+  "ok": "확인",
+  "previousLabel": "이전",
+  "nextLabel": "다음",
+  "inputField": "입력 필드",
+  "checkConnection": "연결 확인",
+  "openSettings": "설정 열기",
+  "goBack": "돌아가기",
+  "technicalDetails": "기술 세부 정보",
+  "requiredFieldLabel": "{label} *",
+  "@requiredFieldLabel": {
+    "description": "Label text indicating a required field.",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Email"
+      }
+    }
+  },
+  "requiredFieldHelper": "필수 필드",
+  "switchOnLabel": "켜짐",
+  "switchOffLabel": "꺼짐",
+  "dialogSemanticLabel": "대화 상자: {title}",
+  "@dialogSemanticLabel": {
+    "description": "Semantic label describing the dialog title.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Settings"
+      }
+    }
+  },
+  "save": "저장",
+  "chooseModel": "모델 선택",
+  "reviewerMode": "검토자 모드",
+  "selectLanguage": "언어 선택",
+  "newFolder": "새 폴더",
+  "folderName": "폴더 이름",
+  "newChat": "새 채팅",
+  "more": "더보기",
+  "clear": "지우기",
+  "searchConversations": "대화 검색...",
+  "create": "만들기",
+  "failedToCreateFolder": "폴더 생성 실패",
+  "failedToMoveChat": "채팅 이동 실패",
+  "failedToLoadChats": "채팅 로드 실패",
+  "failedToUpdatePin": "고정 업데이트 실패",
+  "failedToDeleteChat": "채팅 삭제 실패",
+  "manage": "관리",
+  "rename": "이름 변경",
+  "delete": "삭제",
+  "renameChat": "채팅 이름 변경",
+  "enterChatName": "채팅 이름 입력",
+  "failedToRenameChat": "채팅 이름 변경 실패",
+  "failedToUpdateArchive": "보관 업데이트 실패",
+  "unarchive": "보관 해제",
+  "archive": "보관",
+  "pin": "고정",
+  "unpin": "고정 해제",
+  "recent": "최근",
+  "system": "시스템",
+  "english": "English",
+  "deutsch": "Deutsch",
+  "francais": "Français",
+  "italiano": "Italiano",
+  "espanol": "Español",
+  "nederlands": "Nederlands",
+  "russian": "Русский",
+  "chinese": "中文",
+  "chineseSimplified": "중국어(간체)",
+  "chineseTraditional": "중국어(번체)",
+  "korean": "한국어",
+  "deleteMessagesTitle": "메시지 삭제",
+  "deleteMessagesMessage": "{count}개의 메시지를 삭제하시겠습니까?",
+  "@deleteMessagesMessage": {
+    "description": "Confirmation prompt asking to delete a number of messages.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "routeNotFound": "경로를 찾을 수 없습니다: {routeName}",
+  "@routeNotFound": {
+    "description": "Displayed when navigation fails to find a route name.",
+    "placeholders": {
+      "routeName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteChatTitle": "채팅 삭제",
+  "deleteChatMessage": "이 채팅은 영구적으로 삭제됩니다.",
+  "deleteFolderTitle": "폴더 삭제",
+  "deleteFolderMessage": "이 폴더와 할당 참조가 제거됩니다.",
+  "failedToDeleteFolder": "폴더 삭제 실패",
+  "aboutApp": "정보",
+  "aboutAppSubtitle": "JyotiGPTapp 정보 및 링크",
+  "web": "웹",
+  "imageGen": "이미지 생성",
+  "pinned": "고정됨",
+  "folders": "폴더",
+  "archived": "보관됨",
+  "appLanguage": "앱 언어",
+  "darkMode": "다크 모드",
+  "webSearch": "웹 검색",
+  "webSearchDescription": "웹을 검색하고 답변에 소스를 인용합니다.",
+  "imageGeneration": "이미지 생성",
+  "imageGenerationDescription": "프롬프트에서 이미지를 생성합니다.",
+  "copy": "복사",
+  "ttsListen": "듣기",
+  "ttsStop": "중지",
+  "edit": "편집",
+  "regenerate": "재생성",
+  "noConversationsYet": "아직 대화가 없습니다",
+  "usernameOrEmailHint": "사용자 이름 또는 이메일을 입력하세요",
+  "passwordHint": "비밀번호를 입력하세요",
+  "enterToken": "JWT 토큰을 입력하세요",
+  "tokenHint": "JyotiGPT 설정에서 JWT 토큰을 가져오세요. API 키(sk-...)는 스트리밍에 지원되지 않습니다.",
+  "apiKeyNotSupported": "API 키(sk-...)는 지원되지 않습니다. JWT 토큰을 사용하세요.",
+  "apiKeyNoLongerSupported": "API 키가 더 이상 지원되지 않아 로그아웃되었습니다. JyotiGPT 설정에서 JWT 토큰으로 로그인하세요.",
+  "tokenTooShort": "토큰이 너무 짧습니다",
+  "signingIn": "로그인 중...",
+  "advancedSettings": "고급 설정",
+  "customHeaders": "사용자 정의 헤더",
+  "customHeadersDescription": "인증, API 키 또는 특수 서버 요구사항을 위한 사용자 정의 HTTP 헤더를 추가하세요.",
+  "allowSelfSignedCertificates": "자체 서명된 인증서 신뢰",
+  "allowSelfSignedCertificatesDescription": "자체 서명된 경우에도 이 서버의 TLS 인증서를 수락합니다. 신뢰하는 서버에만 사용하세요.",
+  "headerNameTooLong": "헤더 이름이 너무 깁니다 (최대 64자)",
+  "headerNameInvalidChars": "잘못된 헤더 이름입니다. 문자, 숫자 및 다음 기호만 사용하세요: !#$&-^_`|~",
+  "headerNameReserved": "예약된 헤더 \"{key}\"를 재정의할 수 없습니다",
+  "@headerNameReserved": {
+    "description": "Error when attempting to override a reserved HTTP header {key}.",
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "headerValueTooLong": "헤더 값이 너무 깁니다 (최대 1024자)",
+  "headerValueInvalidChars": "헤더 값에 잘못된 문자가 포함되어 있습니다. 인쇄 가능한 ASCII만 사용하세요.",
+  "headerValueUnsafe": "헤더 값에 잠재적으로 안전하지 않은 콘텐츠가 포함된 것으로 보입니다",
+  "headerAlreadyExists": "헤더 \"{key}\"가 이미 존재합니다. 업데이트하려면 먼저 제거하세요.",
+  "@headerAlreadyExists": {
+    "description": "Error when a custom header with key {key} already exists.",
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "maxHeadersReachedDetail": "최대 10개의 사용자 정의 헤더가 허용됩니다. 더 추가하려면 일부를 제거하세요.",
+  "noModelsAvailable": "사용 가능한 모델 없음",
+  "followingSystem": "시스템 따름: {theme}",
+  "@followingSystem": {
+    "description": "Indicates the app is following the system theme (\"Dark\"/\"Light\").",
+    "placeholders": {
+      "theme": {
+        "type": "String"
+      }
+    }
+  },
+  "themeDark": "다크",
+  "themePalette": "강조 색상 팔레트",
+  "themePaletteJyotiGPTappLabel": "JyotiGPTapp",
+  "themePaletteJyotiGPTappDescription": "JyotiGPTapp을 위해 설계된 깔끔한 중립 테마.",
+  "themePaletteClaudeLabel": "Claude",
+  "themePaletteClaudeDescription": "Claude 웹 클라이언트에서 가져온 따뜻하고 촉각적인 팔레트.",
+  "themePaletteT3ChatLabel": "T3 Chat",
+  "themePaletteT3ChatDescription": "T3 Stack 브랜드에서 영감을 받은 장난스러운 그라디언트.",
+  "themePaletteCatppuccinLabel": "Catppuccin",
+  "themePaletteCatppuccinDescription": "부드러운 파스텔 팔레트.",
+  "themePaletteTangerineLabel": "Tangerine",
+  "themePaletteTangerineDescription": "따뜻한 오렌지와 슬레이트 팔레트.",
+  "themeLight": "라이트",
+  "currentlyUsingDarkTheme": "현재 다크 테마 사용 중",
+  "currentlyUsingLightTheme": "현재 라이트 테마 사용 중",
+  "aboutJyotiGPTapp": "JyotiGPTapp 정보",
+  "versionLabel": "버전: {version} ({build})",
+  "@versionLabel": {
+    "description": "Displays version and build number in the About dialog.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
+  "githubRepository": "GitHub 저장소",
+  "unableToLoadAppInfo": "앱 정보를 불러올 수 없습니다",
+  "thinking": "생각 중…",
+  "thoughts": "생각",
+  "thoughtForDuration": "{duration} 동안 생각함",
+  "@thoughtForDuration": {
+    "description": "Shows how long the assistant thought before replying.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "3s"
+      }
+    }
+  },
+  "analyzing": "분석 중…",
+  "analyzed": "분석 완료",
+  "appCustomization": "사용자 정의",
+  "appCustomizationSubtitle": "테마, 언어, 음성 및 빠른 액션",
+  "quickActionsDescription": "채팅의 빠른 액션",
+  "quickActionsSelectedCount": "{count, plural, =0{선택된 액션 없음} one{액션 1개 선택됨} other{{count}개 액션 선택됨}}",
+  "@quickActionsSelectedCount": {
+    "description": "Subtitle indicating how many quick actions are selected.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "autoSelectDescription": "서버에 구성된 기본 모델 사용",
+  "chatSettings": "채팅",
+  "sendOnEnter": "Enter로 전송",
+  "sendOnEnterDescription": "Enter로 전송 (소프트 키보드). Cmd/Ctrl+Enter도 사용 가능",
+  "androidAssistantTitle": "Android digital assistant",
+  "androidAssistantDescription": "Choose what happens when you trigger the Android digital assistant.",
+  "androidAssistantOverlayOption": "Show quick overlay (default)",
+  "androidAssistantNewChatOption": "Open JyotiGPTapp with a new chat",
+  "androidAssistantVoiceCallOption": "Start a voice call",
+  "sttSettings": "음성 텍스트 변환",
+  "sttEngineLabel": "인식 엔진",
+  "sttEngineDevice": "기기에서",
+  "sttEngineServer": "서버",
+  "sttEngineDeviceDescription": "오디오를 이 기기에서 유지합니다. 기기에서 음성 인식이 지원되지 않으면 음성 입력이 작동하지 않습니다.",
+  "sttEngineServerDescription": "항상 녹음을 JyotiGPT 서버로 전송하여 전사합니다.",
+  "sttDeviceUnavailableWarning": "이 기기에서 기기 음성 인식을 사용할 수 없습니다.",
+  "sttServerUnavailableWarning": "이 옵션을 사용하려면 전사가 활성화된 서버에 연결하세요.",
+  "sttSilenceDuration": "침묵 지속 시간",
+  "sttSilenceDurationDescription": "침묵 후 자동 녹음 중지 전 대기 시간",
+  "ttsEngineLabel": "엔진",
+  "ttsEngineDevice": "기기에서",
+  "ttsEngineServer": "서버",
+  "ttsEngineDeviceDescription": "합성을 이 기기에서 유지합니다. 기기에서 TTS가 지원되지 않으면 음성 재생이 작동하지 않습니다.",
+  "ttsEngineServerDescription": "항상 JyotiGPT 서버에서 오디오를 요청합니다.",
+  "ttsDeviceUnavailableWarning": "이 기기에서 기기 텍스트 음성 변환을 사용할 수 없습니다.",
+  "ttsServerUnavailableWarning": "이 옵션을 사용하려면 텍스트 음성 변환이 활성화된 서버에 연결하세요.",
+  "ttsSettings": "텍스트 음성 변환",
+  "ttsVoice": "음성",
+  "ttsSpeechRate": "말하기 속도",
+  "ttsPitch": "음높이",
+  "ttsVolume": "볼륨",
+  "ttsPreview": "음성 미리보기",
+  "ttsSystemDefault": "시스템 기본값",
+  "ttsSelectVoice": "음성 선택",
+  "ttsPreviewText": "선택한 음성의 미리보기입니다.",
+  "ttsNoVoicesAvailable": "사용 가능한 음성 없음",
+  "ttsVoicesForLanguage": "{language} 음성",
+  "@ttsVoicesForLanguage": {
+    "description": "Section header for voices matching the app language",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "EN"
+      }
+    }
+  },
+  "ttsOtherVoices": "다른 언어",
+  "error": "오류",
+  "errorWithMessage": "오류: {message}",
+  "@errorWithMessage": {
+    "description": "Error label with appended message text.",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Network timeout"
+      }
+    }
+  },
+  "networkTimeoutError": "연결 시간이 초과되었습니다. 인터넷 연결을 확인하고 다시 시도해주세요.",
+  "networkUnreachableError": "서버에 연결할 수 없습니다. 서버 URL과 인터넷 연결을 확인하세요.",
+  "networkServerNotResponding": "서버가 응답하지 않습니다. 서버가 실행 중이고 액세스 가능한지 확인하세요.",
+  "networkGenericError": "네트워크 연결 문제입니다. 인터넷 연결을 확인해주세요.",
+  "serverError500": "서버에 문제가 발생했습니다. 이것은 보통 일시적입니다.",
+  "serverErrorUnavailable": "서버를 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도해주세요.",
+  "serverErrorTimeout": "서버 응답 시간이 너무 깁니다. 다시 시도해주세요.",
+  "serverErrorGeneric": "서버에 문제가 발생했습니다. 나중에 다시 시도해주세요.",
+  "authSessionExpired": "세션이 만료되었습니다. 다시 로그인해주세요.",
+  "authForbidden": "이 작업을 수행할 권한이 없습니다.",
+  "authInvalidToken": "인증 토큰이 유효하지 않습니다. 다시 로그인해주세요.",
+  "authGenericError": "인증 문제입니다. 다시 로그인해주세요.",
+  "validationInvalidEmail": "유효한 이메일 주소를 입력해주세요.",
+  "validationWeakPassword": "비밀번호가 요구사항을 충족하지 않습니다. 확인하고 다시 시도해주세요.",
+  "validationMissingRequired": "모든 필수 필드를 채워주세요.",
+  "validationFormatError": "일부 정보의 형식이 잘못되었습니다. 확인하고 다시 시도해주세요.",
+  "validationGenericError": "입력을 확인하고 다시 시도해주세요.",
+  "fileNotFound": "파일을 찾을 수 없습니다. 이동되었거나 삭제되었을 수 있습니다.",
+  "fileAccessDenied": "파일에 액세스할 수 없습니다. 권한을 확인해주세요.",
+  "fileTooLarge": "파일이 너무 큽니다. 더 작은 파일을 선택해주세요.",
+  "fileGenericError": "파일 문제입니다. 다른 파일을 시도해주세요.",
+  "permissionCameraRequired": "카메라 권한이 필요합니다. 설정에서 활성화해주세요.",
+  "permissionStorageRequired": "저장소 권한이 필요합니다. 설정에서 활성화해주세요.",
+  "permissionMicrophoneRequired": "마이크 권한이 필요합니다. 설정에서 활성화해주세요.",
+  "permissionGenericError": "권한이 필요합니다. 설정에서 앱 권한을 확인해주세요.",
+  "actionRetryRequest": "요청을 다시 시도하세요.",
+  "actionVerifyConnection": "인터넷 연결을 확인하세요.",
+  "actionRetryOperation": "작업을 다시 시도하세요.",
+  "actionRetryAfterDelay": "잠시 기다린 후 다시 시도하세요.",
+  "actionSignInToAccount": "계정에 로그인하세요.",
+  "actionSelectAnotherFile": "다른 파일을 선택하세요.",
+  "actionOpenAppSettings": "앱 설정을 열어 권한을 부여하세요.",
+  "actionRetryAfterPermission": "권한을 부여한 후 다시 시도하세요.",
+  "actionReturnToPrevious": "이전 화면으로 돌아가세요.",
+  "display": "디스플레이",
+  "realtime": "실시간",
+  "transportMode": "전송 모드",
+  "mode": "모드",
+  "transportModePolling": "폴링 폴백",
+  "transportModeWs": "WebSocket 전용",
+  "transportModePollingInfo": "WebSocket이 차단되면 HTTP 폴링으로 폴백합니다. 가능하면 WebSocket으로 업그레이드합니다.",
+  "transportModeWsInfo": "오버헤드가 낮지만 엄격한 프록시/방화벽 뒤에서 실패할 수 있습니다.",
+  "mermaidPreviewUnavailable": "이 플랫폼에서는 Mermaid 미리보기를 사용할 수 없습니다.",
+  "chartPreviewUnavailable": "이 플랫폼에서는 차트 미리보기를 사용할 수 없습니다.",
+  "notes": "노트",
+  "searchNotes": "노트 검색...",
+  "createNote": "노트 만들기",
+  "noNotesYet": "아직 노트가 없습니다",
+  "noNotesFound": "노트를 찾을 수 없습니다",
+  "createFirstNoteHint": "+를 탭하여 첫 번째 노트를 만드세요.",
+  "tryDifferentSearch": "다른 검색어를 시도해 보세요.",
+  "loadingNotes": "노트 불러오는 중...",
+  "loadingNote": "노트 불러오는 중...",
+  "failedToLoadNotes": "노트를 불러올 수 없습니다",
+  "deleteNoteTitle": "노트 삭제",
+  "deleteNoteMessage": "\"{title}\"을(를) 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.",
+  "@deleteNoteMessage": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "writeNote": "무언가 작성하세요...",
+  "saving": "저장 중...",
+  "saved": "저장됨",
+  "noteCopiedToClipboard": "노트가 클립보드에 복사됨",
+  "generateTitle": "제목 생성",
+  "generatingTitle": "제목 생성 중...",
+  "noContentToGenerateTitle": "제목을 생성하려면 먼저 내용을 추가하세요",
+  "failedToGenerateTitle": "제목 생성 실패",
+  "noContentToEnhance": "개선하려면 먼저 내용을 추가하세요",
+  "noteEnhanced": "AI로 노트 개선됨",
+  "failedToEnhanceNote": "노트 개선 실패",
+  "noModelSelected": "먼저 모델을 선택하세요",
+  "enhanceWithAI": "AI로 개선",
+  "enhanceNote": "노트 개선",
+  "startDictation": "받아쓰기 시작",
+  "stopRecording": "녹음 중지",
+  "voiceInputUnavailable": "음성 입력을 사용할 수 없습니다",
+  "failedToStartDictation": "받아쓰기 시작 실패",
+  "noteNotFound": "노트를 찾을 수 없습니다",
+  "untitled": "제목 없음",
+  "today": "오늘",
+  "yesterday": "어제",
+  "previous7Days": "지난 7일",
+  "previous30Days": "지난 30일",
+  "older": "이전",
+  "wordCount": "{count}단어",
+  "@wordCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "charCount": "{count}자",
+  "@charCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "promptVariablesTitle": "세부 정보 입력",
+  "promptVariablesDescription": "아래 필드를 작성하여 이 프롬프트를 사용자 정의하세요.",
+  "promptVariableNumberMin": "최소값은 {min}입니다",
+  "@promptVariableNumberMin": {
+    "placeholders": {
+      "min": {
+        "type": "double"
+      }
+    }
+  },
+  "promptVariableNumberMax": "최대값은 {max}입니다",
+  "@promptVariableNumberMax": {
+    "placeholders": {
+      "max": {
+        "type": "double"
+      }
+    }
+  },
+  "sso": "SSO",
+  "ssoDescription": "조직의 ID 공급자로 로그인",
+  "signInWithSso": "SSO로 로그인",
+  "ssoAuthenticating": "인증 중...",
+  "ssoAuthFailed": "SSO 인증 실패",
+  "ssoLoadingLogin": "로그인 페이지 로딩 중...",
+  "ldap": "LDAP",
+  "ldapDescription": "LDAP 디렉토리 자격 증명으로 로그인",
+  "signInWithLdap": "LDAP으로 로그인",
+  "ldapUsername": "사용자 이름",
+  "ldapUsernameHint": "LDAP 사용자 이름을 입력하세요",
+  "moreSignInOptions": "추가 로그인 옵션",
+  "ldapNotEnabled": "이 서버에서 LDAP 인증이 활성화되어 있지 않습니다",
+  "ssoPlatformNotSupported": "이 플랫폼에서는 SSO 인증이 지원되지 않습니다. 대신 자격 증명 또는 LDAP 인증을 사용하세요.",
+  "continueWithProvider": "{provider}(으)로 계속",
+  "or": "또는",
+  "usageInfo": "정보",
+  "usageInfoTitle": "응답 통계",
+  "usageTokenGeneration": "토큰 생성",
+  "usagePromptEval": "프롬프트 처리",
+  "usageTotalDuration": "총 소요 시간",
+  "usageTokensPerSecond": "{speed} t/s",
+  "@usageTokensPerSecond": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "usageTokenCount": "{count}개 토큰",
+  "@usageTokenCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "usageSecondsFormat": "{seconds}초",
+  "@usageSecondsFormat": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "usageLoadDuration": "모델 로드 시간",
+  "usageQueueTime": "대기 시간",
+  "usageReasoningTokens": "추론 토큰",
+  "usageTotalTokens": "총 토큰",
+  "proxyAuthentication": "프록시 인증",
+  "proxyAuthPlatformNotSupported": "프록시 인증은 모바일 장치가 필요합니다. 먼저 브라우저를 통해 인증해 주세요.",
+  "proxyAuthLoading": "인증 페이지 로딩 중...",
+  "proxyAuthFailed": "프록시 인증 실패",
+  "proxyAuthHelpText": "조직의 프록시를 통해 로그인한 다음 JyotiGPT에 로그인하세요. 자동으로 리디렉션됩니다.",
+  "proxyAuthHelpTextSimple": "프록시를 통해 로그인하세요. 인증 후 계속을 탭하여 로그인을 진행하세요.",
+  "continueButton": "계속",
+  "proxyAuthRequired": "이 서버는 프록시 인증이 필요합니다",
+  "proxyAuthRequiredDescription": "서버가 인증 프록시(예: oauth2-proxy) 뒤에 있는 것 같습니다. 먼저 프록시를 통해 로그인해야 합니다.",
+  "authenticateThroughProxy": "인증",
+  "voiceOptions": "음성 옵션",
+  "dictation": "받아쓰기",
+  "dictationDescription": "말하면 실시간으로 텍스트로 변환",
+  "recordAudio": "오디오 녹음",
+  "recordAudioDescription": "나중에 텍스트 변환을 위해 오디오 저장",
+  "recordingAudio": "녹음 중...",
+  "preparingRecording": "준비 중...",
+  "recordingHint": "완료되면 정지를 누르세요",
+  "stopAndSaveRecording": "정지 및 저장",
+  "processingRecording": "처리 중...",
+  "audioRecordingSaved": "오디오 녹음 저장됨",
+  "microphonePermissionDenied": "마이크 권한이 거부되었습니다",
+  "recordingFailed": "녹음 실패",
+  "removeFileConfirm": "이 파일을 노트에서 제거하시겠습니까?",
+  "fileRemoved": "파일 제거됨",
+  "playAudio": "오디오 재생",
+  "removeFile": "파일 제거",
+  "audioFileType": "오디오",
+  "imageFileType": "이미지",
+  "failedToUploadAudio": "오디오 업로드 실패",
+  "audioAttachment": "오디오 첨부 파일",
+  "loadingAudio": "오디오 로드 중...",
+  "failedToLoadAudio": "오디오를 로드할 수 없습니다",
+  "webPage": "웹 페이지",
+  "greetingTitle": "안녕하세요, {username}",
+  "temporaryChat": "Temporary Chat",
+  "temporaryChatTooltip": "This chat won't appear in history",
+  "saveChat": "Save Chat",
+  "temporaryChatByDefault": "Temporary Chat by Default",
+  "temporaryChatByDefaultDescription": "New chats won't be saved to history unless you choose to save them",
+  "chatSaved": "Chat saved to history",
+  "chatSaveFailed": "Failed to save chat"
+}

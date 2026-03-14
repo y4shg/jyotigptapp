@@ -1,0 +1,140 @@
+name: jyotigptapp
+description: AI spiritual assistant for exploring Brahma Kumaris teachings
+version: 0.9.4+95
+publish_to: 'none'
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  
+  # State Management
+  flutter_riverpod: ^3.0.3
+  
+  # Navigation
+  go_router: ^17.0.0
+  
+  # Network & API
+  dio: ^5.9.0
+  http_parser: ^4.0.2
+  
+  
+  # Storage
+  flutter_secure_storage: ^10.0.0
+  hive_ce: ^2.14.0
+  hive_ce_flutter: ^2.3.2
+  shared_preferences: ^2.3.2
+  
+  # UI Components - Markdown Rendering
+  cached_network_image: ^3.3.1
+  markdown: ^7.3.0
+  webview_flutter: ^4.7.0
+  socket_io_client: ^3.1.2
+  yaml: ^3.1.2
+  
+  
+  
+  # Modern Animations
+  flutter_animate: ^4.5.0
+  
+  # Platform Features
+  vad: ^0.0.7+1
+  speech_to_text: ^7.3.0
+  record: ^6.2.0
+  flutter_tts: ^4.2.5
+  audio_session: ^0.2.2
+  permission_handler: ^12.0.1
+  image_picker: ^1.2.0
+  file_picker: ^10.3.7
+  flutter_image_compress: ^2.1.0
+  path_provider: ^2.1.4
+  
+  # Utilities
+  path: ^1.9.0
+  uuid: ^4.5.0
+  crypto: ^3.0.3
+  package_info_plus: ^9.0.0
+  url_launcher: ^6.3.0
+  intl: ^0.20.2
+
+  # Icons & Theming
+  cupertino_icons: ^1.0.8
+  json_annotation: ^4.9.0
+  freezed_annotation: ^3.0.0
+  wakelock_plus: ^1.4.0
+  share_plus: ^12.0.0
+  share_handler: ^0.0.19
+  riverpod_annotation: ^3.0.3
+  flutter_local_notifications: ^19.4.2
+  connectivity_plus: ^7.0.0
+  flutter_cache_manager: ^3.4.1
+  http: ^1.5.0
+  flutter_callkit_incoming: ^3.0.0
+  quick_actions: 1.1.0
+  flutter_svg: ^2.2.3
+  html_unescape: ^2.0.0
+  home_widget: ^0.8.1
+  flutter_highlight: ^0.7.0
+  super_context_menu: ^0.9.1
+  super_drag_and_drop: ^0.9.1
+  just_audio: ^0.10.5
+  adaptive_platform_ui: ^0.1.103
+  flutter_tex: ^5.2.6
+  super_clipboard: ^0.9.1
+  
+  # Clipboard functionality is available through flutter/services (part of Flutter SDK)
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.7.1
+  freezed: ^3.2.0
+  json_serializable: ^6.11.1
+  flutter_native_splash: ^2.4.6
+  riverpod_generator: ^3.0.3
+  riverpod_lint: 3.0.3
+  custom_lint: 0.8.1
+  mocktail: ^1.0.4
+  checks: ^0.3.1
+
+dependency_overrides:
+  riverpod_lint: 3.0.3
+  custom_lint_builder: 0.8.1
+  super_native_extensions:
+    git:
+      url: https://github.com/dilumdesilva/super_native_extensions
+      ref: main
+      path: super_native_extensions
+
+flutter:
+  uses-material-design: true
+  generate: true
+  # Localization
+  # ARB files live in lib/l10n (configured via l10n.yaml)
+  
+  assets:
+    - assets/icons/
+    - assets/mermaid.min.js
+    - assets/chartjs.min.js
+
+flutter_native_splash:
+  # Splash background matches the light theme; `color_dark` handles dark mode.
+  color: "#FFFFFF"
+  color_dark: "#0A0A0A"
+  # Image to display on the splash screen
+  image: assets/icons/icon.png
+
+  
+  # Android specific settings
+  android_12:
+    color: "#FFFFFF"
+    color_dark: "#0A0A0A"
+  
+  # Web specific settings
+  web: false
+    

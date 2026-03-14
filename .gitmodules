@@ -1,0 +1,3 @@
+[submodule "jyotigpt-src"]
+	path = jyotigpt-src
+	url = https://github.com/jyotigpt/jyotigpt

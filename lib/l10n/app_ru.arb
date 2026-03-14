@@ -1,0 +1,907 @@
+{
+  "@@locale": "ru",
+  "appTitle": "JyotiGPT",
+  "requiredField": "This field is required",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+  "retry": "Повторить",
+  "back": "Назад",
+  "you": "Вы",
+  "loadingProfile": "Загрузка профиля...",
+  "pleaseCheckConnection": "Пожалуйста, проверьте соединение и повторите попытку",
+  "connectionIssueTitle": "Не удается подключиться к серверу",
+  "@connectionIssueTitle": {
+    "description": "Заголовок, отображаемый при недоступности настроенного сервера"
+  },
+  "connectionIssueSubtitle": "Переподключитесь, чтобы продолжить, или выйдите, чтобы выбрать другой сервер.",
+  "@connectionIssueSubtitle": {
+    "description": "Подзаголовок с доступными действиями при недоступности сервера"
+  },
+  "account": "Аккаунт",
+  "supportJyotiGPTapp": "Поддержать JyotiGPTapp",
+  "supportJyotiGPTappSubtitle": "Сохраните независимость JyotiGPTapp, финансируя разработку.",
+  "githubSponsorsTitle": "GitHub Sponsors",
+  "githubSponsorsSubtitle": "Станьте регулярным спонсором для финансирования дорожной карты.",
+  "buyMeACoffeeTitle": "Buy Me a Coffee",
+  "buyMeACoffeeSubtitle": "Сделайте разовое пожертвование в знак благодарности.",
+  "signOut": "Выйти",
+  "endYourSession": "Завершить сеанс",
+  "defaultModel": "Модель по умолчанию",
+  "autoSelect": "По умолчанию сервера",
+  "loadingModels": "Загрузка моделей...",
+  "failedToLoadModels": "Не удалось загрузить модели",
+  "availableModels": "Доступные модели",
+  "noResults": "Нет результатов",
+  "searchModels": "Поиск моделей...",
+  "errorMessage": "Что-то пошло не так. Пожалуйста, попробуйте еще раз.",
+  "closeButtonSemantic": "Закрыть",
+  "loadingContent": "Загрузка содержимого",
+  "noItems": "Нет элементов",
+  "noItemsToDisplay": "Нет элементов для отображения",
+  "knowledgeBase": "База знаний",
+  "attachments": "Вложения",
+  "takePhoto": "Сделать фото",
+  "document": "Документ",
+  "backToServerSetup": "Вернуться к настройке сервера",
+  "connectedToServer": "Подключено к серверу",
+  "signIn": "Войти",
+  "enterCredentials": "Введите свои учетные данные для доступа к вашим разговорам с ИИ",
+  "credentials": "Учетные данные",
+  "apiKey": "API-ключ",
+  "token": "Токен",
+  "usernameOrEmail": "Имя пользователя или email",
+  "password": "Пароль",
+  "signInWithToken": "Войти с помощью токена",
+  "connectToServer": "Подключиться к серверу",
+  "enterServerAddress": "Введите адрес вашего сервера JyotiGPT для начала",
+  "serverUrl": "URL сервера",
+  "serverUrlHint": "https://your-server.com",
+  "enterServerUrlSemantic": "Введите URL или IP-адрес вашего сервера",
+  "headerName": "Имя заголовка",
+  "headerValue": "Значение заголовка",
+  "headerValueHint": "api-key-123 или Bearer token",
+  "addHeader": "Добавить заголовок",
+  "maximumHeadersReached": "Достигнуто максимальное количество заголовков",
+  "removeHeader": "Удалить заголовок",
+  "connecting": "Подключение...",
+  "connectToServerButton": "Подключиться к серверу",
+  "demoModeActive": "Демо-режим активен",
+  "skipServerSetupTryDemo": "Пропустить настройку сервера и попробовать демо",
+  "enterDemo": "Войти в демо",
+  "demoBadge": "Демо",
+  "serverNotJyotiGPT": "Это не похоже на сервер JyotiGPT.",
+  "serverUrlEmpty": "URL сервера не может быть пустым",
+  "invalidUrlFormat": "Неверный формат URL. Пожалуйста, проверьте ввод.",
+  "onlyHttpHttps": "Поддерживаются только протоколы HTTP и HTTPS.",
+  "serverAddressRequired": "Требуется адрес сервера (например, 192.168.1.10 или example.com).",
+  "portRange": "Порт должен быть от 1 до 65535.",
+  "invalidIpFormat": "Неверный формат IP-адреса. Используйте формат как 192.168.1.10.",
+  "couldNotConnectGeneric": "Не удалось подключиться. Проверьте адрес и повторите попытку.",
+  "weCouldntReachServer": "Мы не смогли связаться с сервером. Проверьте подключение и работает ли сервер.",
+  "connectionTimedOut": "Время ожидания подключения истекло. Сервер может быть занят или заблокирован брандмауэром.",
+  "useHttpOrHttpsOnly": "Используйте только http:// или https://.",
+  "loginFailed": "Ошибка входа",
+  "invalidCredentials": "Неверное имя пользователя или пароль. Пожалуйста, попробуйте еще раз.",
+  "serverRedirectingHttps": "Сервер перенаправляет запросы. Проверьте настройки HTTPS вашего сервера.",
+  "unableToConnectServer": "Не удается подключиться к серверу. Пожалуйста, проверьте соединение.",
+  "requestTimedOut": "Время ожидания запроса истекло. Пожалуйста, попробуйте еще раз.",
+  "genericSignInFailed": "Не удалось войти. Проверьте учетные данные и настройки сервера.",
+  "attachmentLabel": "Вложение",
+  "tools": "Инструменты",
+  "filters": "Фильтры",
+  "voiceInput": "Голосовой ввод",
+  "voice": "Голос",
+  "voiceStatusListening": "Слушаю...",
+  "voiceStatusRecording": "Запись...",
+  "voiceHoldToTalk": "Удерживайте для разговора",
+  "voiceAutoSend": "Автоотправка",
+  "voiceTranscript": "Транскрипция",
+  "voicePromptSpeakNow": "Говорите сейчас...",
+  "voicePromptTapStart": "Нажмите «Начать» для запуска",
+  "voiceActionStop": "Стоп",
+  "voiceActionStart": "Начать",
+  "messageHintText": "Спросите JyotiGPTapp",
+  "stopGenerating": "Остановить генерацию",
+  "codeCopiedToClipboard": "Код скопирован в буфер обмена.",
+  "send": "Отправить",
+  "sendMessage": "Отправить сообщение",
+  "file": "Файл",
+  "photo": "Фото",
+  "camera": "Камера",
+  "pasteImage": "Вставить изображение",
+  "apiUnavailable": "Служба API недоступна",
+  "unableToLoadImage": "Не удалось загрузить изображение",
+  "notAnImageFile": "Не является файлом изображения: {fileName}",
+  "failedToLoadImage": "Не удалось загрузить изображение: {error}",
+  "invalidDataUrl": "Неверный формат data URL",
+  "failedToDecodeImage": "Не удалось декодировать изображение",
+  "invalidImageFormat": "Неверный формат изображения",
+  "emptyImageData": "Пустые данные изображения",
+  "confirm": "Подтвердить",
+  "cancel": "Отмена",
+  "ok": "OK",
+  "inputField": "Поле ввода",
+  "checkConnection": "Проверить соединение",
+  "openSettings": "Открыть настройки",
+  "goBack": "Назад",
+  "technicalDetails": "Технические детали",
+  "save": "Сохранить",
+  "chooseModel": "Выбрать модель",
+  "reviewerMode": "РЕЖИМ РЕЦЕНЗЕНТА",
+  "selectLanguage": "Выбрать язык",
+  "newFolder": "Новая папка",
+  "folderName": "Имя папки",
+  "newChat": "Новый чат",
+  "more": "Еще",
+  "clear": "Очистить",
+  "searchConversations": "Поиск разговоров...",
+  "create": "Создать",
+  "failedToCreateFolder": "Не удалось создать папку",
+  "failedToMoveChat": "Не удалось переместить чат",
+  "failedToLoadChats": "Не удалось загрузить чаты",
+  "failedToUpdatePin": "Не удалось обновить закрепление",
+  "failedToDeleteChat": "Не удалось удалить чат",
+  "manage": "Управление",
+  "rename": "Переименовать",
+  "delete": "Удалить",
+  "renameChat": "Переименовать чат",
+  "enterChatName": "Введите имя чата",
+  "failedToRenameChat": "Не удалось переименовать чат",
+  "failedToUpdateArchive": "Не удалось обновить архив",
+  "unarchive": "Разархивировать",
+  "archive": "Архивировать",
+  "pin": "Закрепить",
+  "unpin": "Открепить",
+  "recent": "Недавние",
+  "system": "Системный",
+  "english": "English",
+  "deutsch": "Deutsch",
+  "francais": "Français",
+  "italiano": "Italiano",
+  "espanol": "Español",
+  "nederlands": "Nederlands",
+  "russian": "Русский",
+  "chinese": "中文",
+  "chineseSimplified": "Китайский (упрощённый)",
+  "chineseTraditional": "Китайский (традиционный)",
+  "korean": "한국어",
+  "deleteMessagesTitle": "Удалить сообщения",
+  "deleteMessagesMessage": "Удалить {count, plural, one{{count} сообщение} few{{count} сообщения} other{{count} сообщений}}?",
+  "@deleteMessagesMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "routeNotFound": "Маршрут не найден: {routeName}",
+  "@routeNotFound": {
+    "placeholders": {
+      "routeName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteChatTitle": "Удалить чат",
+  "deleteChatMessage": "Этот чат будет удален навсегда.",
+  "deleteFolderTitle": "Удалить папку",
+  "deleteFolderMessage": "Эта папка и ее ссылки будут удалены.",
+  "failedToDeleteFolder": "Не удалось удалить папку",
+  "aboutApp": "О",
+  "aboutAppSubtitle": "Информация и ссылки JyotiGPTapp",
+  "web": "Веб",
+  "imageGen": "Генерация изображений",
+  "pinned": "Закреплено",
+  "folders": "Папки",
+  "archived": "Архивировано",
+  "appLanguage": "Язык приложения",
+  "darkMode": "Темный режим",
+  "webSearch": "Веб-поиск",
+  "webSearchDescription": "Поиск в интернете и цитирование источников в ответах.",
+  "imageGeneration": "Генерация изображений",
+  "imageGenerationDescription": "Создавайте изображения из ваших запросов.",
+  "copy": "Копировать",
+  "ttsListen": "Прослушать",
+  "ttsStop": "Остановить",
+  "edit": "Редактировать",
+  "regenerate": "Регенерировать",
+  "noConversationsYet": "Пока нет разговоров",
+  "usernameOrEmailHint": "Введите ваше имя пользователя или email",
+  "passwordHint": "Введите ваш пароль",
+  "enterToken": "Введите ваш JWT-токен",
+  "tokenHint": "Получите JWT-токен в настройках JyotiGPT. API-ключи (sk-...) не поддерживаются для потоковой передачи.",
+  "apiKeyNotSupported": "API-ключи (sk-...) не поддерживаются. Пожалуйста, используйте JWT-токен.",
+  "apiKeyNoLongerSupported": "Вы были выведены из системы, так как API-ключи больше не поддерживаются. Пожалуйста, войдите с JWT-токеном из настроек JyotiGPT.",
+  "tokenTooShort": "Токен слишком короткий",
+  "signingIn": "Вход...",
+  "advancedSettings": "Расширенные настройки",
+  "customHeaders": "Пользовательские заголовки",
+  "customHeadersDescription": "Добавьте пользовательские HTTP-заголовки для аутентификации, API-ключей или особых требований сервера.",
+  "allowSelfSignedCertificates": "Доверять самоподписанным сертификатам",
+  "@allowSelfSignedCertificates": {
+    "description": "Переключатель, позволяющий доверять самоподписанным TLS-сертификатам для настроенного сервера."
+  },
+  "allowSelfSignedCertificatesDescription": "Принимать TLS-сертификат этого сервера, даже если он самоподписанный. Включайте только для серверов, которым вы доверяете.",
+  "@allowSelfSignedCertificatesDescription": {
+    "description": "Вспомогательный текст, разъясняющий риски включения переключателя самоподписанных сертификатов."
+  },
+  "headerNameTooLong": "Имя заголовка слишком длинное (максимум 64 символа)",
+  "headerNameInvalidChars": "Недопустимое имя заголовка. Используйте только буквы, цифры и эти символы: !#$&-^_`|~",
+  "headerNameReserved": "Невозможно переопределить зарезервированный заголовок «{key}»",
+  "@headerNameReserved": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "headerValueTooLong": "Значение заголовка слишком длинное (максимум 1024 символа)",
+  "headerValueInvalidChars": "Значение заголовка содержит недопустимые символы. Используйте только печатаемые ASCII.",
+  "headerValueUnsafe": "Значение заголовка содержит потенциально небезопасное содержимое",
+  "headerAlreadyExists": "Заголовок «{key}» уже существует. Сначала удалите его для обновления.",
+  "@headerAlreadyExists": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "maxHeadersReachedDetail": "Разрешено максимум 10 пользовательских заголовков. Удалите некоторые, чтобы добавить больше.",
+  "noModelsAvailable": "Нет доступных моделей",
+  "followingSystem": "Следует за системой: {theme}",
+  "@followingSystem": {
+    "placeholders": {
+      "theme": {
+        "type": "String"
+      }
+    }
+  },
+  "themeDark": "Темная",
+  "themePalette": "Цветовая палитра",
+  "@themePalette": {
+    "description": "Заголовок для выбора цветовой палитры приложения."
+  },
+  "themeLight": "Светлая",
+  "currentlyUsingDarkTheme": "Используется темная тема",
+  "currentlyUsingLightTheme": "Используется светлая тема",
+  "aboutJyotiGPTapp": "О JyotiGPTapp",
+  "versionLabel": "Версия: {version} ({build})",
+  "@versionLabel": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
+  "githubRepository": "Репозиторий GitHub",
+  "unableToLoadAppInfo": "Не удалось загрузить информацию о приложении",
+  "thinking": "Думаю...",
+  "thoughts": "Мысли",
+  "thoughtForDuration": "Думал {duration}",
+  "@thoughtForDuration": {
+    "description": "Показывает, сколько времени ассистент думал перед ответом.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "3с"
+      }
+    }
+  },
+  "analyzing": "Анализирую…",
+  "analyzed": "Проанализировано",
+  "appCustomization": "Настройка",
+  "appCustomizationSubtitle": "Тема, язык, голос и quickpills",
+  "quickActionsDescription": "Быстрые клавиши в чате",
+  "chatSettings": "Чат",
+  "sendOnEnter": "Отправка по Enter",
+  "sendOnEnterDescription": "Enter отправляет (программная клавиатура). Также доступно Cmd/Ctrl+Enter",
+  "androidAssistantTitle": "Android digital assistant",
+  "androidAssistantDescription": "Choose what happens when you trigger the Android digital assistant.",
+  "androidAssistantOverlayOption": "Show quick overlay (default)",
+  "androidAssistantNewChatOption": "Open JyotiGPTapp with a new chat",
+  "androidAssistantVoiceCallOption": "Start a voice call",
+  "sttSettings": "Речь в текст",
+  "sttEngineLabel": "Движок распознавания",
+  "sttEngineDevice": "На устройстве",
+  "sttEngineServer": "Сервер",
+  "sttEngineDeviceDescription": "Оставляет звук на этом устройстве. Голосовой ввод не работает, если устройство не поддерживает распознавание речи.",
+  "sttEngineServerDescription": "Всегда отправляет записи на сервер JyotiGPT для транскрибации.",
+  "sttDeviceUnavailableWarning": "Распознавание речи на устройстве недоступно на этом устройстве.",
+  "sttServerUnavailableWarning": "Подключитесь к серверу с включённой транскрибацией, чтобы использовать эту опцию.",
+  "sttSilenceDuration": "Длительность тишины",
+  "sttSilenceDurationDescription": "Время ожидания после тишины перед автоматической остановкой записи",
+  "ttsSettings": "Преобразование текста в речь",
+  "ttsEngineDeviceDescription": "Оставляет синтез на этом устройстве. Воспроизведение голоса не работает, если устройство не поддерживает синтез речи.",
+  "ttsEngineServerDescription": "Всегда запрашивает аудио у вашего сервера JyotiGPT.",
+  "ttsDeviceUnavailableWarning": "Синтез речи на устройстве недоступен на этом устройстве.",
+  "ttsServerUnavailableWarning": "Подключитесь к серверу с включённым синтезом речи, чтобы использовать эту опцию.",
+  "ttsVoice": "Голос",
+  "ttsSpeechRate": "Скорость речи",
+  "ttsPitch": "Высота тона",
+  "ttsVolume": "Громкость",
+  "ttsPreview": "Предпросмотр голоса",
+  "ttsSystemDefault": "Системное значение по умолчанию",
+  "ttsSelectVoice": "Выбрать голос",
+  "ttsPreviewText": "Это предварительный просмотр выбранного голоса.",
+  "ttsNoVoicesAvailable": "Нет доступных голосов",
+  "ttsVoicesForLanguage": "Голоса {language}",
+  "ttsOtherVoices": "Другие языки",
+  "error": "Ошибка",
+  "display": "Отображение",
+  "realtime": "Реальное время",
+  "transportMode": "Режим транспорта",
+  "mode": "Режим",
+  "transportModePolling": "Опрос (резерв)",
+  "transportModeWs": "Только WebSocket",
+  "transportModePollingInfo": "Переходит на HTTP-опрос, если WebSocket заблокирован. Возвращается к WebSocket, когда это возможно.",
+  "transportModeWsInfo": "Меньше накладных расходов, но может не работать за строгими прокси/брандмауэрами.",
+  "quickActionsSelectedCount": "{count, plural, =0{Действия не выбраны} one{{count} действие выбрано} few{{count} действия выбраны} many{{count} действий выбрано} other{{count} действий выбрано}}",
+  "@quickActionsSelectedCount": {
+    "description": "Subtitle indicating how many quick actions are selected.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "autoSelectDescription": "Использовать модель по умолчанию, настроенную на сервере",
+  "@autoSelectDescription": {
+    "description": "Explains what the server-provided model setting does."
+  },
+  "ttsEngineLabel": "Движок",
+  "@ttsEngineLabel": {
+    "description": "Label for selecting the text-to-speech engine."
+  },
+  "ttsEngineDevice": "На устройстве",
+  "@ttsEngineDevice": {
+    "description": "Chip label for using on-device text-to-speech."
+  },
+  "ttsEngineServer": "Сервер",
+  "@ttsEngineServer": {
+    "description": "Chip label for using server-side text-to-speech."
+  },
+  "modelCapabilityMultimodal": "Мультимодальность",
+  "@modelCapabilityMultimodal": {
+    "description": "Capability chip label for models that support multimodal input."
+  },
+  "modelCapabilityReasoning": "Рассуждения",
+  "@modelCapabilityReasoning": {
+    "description": "Capability chip label for models that support reasoning features."
+  },
+  "voiceCallTitle": "Голосовой звонок",
+  "@voiceCallTitle": {
+    "description": "Title displayed on the voice call screen."
+  },
+  "voiceCallPause": "Пауза",
+  "@voiceCallPause": {
+    "description": "Button label to pause a voice call."
+  },
+  "voiceCallResume": "Продолжить",
+  "@voiceCallResume": {
+    "description": "Button label to resume a paused voice call."
+  },
+  "voiceCallStop": "Остановить",
+  "@voiceCallStop": {
+    "description": "Button label to stop the active voice call."
+  },
+  "voiceCallEnd": "Завершить звонок",
+  "@voiceCallEnd": {
+    "description": "Button label to end the voice call session."
+  },
+  "chooseDifferentFile": "Выбрать другой файл",
+  "@chooseDifferentFile": {
+    "description": "Action label prompting the user to pick another file."
+  },
+  "errorWithMessage": "Ошибка: {message}",
+  "@errorWithMessage": {
+    "description": "Error label with appended message text.",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Network timeout"
+      }
+    }
+  },
+  "networkTimeoutError": "Время соединения истекло. Проверьте подключение к интернету и повторите попытку.",
+  "@networkTimeoutError": {
+    "description": "User-facing message when a network request times out."
+  },
+  "networkUnreachableError": "Не удаётся связаться с сервером. Проверьте URL сервера и подключение к интернету.",
+  "@networkUnreachableError": {
+    "description": "User-facing message when the server cannot be reached."
+  },
+  "networkServerNotResponding": "Сервер не отвечает. Убедитесь, что он запущен и доступен.",
+  "@networkServerNotResponding": {
+    "description": "User-facing message when the server does not respond to a request."
+  },
+  "networkGenericError": "Проблема с подключением. Проверьте подключение к интернету.",
+  "@networkGenericError": {
+    "description": "Fallback message for generic network errors."
+  },
+  "serverError500": "На сервере возникли проблемы. Обычно это временно.",
+  "@serverError500": {
+    "description": "Message when a 500 error is encountered."
+  },
+  "serverErrorUnavailable": "Сервер временно недоступен. Повторите попытку чуть позже.",
+  "@serverErrorUnavailable": {
+    "description": "Message when a 502/503 error is encountered."
+  },
+  "serverErrorTimeout": "Сервер слишком долго отвечает. Повторите попытку.",
+  "@serverErrorTimeout": {
+    "description": "Message when the server times out."
+  },
+  "serverErrorGeneric": "Сервер испытывает трудности. Повторите попытку позже.",
+  "@serverErrorGeneric": {
+    "description": "Fallback server error message."
+  },
+  "authSessionExpired": "Сессия истекла. Выполните вход снова.",
+  "@authSessionExpired": {
+    "description": "Message when an authentication session expires."
+  },
+  "authForbidden": "У вас нет прав для выполнения этого действия.",
+  "@authForbidden": {
+    "description": "Message when the user lacks required permissions."
+  },
+  "authInvalidToken": "Токен аутентификации недействителен. Выполните вход снова.",
+  "@authInvalidToken": {
+    "description": "Message when the authentication token is invalid."
+  },
+  "authGenericError": "Проблема с аутентификацией. Выполните вход снова.",
+  "@authGenericError": {
+    "description": "Fallback authentication error message."
+  },
+  "validationInvalidEmail": "Введите корректный адрес электронной почты.",
+  "@validationInvalidEmail": {
+    "description": "Validation message for invalid email input."
+  },
+  "validationWeakPassword": "Пароль не соответствует требованиям. Проверьте его и повторите попытку.",
+  "@validationWeakPassword": {
+    "description": "Validation message for weak passwords."
+  },
+  "validationMissingRequired": "Заполните все обязательные поля.",
+  "@validationMissingRequired": {
+    "description": "Validation message when required fields are missing."
+  },
+  "validationFormatError": "Некоторые данные указаны в неверном формате. Проверьте и повторите попытку.",
+  "@validationFormatError": {
+    "description": "Validation message for generic formatting issues."
+  },
+  "validationGenericError": "Проверьте введённые данные и повторите попытку.",
+  "@validationGenericError": {
+    "description": "Fallback validation message."
+  },
+  "fileNotFound": "Файл не найден. Возможно, он был перемещён или удалён.",
+  "@fileNotFound": {
+    "description": "Message when a file cannot be located."
+  },
+  "fileAccessDenied": "Нет доступа к файлу. Проверьте разрешения.",
+  "@fileAccessDenied": {
+    "description": "Message when file access is denied."
+  },
+  "fileTooLarge": "Файл слишком большой. Выберите файл меньшего размера.",
+  "@fileTooLarge": {
+    "description": "Message when a file exceeds size limits."
+  },
+  "fileGenericError": "Проблема с файлом. Попробуйте другой файл.",
+  "@fileGenericError": {
+    "description": "Fallback file error message."
+  },
+  "permissionCameraRequired": "Требуется доступ к камере. Включите его в настройках.",
+  "@permissionCameraRequired": {
+    "description": "Message when camera permission is missing."
+  },
+  "permissionStorageRequired": "Требуется доступ к хранилищу. Включите его в настройках.",
+  "@permissionStorageRequired": {
+    "description": "Message when storage permission is missing."
+  },
+  "permissionMicrophoneRequired": "Требуется доступ к микрофону. Включите его в настройках.",
+  "@permissionMicrophoneRequired": {
+    "description": "Message when microphone permission is missing."
+  },
+  "permissionGenericError": "Требуется разрешение. Проверьте разрешения приложения в настройках.",
+  "@permissionGenericError": {
+    "description": "Fallback permission error message."
+  },
+  "actionRetryRequest": "Повторите запрос.",
+  "@actionRetryRequest": {
+    "description": "Description for retrying a failed request."
+  },
+  "actionVerifyConnection": "Проверьте подключение к интернету.",
+  "@actionVerifyConnection": {
+    "description": "Description for checking internet connectivity."
+  },
+  "actionRetryOperation": "Повторите операцию.",
+  "@actionRetryOperation": {
+    "description": "Description for retrying the same operation."
+  },
+  "actionRetryAfterDelay": "Подождите немного и попробуйте снова.",
+  "@actionRetryAfterDelay": {
+    "description": "Description suggesting a short delay before retrying."
+  },
+  "actionSignInToAccount": "Войдите в свою учётную запись.",
+  "@actionSignInToAccount": {
+    "description": "Description for signing back into the app."
+  },
+  "actionSelectAnotherFile": "Выберите другой файл.",
+  "@actionSelectAnotherFile": {
+    "description": "Description for choosing a different file."
+  },
+  "actionOpenAppSettings": "Откройте настройки приложения, чтобы предоставить разрешения.",
+  "@actionOpenAppSettings": {
+    "description": "Description for opening system or app settings."
+  },
+  "actionRetryAfterPermission": "Повторите попытку после предоставления разрешения.",
+  "@actionRetryAfterPermission": {
+    "description": "Description for retrying once permissions are granted."
+  },
+  "actionReturnToPrevious": "Вернуться на предыдущий экран.",
+  "@actionReturnToPrevious": {
+    "description": "Description for navigating back to the prior screen."
+  },
+  "continueAction": "Продолжить",
+  "@continueAction": {
+    "description": "Button label to continue an action or flow."
+  },
+  "loadingShort": "Загрузка",
+  "@loadingShort": {
+    "description": "Short loading label used for accessibility."
+  },
+  "loadingAnnouncement": "Загрузка: {message}",
+  "@loadingAnnouncement": {
+    "description": "Screen reader announcement when loading a resource.",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Messages"
+      }
+    }
+  },
+  "errorAnnouncement": "Ошибка: {error}",
+  "@errorAnnouncement": {
+    "description": "Screen reader announcement for an error.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network timeout"
+      }
+    }
+  },
+  "errorAnnouncementWithSuggestion": "Ошибка: {error}. {suggestion}",
+  "@errorAnnouncementWithSuggestion": {
+    "description": "Screen reader announcement for an error with a follow-up suggestion.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network timeout"
+      },
+      "suggestion": {
+        "type": "String",
+        "example": "Please try again later."
+      }
+    }
+  },
+  "successAnnouncement": "Успешно: {message}",
+  "@successAnnouncement": {
+    "description": "Screen reader announcement for successful actions.",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Profile updated"
+      }
+    }
+  },
+  "requiredFieldLabel": "{label} *",
+  "@requiredFieldLabel": {
+    "description": "Label text indicating a required field.",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Email"
+      }
+    }
+  },
+  "requiredFieldHelper": "Обязательное поле",
+  "@requiredFieldHelper": {
+    "description": "Helper text indicating that the field is required."
+  },
+  "switchOnLabel": "Вкл.",
+  "@switchOnLabel": {
+    "description": "Semantic label when a switch is enabled."
+  },
+  "switchOffLabel": "Выкл.",
+  "@switchOffLabel": {
+    "description": "Semantic label when a switch is disabled."
+  },
+  "dialogSemanticLabel": "Диалог: {title}",
+  "@dialogSemanticLabel": {
+    "description": "Semantic label describing the dialog title.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Settings"
+      }
+    }
+  },
+  "previousLabel": "Назад",
+  "@previousLabel": {
+    "description": "Label for navigating to the previous item."
+  },
+  "nextLabel": "Далее",
+  "@nextLabel": {
+    "description": "Label for navigating to the next item."
+  },
+  "themePaletteJyotiGPTappLabel": "JyotiGPTapp",
+  "@themePaletteJyotiGPTappLabel": {
+    "description": "Palette name for the default JyotiGPTapp theme."
+  },
+  "themePaletteJyotiGPTappDescription": "Нейтральная чистая тема, созданная для JyotiGPTapp.",
+  "@themePaletteJyotiGPTappDescription": {
+    "description": "Description of the JyotiGPTapp palette."
+  },
+  "themePaletteClaudeLabel": "Claude",
+  "@themePaletteClaudeLabel": {
+    "description": "Palette name inspired by the Claude web client."
+  },
+  "themePaletteClaudeDescription": "Тёплая тактильная палитра из веб-клиента Claude.",
+  "@themePaletteClaudeDescription": {
+    "description": "Description of the Claude palette."
+  },
+  "themePaletteT3ChatLabel": "T3 Chat",
+  "@themePaletteT3ChatLabel": {
+    "description": "Palette name inspired by the T3 Stack brand."
+  },
+  "themePaletteT3ChatDescription": "Игривые градиенты, вдохновлённые брендом T3 Stack.",
+  "@themePaletteT3ChatDescription": {
+    "description": "Description of the T3 Chat palette."
+  },
+  "themePaletteCatppuccinLabel": "Catppuccin",
+  "@themePaletteCatppuccinLabel": {
+    "description": "Palette name for Catppuccin colors."
+  },
+  "themePaletteCatppuccinDescription": "Мягкая пастельная палитра.",
+  "@themePaletteCatppuccinDescription": {
+    "description": "Description of the Catppuccin palette."
+  },
+  "themePaletteTangerineLabel": "Tangerine",
+  "@themePaletteTangerineLabel": {
+    "description": "Palette name for Tangerine colors."
+  },
+  "themePaletteTangerineDescription": "Тёплая палитра оранжевых и сланцевых оттенков.",
+  "@themePaletteTangerineDescription": {
+    "description": "Description of the Tangerine palette."
+  },
+  "@notAnImageFile": {
+    "description": "Error when a referenced file is not an image.",
+    "placeholders": {
+      "fileName": {
+        "type": "String",
+        "example": "image.txt"
+      }
+    }
+  },
+  "@failedToLoadImage": {
+    "description": "Error including the underlying reason when image loading fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "@ttsVoicesForLanguage": {
+    "description": "Section header for voices matching the app language",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "EN"
+      }
+    }
+  },
+  "voiceCallReady": "Готово",
+  "@voiceCallReady": {
+    "description": "Status label shown when the voice call is ready to start."
+  },
+  "voiceCallConnecting": "Подключение...",
+  "@voiceCallConnecting": {
+    "description": "Status label shown while the voice call is connecting."
+  },
+  "voiceCallListening": "Слушает",
+  "@voiceCallListening": {
+    "description": "Status label shown while the call is listening for input."
+  },
+  "voiceCallPaused": "Пауза",
+  "@voiceCallPaused": {
+    "description": "Status label shown when the call is paused."
+  },
+  "voiceCallProcessing": "Обрабатывает...",
+  "@voiceCallProcessing": {
+    "description": "Status label shown while the call processes a response."
+  },
+  "voiceCallSpeaking": "Говорит",
+  "@voiceCallSpeaking": {
+    "description": "Status label shown while the assistant is speaking."
+  },
+  "voiceCallDisconnected": "Отключено",
+  "@voiceCallDisconnected": {
+    "description": "Status label shown when the voice call has ended or disconnected."
+  },
+  "voiceCallErrorHelp": "Проверьте:\n• Разрешение на микрофон предоставлено\n• Распознавание речи доступно на устройстве\n• Есть подключение к серверу",
+  "@voiceCallErrorHelp": {
+    "description": "Guidance shown when the voice call encounters an error."
+  },
+  "mermaidPreviewUnavailable": "Предпросмотр Mermaid недоступен на этой платформе.",
+  "chartPreviewUnavailable": "Предпросмотр диаграмм недоступен на этой платформе.",
+  "notes": "Заметки",
+  "searchNotes": "Поиск заметок...",
+  "createNote": "Создать заметку",
+  "noNotesYet": "Заметок пока нет",
+  "noNotesFound": "Заметки не найдены",
+  "createFirstNoteHint": "Нажмите +, чтобы создать первую заметку.",
+  "tryDifferentSearch": "Попробуйте другой поисковый запрос.",
+  "loadingNotes": "Загрузка заметок...",
+  "loadingNote": "Загрузка заметки...",
+  "failedToLoadNotes": "Не удалось загрузить заметки",
+  "deleteNoteTitle": "Удалить заметку",
+  "deleteNoteMessage": "Удалить \"{title}\"? Это действие нельзя отменить.",
+  "@deleteNoteMessage": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "writeNote": "Напишите что-нибудь...",
+  "saving": "Сохранение...",
+  "saved": "Сохранено",
+  "noteCopiedToClipboard": "Заметка скопирована в буфер обмена",
+  "generateTitle": "Сгенерировать название",
+  "generatingTitle": "Генерация названия...",
+  "noContentToGenerateTitle": "Сначала добавьте содержимое для генерации названия",
+  "failedToGenerateTitle": "Не удалось сгенерировать название",
+  "noContentToEnhance": "Сначала добавьте содержимое для улучшения",
+  "noteEnhanced": "Заметка улучшена с помощью ИИ",
+  "failedToEnhanceNote": "Не удалось улучшить заметку",
+  "noModelSelected": "Сначала выберите модель",
+  "enhanceWithAI": "Улучшить с помощью ИИ",
+  "enhanceNote": "Улучшить заметку",
+  "startDictation": "Начать диктовку",
+  "stopRecording": "Остановить запись",
+  "voiceInputUnavailable": "Голосовой ввод недоступен",
+  "failedToStartDictation": "Не удалось начать диктовку",
+  "noteNotFound": "Заметка не найдена",
+  "untitled": "Без названия",
+  "today": "Сегодня",
+  "yesterday": "Вчера",
+  "previous7Days": "Последние 7 дней",
+  "previous30Days": "Последние 30 дней",
+  "older": "Старше",
+  "wordCount": "{count} слов",
+  "@wordCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "charCount": "{count} символов",
+  "@charCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "promptVariablesTitle": "Заполните данные",
+  "promptVariablesDescription": "Заполните поля ниже, чтобы настроить этот промпт.",
+  "promptVariableNumberMin": "Минимальное значение: {min}",
+  "@promptVariableNumberMin": {
+    "placeholders": {
+      "min": {
+        "type": "double"
+      }
+    }
+  },
+  "promptVariableNumberMax": "Максимальное значение: {max}",
+  "@promptVariableNumberMax": {
+    "placeholders": {
+      "max": {
+        "type": "double"
+      }
+    }
+  },
+  "sso": "SSO",
+  "ssoDescription": "Войдите через провайдера идентификации вашей организации",
+  "signInWithSso": "Войти через SSO",
+  "ssoAuthenticating": "Аутентификация...",
+  "ssoAuthFailed": "Ошибка SSO-аутентификации",
+  "ssoLoadingLogin": "Загрузка страницы входа...",
+  "ldap": "LDAP",
+  "ldapDescription": "Войдите с учётными данными каталога LDAP",
+  "signInWithLdap": "Войти через LDAP",
+  "ldapUsername": "Имя пользователя",
+  "ldapUsernameHint": "Введите имя пользователя LDAP",
+  "moreSignInOptions": "Дополнительные способы входа",
+  "ldapNotEnabled": "LDAP-аутентификация не включена на этом сервере",
+  "ssoPlatformNotSupported": "SSO-аутентификация не поддерживается на этой платформе. Пожалуйста, используйте учётные данные или LDAP-аутентификацию.",
+  "continueWithProvider": "Продолжить с {provider}",
+  "or": "или",
+  "usageInfo": "Инфо",
+  "usageInfoTitle": "Статистика ответа",
+  "usageTokenGeneration": "Генерация токенов",
+  "usagePromptEval": "Обработка промпта",
+  "usageTotalDuration": "Общая длительность",
+  "usageTokensPerSecond": "{speed} т/с",
+  "@usageTokensPerSecond": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "usageTokenCount": "{count} токенов",
+  "@usageTokenCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "usageSecondsFormat": "{seconds}с",
+  "@usageSecondsFormat": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "usageLoadDuration": "Время загрузки модели",
+  "usageQueueTime": "Время в очереди",
+  "usageReasoningTokens": "Токены рассуждений",
+  "usageTotalTokens": "Всего токенов",
+  "proxyAuthentication": "Аутентификация через прокси",
+  "proxyAuthPlatformNotSupported": "Аутентификация через прокси требует мобильное устройство. Пожалуйста, сначала авторизуйтесь через браузер.",
+  "proxyAuthLoading": "Загрузка страницы аутентификации...",
+  "proxyAuthFailed": "Ошибка аутентификации через прокси",
+  "proxyAuthHelpText": "Войдите через прокси вашей организации, затем войдите в JyotiGPT. Вы будете перенаправлены автоматически.",
+  "proxyAuthHelpTextSimple": "Войдите через ваш прокси. После аутентификации нажмите Продолжить для входа.",
+  "continueButton": "Продолжить",
+  "proxyAuthRequired": "Этот сервер требует аутентификацию через прокси",
+  "proxyAuthRequiredDescription": "Ваш сервер, похоже, находится за прокси аутентификации (например, oauth2-proxy). Сначала необходимо войти через прокси.",
+  "authenticateThroughProxy": "Аутентифицировать",
+  "voiceOptions": "Голосовые опции",
+  "dictation": "Диктовка",
+  "dictationDescription": "Говорите и конвертируйте в текст в реальном времени",
+  "recordAudio": "Записать аудио",
+  "recordAudioDescription": "Сохранить аудио для последующей транскрипции",
+  "recordingAudio": "Запись...",
+  "preparingRecording": "Подготовка...",
+  "recordingHint": "Нажмите стоп когда закончите",
+  "stopAndSaveRecording": "Остановить и сохранить",
+  "processingRecording": "Обработка...",
+  "audioRecordingSaved": "Аудиозапись сохранена",
+  "microphonePermissionDenied": "Доступ к микрофону запрещён",
+  "recordingFailed": "Ошибка записи",
+  "removeFileConfirm": "Удалить этот файл из заметки?",
+  "fileRemoved": "Файл удалён",
+  "playAudio": "Воспроизвести аудио",
+  "removeFile": "Удалить файл",
+  "audioFileType": "Аудио",
+  "imageFileType": "Изображение",
+  "failedToUploadAudio": "Не удалось загрузить аудио",
+  "audioAttachment": "Аудио вложение",
+  "loadingAudio": "Загрузка аудио...",
+  "failedToLoadAudio": "Не удалось загрузить аудио",
+  "webPage": "Веб-страница",
+  "greetingTitle": "Привет, {username}",
+  "temporaryChat": "Temporary Chat",
+  "temporaryChatTooltip": "This chat won't appear in history",
+  "saveChat": "Save Chat",
+  "temporaryChatByDefault": "Temporary Chat by Default",
+  "temporaryChatByDefaultDescription": "New chats won't be saved to history unless you choose to save them",
+  "chatSaved": "Chat saved to history",
+  "chatSaveFailed": "Failed to save chat"
+}

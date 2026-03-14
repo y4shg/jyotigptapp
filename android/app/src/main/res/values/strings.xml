@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">JyotiGPT</string>
+    
+    <!-- Widget strings -->
+    <string name="widget_name">JyotiGPT</string>
+    <string name="widget_description">Quick access to spiritual chat with camera, photos, and clipboard shortcuts</string>
+    <string name="widget_ask_jyotigptapp">Ask JyotiGPT</string>
+    <string name="widget_camera">Camera</string>
+    <string name="widget_photos">Photos</string>
+    <string name="widget_clipboard">Clipboard</string>
+    <string name="widget_mic">Voice</string>
+</resources>
+
+
+
+

@@ -1,0 +1,907 @@
+{
+  "@@locale": "es",
+  "appTitle": "JyotiGPT",
+  "requiredField": "This field is required",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+  "retry": "Reintentar",
+  "back": "Atrás",
+  "you": "Tú",
+  "loadingProfile": "Cargando perfil...",
+  "pleaseCheckConnection": "Por favor, verifica tu conexión e inténtalo de nuevo",
+  "connectionIssueTitle": "No se puede conectar al servidor",
+  "@connectionIssueTitle": {
+    "description": "Título que se muestra cuando el servidor configurado no está disponible"
+  },
+  "connectionIssueSubtitle": "Reconecta para continuar o cierra sesión para elegir otro servidor.",
+  "@connectionIssueSubtitle": {
+    "description": "Subtítulo que explica las acciones disponibles cuando no se puede acceder al servidor"
+  },
+  "account": "Cuenta",
+  "supportJyotiGPTapp": "Apoyar JyotiGPTapp",
+  "supportJyotiGPTappSubtitle": "Mantén JyotiGPTapp independiente financiando el desarrollo continuo.",
+  "githubSponsorsTitle": "GitHub Sponsors",
+  "githubSponsorsSubtitle": "Conviértete en un patrocinador recurrente para financiar elementos del roadmap.",
+  "buyMeACoffeeTitle": "Buy Me a Coffee",
+  "buyMeACoffeeSubtitle": "Haz una donación única para agradecer.",
+  "signOut": "Cerrar sesión",
+  "endYourSession": "Finalizar tu sesión",
+  "defaultModel": "Modelo predeterminado",
+  "autoSelect": "Predeterminado del servidor",
+  "loadingModels": "Cargando modelos...",
+  "failedToLoadModels": "No se pudieron cargar los modelos",
+  "availableModels": "Modelos disponibles",
+  "noResults": "Sin resultados",
+  "searchModels": "Buscar modelos...",
+  "errorMessage": "Algo salió mal. Por favor, inténtalo de nuevo.",
+  "closeButtonSemantic": "Cerrar",
+  "loadingContent": "Cargando contenido",
+  "noItems": "Sin elementos",
+  "noItemsToDisplay": "No hay elementos para mostrar",
+  "knowledgeBase": "Base de conocimientos",
+  "attachments": "Adjuntos",
+  "takePhoto": "Tomar una foto",
+  "document": "Documento",
+  "backToServerSetup": "Volver a configuración del servidor",
+  "connectedToServer": "Conectado al servidor",
+  "signIn": "Iniciar sesión",
+  "enterCredentials": "Ingresa tus credenciales para acceder a tus conversaciones de IA",
+  "credentials": "Credenciales",
+  "apiKey": "Clave API",
+  "token": "Token",
+  "usernameOrEmail": "Usuario o correo electrónico",
+  "password": "Contraseña",
+  "signInWithToken": "Iniciar sesión con token",
+  "connectToServer": "Conectar al servidor",
+  "enterServerAddress": "Ingresa la dirección de tu servidor JyotiGPT para comenzar",
+  "serverUrl": "URL del servidor",
+  "serverUrlHint": "https://tu-servidor.com",
+  "enterServerUrlSemantic": "Ingresa la URL o dirección IP de tu servidor",
+  "headerName": "Nombre de encabezado",
+  "headerValue": "Valor de encabezado",
+  "headerValueHint": "api-key-123 o Bearer token",
+  "addHeader": "Añadir encabezado",
+  "maximumHeadersReached": "Número máximo de encabezados alcanzado",
+  "removeHeader": "Eliminar encabezado",
+  "connecting": "Conectando...",
+  "connectToServerButton": "Conectar al servidor",
+  "demoModeActive": "Modo demo activo",
+  "skipServerSetupTryDemo": "Omitir configuración del servidor y probar la demo",
+  "enterDemo": "Entrar a demo",
+  "demoBadge": "Demo",
+  "serverNotJyotiGPT": "Esto no parece ser un servidor JyotiGPT.",
+  "serverUrlEmpty": "La URL del servidor no puede estar vacía",
+  "invalidUrlFormat": "Formato de URL inválido. Por favor, verifica tu entrada.",
+  "onlyHttpHttps": "Solo se admiten los protocolos HTTP y HTTPS.",
+  "serverAddressRequired": "Se requiere dirección del servidor (ej. 192.168.1.10 o example.com).",
+  "portRange": "El puerto debe estar entre 1 y 65535.",
+  "invalidIpFormat": "Formato de dirección IP inválido. Usa un formato como 192.168.1.10.",
+  "couldNotConnectGeneric": "No se pudo conectar. Verifica la dirección e inténtalo de nuevo.",
+  "weCouldntReachServer": "No pudimos conectarnos al servidor. Verifica tu conexión y que el servidor esté funcionando.",
+  "connectionTimedOut": "Se agotó el tiempo de conexión. El servidor puede estar ocupado o bloqueado por un firewall.",
+  "useHttpOrHttpsOnly": "Usa solo http:// o https://.",
+  "loginFailed": "Error al iniciar sesión",
+  "invalidCredentials": "Usuario o contraseña inválidos. Por favor, inténtalo de nuevo.",
+  "serverRedirectingHttps": "El servidor está redirigiendo solicitudes. Verifica la configuración HTTPS de tu servidor.",
+  "unableToConnectServer": "No se puede conectar al servidor. Por favor, verifica tu conexión.",
+  "requestTimedOut": "Se agotó el tiempo de espera de la solicitud. Por favor, inténtalo de nuevo.",
+  "genericSignInFailed": "No pudimos iniciar tu sesión. Verifica tus credenciales y configuración del servidor.",
+  "attachmentLabel": "Adjunto",
+  "tools": "Herramientas",
+  "filters": "Filtros",
+  "voiceInput": "Entrada de voz",
+  "voice": "Voz",
+  "voiceStatusListening": "Escuchando...",
+  "voiceStatusRecording": "Grabando...",
+  "voiceHoldToTalk": "Mantén presionado para hablar",
+  "voiceAutoSend": "Envío automático",
+  "voiceTranscript": "Transcripción",
+  "voicePromptSpeakNow": "Habla ahora...",
+  "voicePromptTapStart": "Toca Iniciar para comenzar",
+  "voiceActionStop": "Detener",
+  "voiceActionStart": "Iniciar",
+  "messageHintText": "Pregunta a JyotiGPTapp",
+  "stopGenerating": "Detener generación",
+  "codeCopiedToClipboard": "Código copiado al portapapeles.",
+  "send": "Enviar",
+  "sendMessage": "Enviar mensaje",
+  "file": "Archivo",
+  "photo": "Foto",
+  "camera": "Cámara",
+  "pasteImage": "Pegar imagen",
+  "apiUnavailable": "Servicio de API no disponible",
+  "unableToLoadImage": "No se puede cargar la imagen",
+  "notAnImageFile": "No es un archivo de imagen: {fileName}",
+  "failedToLoadImage": "No se pudo cargar la imagen: {error}",
+  "invalidDataUrl": "Formato de URL de datos inválido",
+  "failedToDecodeImage": "No se pudo decodificar la imagen",
+  "invalidImageFormat": "Formato de imagen inválido",
+  "emptyImageData": "Datos de imagen vacíos",
+  "confirm": "Confirmar",
+  "cancel": "Cancelar",
+  "ok": "OK",
+  "inputField": "Campo de entrada",
+  "checkConnection": "Verificar conexión",
+  "openSettings": "Abrir configuración",
+  "goBack": "Volver",
+  "technicalDetails": "Detalles técnicos",
+  "save": "Guardar",
+  "chooseModel": "Elegir modelo",
+  "reviewerMode": "MODO REVISOR",
+  "selectLanguage": "Seleccionar idioma",
+  "newFolder": "Nueva carpeta",
+  "folderName": "Nombre de carpeta",
+  "newChat": "Nueva conversación",
+  "more": "Más",
+  "clear": "Limpiar",
+  "searchConversations": "Buscar conversaciones...",
+  "create": "Crear",
+  "failedToCreateFolder": "No se pudo crear la carpeta",
+  "failedToMoveChat": "No se pudo mover la conversación",
+  "failedToLoadChats": "No se pudieron cargar las conversaciones",
+  "failedToUpdatePin": "No se pudo actualizar el anclaje",
+  "failedToDeleteChat": "No se pudo eliminar la conversación",
+  "manage": "Gestionar",
+  "rename": "Renombrar",
+  "delete": "Eliminar",
+  "renameChat": "Renombrar conversación",
+  "enterChatName": "Ingresa nombre de conversación",
+  "failedToRenameChat": "No se pudo renombrar la conversación",
+  "failedToUpdateArchive": "No se pudo actualizar el archivo",
+  "unarchive": "Desarchivar",
+  "archive": "Archivar",
+  "pin": "Anclar",
+  "unpin": "Desanclar",
+  "recent": "Reciente",
+  "system": "Sistema",
+  "english": "English",
+  "deutsch": "Deutsch",
+  "francais": "Français",
+  "italiano": "Italiano",
+  "espanol": "Español",
+  "nederlands": "Nederlands",
+  "russian": "Русский",
+  "chinese": "中文",
+  "chineseSimplified": "Chino (simplificado)",
+  "chineseTraditional": "Chino (tradicional)",
+  "korean": "한국어",
+  "deleteMessagesTitle": "Eliminar mensajes",
+  "deleteMessagesMessage": "¿Eliminar {count} mensajes?",
+  "@deleteMessagesMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "routeNotFound": "Ruta no encontrada: {routeName}",
+  "@routeNotFound": {
+    "placeholders": {
+      "routeName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteChatTitle": "Eliminar conversación",
+  "deleteChatMessage": "Esta conversación se eliminará permanentemente.",
+  "deleteFolderTitle": "Eliminar carpeta",
+  "deleteFolderMessage": "Esta carpeta y sus referencias de asignación se eliminarán.",
+  "failedToDeleteFolder": "No se pudo eliminar la carpeta",
+  "aboutApp": "Acerca de",
+  "aboutAppSubtitle": "Información y enlaces de JyotiGPTapp",
+  "web": "Web",
+  "imageGen": "Generación de imágenes",
+  "pinned": "Anclado",
+  "folders": "Carpetas",
+  "archived": "Archivado",
+  "appLanguage": "Idioma de la aplicación",
+  "darkMode": "Modo oscuro",
+  "webSearch": "Búsqueda web",
+  "webSearchDescription": "Busca en la web y cita fuentes en las respuestas.",
+  "imageGeneration": "Generación de imágenes",
+  "imageGenerationDescription": "Crea imágenes a partir de tus prompts.",
+  "copy": "Copiar",
+  "ttsListen": "Escuchar",
+  "ttsStop": "Detener",
+  "edit": "Editar",
+  "regenerate": "Regenerar",
+  "noConversationsYet": "Aún no hay conversaciones",
+  "usernameOrEmailHint": "Ingresa tu usuario o correo electrónico",
+  "passwordHint": "Ingresa tu contraseña",
+  "enterToken": "Ingresa tu token JWT",
+  "tokenHint": "Obtén el token JWT desde la configuración de JyotiGPT. Las claves API (sk-...) no son compatibles con streaming.",
+  "apiKeyNotSupported": "Las claves API (sk-...) no son compatibles. Por favor usa un token JWT en su lugar.",
+  "apiKeyNoLongerSupported": "Se cerró tu sesión porque las claves API ya no son compatibles. Por favor inicia sesión con un token JWT desde la configuración de JyotiGPT.",
+  "tokenTooShort": "El token es demasiado corto",
+  "signingIn": "Iniciando sesión...",
+  "advancedSettings": "Configuración avanzada",
+  "customHeaders": "Encabezados personalizados",
+  "customHeadersDescription": "Añade encabezados HTTP personalizados para autenticación, claves API o requisitos especiales del servidor.",
+  "allowSelfSignedCertificates": "Confiar en certificados autofirmados",
+  "@allowSelfSignedCertificates": {
+    "description": "Etiqueta del interruptor que permite confiar en certificados TLS autofirmados para el servidor configurado."
+  },
+  "allowSelfSignedCertificatesDescription": "Acepta el certificado TLS de este servidor incluso si es autofirmado. Actívalo solo para servidores en los que confíes.",
+  "@allowSelfSignedCertificatesDescription": {
+    "description": "Texto de ayuda que aclara los riesgos de habilitar el interruptor de certificados autofirmados."
+  },
+  "headerNameTooLong": "Nombre de encabezado demasiado largo (máx. 64 caracteres)",
+  "headerNameInvalidChars": "Nombre de encabezado inválido. Usa solo letras, números y estos símbolos: !#$&-^_`|~",
+  "headerNameReserved": "No se puede sobrescribir el encabezado reservado \"{key}\"",
+  "@headerNameReserved": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "headerValueTooLong": "Valor de encabezado demasiado largo (máx. 1024 caracteres)",
+  "headerValueInvalidChars": "El valor del encabezado contiene caracteres inválidos. Usa solo ASCII imprimible.",
+  "headerValueUnsafe": "El valor del encabezado parece contener contenido potencialmente inseguro",
+  "headerAlreadyExists": "El encabezado \"{key}\" ya existe. Elimínalo primero para actualizarlo.",
+  "@headerAlreadyExists": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "maxHeadersReachedDetail": "Máximo de 10 encabezados personalizados permitidos. Elimina algunos para añadir más.",
+  "noModelsAvailable": "No hay modelos disponibles",
+  "followingSystem": "Siguiendo el sistema: {theme}",
+  "@followingSystem": {
+    "placeholders": {
+      "theme": {
+        "type": "String"
+      }
+    }
+  },
+  "themeDark": "Oscuro",
+  "themePalette": "Paleta de acentos",
+  "@themePalette": {
+    "description": "Título para seleccionar la paleta de colores de la aplicación."
+  },
+  "themeLight": "Claro",
+  "currentlyUsingDarkTheme": "Usando actualmente el tema oscuro",
+  "currentlyUsingLightTheme": "Usando actualmente el tema claro",
+  "aboutJyotiGPTapp": "Acerca de JyotiGPTapp",
+  "versionLabel": "Versión: {version} ({build})",
+  "@versionLabel": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
+  "githubRepository": "Repositorio GitHub",
+  "unableToLoadAppInfo": "No se puede cargar información de la aplicación",
+  "thinking": "Pensando...",
+  "thoughts": "Pensamientos",
+  "thoughtForDuration": "Pensó durante {duration}",
+  "@thoughtForDuration": {
+    "description": "Muestra cuánto tiempo el asistente estuvo pensando antes de responder.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "3s"
+      }
+    }
+  },
+  "analyzing": "Analizando…",
+  "analyzed": "Analizado",
+  "appCustomization": "Personalización",
+  "appCustomizationSubtitle": "Tema, idioma, voz y quickpills",
+  "quickActionsDescription": "Accesos directos en chat",
+  "chatSettings": "Conversación",
+  "sendOnEnter": "Enviar con Enter",
+  "sendOnEnterDescription": "Enter envía (teclado virtual). Cmd/Ctrl+Enter también disponible",
+  "androidAssistantTitle": "Android digital assistant",
+  "androidAssistantDescription": "Choose what happens when you trigger the Android digital assistant.",
+  "androidAssistantOverlayOption": "Show quick overlay (default)",
+  "androidAssistantNewChatOption": "Open JyotiGPTapp with a new chat",
+  "androidAssistantVoiceCallOption": "Start a voice call",
+  "sttSettings": "Voz a texto",
+  "sttEngineLabel": "Motor de reconocimiento",
+  "sttEngineDevice": "En el dispositivo",
+  "sttEngineServer": "Servidor",
+  "sttEngineDeviceDescription": "Mantiene el audio en este dispositivo. La entrada de voz no funciona si el dispositivo no admite reconocimiento de voz.",
+  "sttEngineServerDescription": "Envía siempre las grabaciones a tu servidor JyotiGPT para la transcripción.",
+  "sttDeviceUnavailableWarning": "El reconocimiento de voz en el dispositivo no está disponible en este dispositivo.",
+  "sttServerUnavailableWarning": "Conéctate a un servidor con transcripción habilitada para usar esta opción.",
+  "sttSilenceDuration": "Duración del silencio",
+  "sttSilenceDurationDescription": "Tiempo de espera después del silencio antes de detener automáticamente la grabación",
+  "ttsSettings": "Texto a voz",
+  "ttsEngineDeviceDescription": "Mantiene la síntesis en este dispositivo. La reproducción de voz no funciona si el dispositivo no admite TTS.",
+  "ttsEngineServerDescription": "Solicita siempre el audio a tu servidor JyotiGPT.",
+  "ttsDeviceUnavailableWarning": "La síntesis de voz en el dispositivo no está disponible en este dispositivo.",
+  "ttsServerUnavailableWarning": "Conéctate a un servidor con texto a voz habilitado para usar esta opción.",
+  "ttsVoice": "Voz",
+  "ttsSpeechRate": "Velocidad de voz",
+  "ttsPitch": "Tono",
+  "ttsVolume": "Volumen",
+  "ttsPreview": "Vista previa de voz",
+  "ttsSystemDefault": "Predeterminado del sistema",
+  "ttsSelectVoice": "Seleccionar voz",
+  "ttsPreviewText": "Esta es una vista previa de la voz seleccionada.",
+  "ttsNoVoicesAvailable": "No hay voces disponibles",
+  "ttsVoicesForLanguage": "Voces de {language}",
+  "ttsOtherVoices": "Otros idiomas",
+  "error": "Error",
+  "display": "Visualización",
+  "realtime": "Tiempo real",
+  "transportMode": "Modo de transporte",
+  "mode": "Modo",
+  "transportModePolling": "Polling de respaldo",
+  "transportModeWs": "Solo WebSocket",
+  "transportModePollingInfo": "Recurrirá a HTTP polling si WebSocket está bloqueado. Se actualizará a WebSocket cuando sea posible.",
+  "transportModeWsInfo": "Menor sobrecarga, pero puede fallar detrás de proxies/firewalls estrictos.",
+  "quickActionsSelectedCount": "{count, plural, =0{No hay acciones seleccionadas} one{{count} acción seleccionada} other{{count} acciones seleccionadas}}",
+  "@quickActionsSelectedCount": {
+    "description": "Subtitle indicating how many quick actions are selected.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "autoSelectDescription": "Usar el modelo predeterminado configurado en el servidor",
+  "@autoSelectDescription": {
+    "description": "Explains what the server-provided model setting does."
+  },
+  "ttsEngineLabel": "Motor",
+  "@ttsEngineLabel": {
+    "description": "Label for selecting the text-to-speech engine."
+  },
+  "ttsEngineDevice": "En el dispositivo",
+  "@ttsEngineDevice": {
+    "description": "Chip label for using on-device text-to-speech."
+  },
+  "ttsEngineServer": "Servidor",
+  "@ttsEngineServer": {
+    "description": "Chip label for using server-side text-to-speech."
+  },
+  "modelCapabilityMultimodal": "Multimodal",
+  "@modelCapabilityMultimodal": {
+    "description": "Capability chip label for models that support multimodal input."
+  },
+  "modelCapabilityReasoning": "Razonamiento",
+  "@modelCapabilityReasoning": {
+    "description": "Capability chip label for models that support reasoning features."
+  },
+  "voiceCallTitle": "Llamada de voz",
+  "@voiceCallTitle": {
+    "description": "Title displayed on the voice call screen."
+  },
+  "voiceCallPause": "Pausar",
+  "@voiceCallPause": {
+    "description": "Button label to pause a voice call."
+  },
+  "voiceCallResume": "Reanudar",
+  "@voiceCallResume": {
+    "description": "Button label to resume a paused voice call."
+  },
+  "voiceCallStop": "Detener",
+  "@voiceCallStop": {
+    "description": "Button label to stop the active voice call."
+  },
+  "voiceCallEnd": "Finalizar llamada",
+  "@voiceCallEnd": {
+    "description": "Button label to end the voice call session."
+  },
+  "chooseDifferentFile": "Seleccionar otro archivo",
+  "@chooseDifferentFile": {
+    "description": "Action label prompting the user to pick another file."
+  },
+  "errorWithMessage": "Error: {message}",
+  "@errorWithMessage": {
+    "description": "Error label with appended message text.",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Network timeout"
+      }
+    }
+  },
+  "networkTimeoutError": "La conexión agotó el tiempo de espera. Verifica tu conexión a Internet e inténtalo de nuevo.",
+  "@networkTimeoutError": {
+    "description": "User-facing message when a network request times out."
+  },
+  "networkUnreachableError": "No se puede alcanzar el servidor. Verifica la URL del servidor y tu conexión a Internet.",
+  "@networkUnreachableError": {
+    "description": "User-facing message when the server cannot be reached."
+  },
+  "networkServerNotResponding": "El servidor no responde. Verifica que esté en ejecución y accesible.",
+  "@networkServerNotResponding": {
+    "description": "User-facing message when the server does not respond to a request."
+  },
+  "networkGenericError": "Problema de conexión de red. Verifica tu conexión a Internet.",
+  "@networkGenericError": {
+    "description": "Fallback message for generic network errors."
+  },
+  "serverError500": "El servidor tiene problemas. Normalmente es temporal.",
+  "@serverError500": {
+    "description": "Message when a 500 error is encountered."
+  },
+  "serverErrorUnavailable": "El servidor está temporalmente no disponible. Inténtalo de nuevo en un momento.",
+  "@serverErrorUnavailable": {
+    "description": "Message when a 502/503 error is encountered."
+  },
+  "serverErrorTimeout": "El servidor tardó demasiado en responder. Inténtalo de nuevo.",
+  "@serverErrorTimeout": {
+    "description": "Message when the server times out."
+  },
+  "serverErrorGeneric": "El servidor está teniendo problemas. Inténtalo más tarde.",
+  "@serverErrorGeneric": {
+    "description": "Fallback server error message."
+  },
+  "authSessionExpired": "Tu sesión ha expirado. Vuelve a iniciar sesión.",
+  "@authSessionExpired": {
+    "description": "Message when an authentication session expires."
+  },
+  "authForbidden": "No tienes permiso para realizar esta acción.",
+  "@authForbidden": {
+    "description": "Message when the user lacks required permissions."
+  },
+  "authInvalidToken": "El token de autenticación no es válido. Vuelve a iniciar sesión.",
+  "@authInvalidToken": {
+    "description": "Message when the authentication token is invalid."
+  },
+  "authGenericError": "Problema de autenticación. Vuelve a iniciar sesión.",
+  "@authGenericError": {
+    "description": "Fallback authentication error message."
+  },
+  "validationInvalidEmail": "Introduce una dirección de correo válida.",
+  "@validationInvalidEmail": {
+    "description": "Validation message for invalid email input."
+  },
+  "validationWeakPassword": "La contraseña no cumple los requisitos. Revísala e inténtalo de nuevo.",
+  "@validationWeakPassword": {
+    "description": "Validation message for weak passwords."
+  },
+  "validationMissingRequired": "Completa todos los campos obligatorios.",
+  "@validationMissingRequired": {
+    "description": "Validation message when required fields are missing."
+  },
+  "validationFormatError": "Algunos datos tienen un formato incorrecto. Revísalos e inténtalo de nuevo.",
+  "@validationFormatError": {
+    "description": "Validation message for generic formatting issues."
+  },
+  "validationGenericError": "Revisa tu entrada e inténtalo de nuevo.",
+  "@validationGenericError": {
+    "description": "Fallback validation message."
+  },
+  "fileNotFound": "Archivo no encontrado. Puede que se haya movido o eliminado.",
+  "@fileNotFound": {
+    "description": "Message when a file cannot be located."
+  },
+  "fileAccessDenied": "No se puede acceder al archivo. Verifica los permisos.",
+  "@fileAccessDenied": {
+    "description": "Message when file access is denied."
+  },
+  "fileTooLarge": "El archivo es demasiado grande. Elige uno más pequeño.",
+  "@fileTooLarge": {
+    "description": "Message when a file exceeds size limits."
+  },
+  "fileGenericError": "Problema con el archivo. Prueba con otro archivo.",
+  "@fileGenericError": {
+    "description": "Fallback file error message."
+  },
+  "permissionCameraRequired": "Se requiere permiso de cámara. Actívalo en los ajustes.",
+  "@permissionCameraRequired": {
+    "description": "Message when camera permission is missing."
+  },
+  "permissionStorageRequired": "Se requiere permiso de almacenamiento. Actívalo en los ajustes.",
+  "@permissionStorageRequired": {
+    "description": "Message when storage permission is missing."
+  },
+  "permissionMicrophoneRequired": "Se requiere permiso de micrófono. Actívalo en los ajustes.",
+  "@permissionMicrophoneRequired": {
+    "description": "Message when microphone permission is missing."
+  },
+  "permissionGenericError": "Se requiere un permiso. Revisa los permisos de la app en los ajustes.",
+  "@permissionGenericError": {
+    "description": "Fallback permission error message."
+  },
+  "actionRetryRequest": "Intenta la solicitud nuevamente.",
+  "@actionRetryRequest": {
+    "description": "Description for retrying a failed request."
+  },
+  "actionVerifyConnection": "Verifica tu conexión a Internet.",
+  "@actionVerifyConnection": {
+    "description": "Description for checking internet connectivity."
+  },
+  "actionRetryOperation": "Vuelve a intentar la operación.",
+  "@actionRetryOperation": {
+    "description": "Description for retrying the same operation."
+  },
+  "actionRetryAfterDelay": "Espera un momento y vuelve a intentarlo.",
+  "@actionRetryAfterDelay": {
+    "description": "Description suggesting a short delay before retrying."
+  },
+  "actionSignInToAccount": "Inicia sesión en tu cuenta.",
+  "@actionSignInToAccount": {
+    "description": "Description for signing back into the app."
+  },
+  "actionSelectAnotherFile": "Selecciona otro archivo.",
+  "@actionSelectAnotherFile": {
+    "description": "Description for choosing a different file."
+  },
+  "actionOpenAppSettings": "Abre la configuración de la aplicación para otorgar permisos.",
+  "@actionOpenAppSettings": {
+    "description": "Description for opening system or app settings."
+  },
+  "actionRetryAfterPermission": "Vuelve a intentarlo después de otorgar el permiso.",
+  "@actionRetryAfterPermission": {
+    "description": "Description for retrying once permissions are granted."
+  },
+  "actionReturnToPrevious": "Vuelve a la pantalla anterior.",
+  "@actionReturnToPrevious": {
+    "description": "Description for navigating back to the prior screen."
+  },
+  "continueAction": "Continuar",
+  "@continueAction": {
+    "description": "Button label to continue an action or flow."
+  },
+  "loadingShort": "Cargando",
+  "@loadingShort": {
+    "description": "Short loading label used for accessibility."
+  },
+  "loadingAnnouncement": "Cargando: {message}",
+  "@loadingAnnouncement": {
+    "description": "Screen reader announcement when loading a resource.",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Messages"
+      }
+    }
+  },
+  "errorAnnouncement": "Error: {error}",
+  "@errorAnnouncement": {
+    "description": "Screen reader announcement for an error.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network timeout"
+      }
+    }
+  },
+  "errorAnnouncementWithSuggestion": "Error: {error}. {suggestion}",
+  "@errorAnnouncementWithSuggestion": {
+    "description": "Screen reader announcement for an error with a follow-up suggestion.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network timeout"
+      },
+      "suggestion": {
+        "type": "String",
+        "example": "Please try again later."
+      }
+    }
+  },
+  "successAnnouncement": "Éxito: {message}",
+  "@successAnnouncement": {
+    "description": "Screen reader announcement for successful actions.",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Profile updated"
+      }
+    }
+  },
+  "requiredFieldLabel": "{label} *",
+  "@requiredFieldLabel": {
+    "description": "Label text indicating a required field.",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Email"
+      }
+    }
+  },
+  "requiredFieldHelper": "Campo obligatorio",
+  "@requiredFieldHelper": {
+    "description": "Helper text indicating that the field is required."
+  },
+  "switchOnLabel": "Activado",
+  "@switchOnLabel": {
+    "description": "Semantic label when a switch is enabled."
+  },
+  "switchOffLabel": "Desactivado",
+  "@switchOffLabel": {
+    "description": "Semantic label when a switch is disabled."
+  },
+  "dialogSemanticLabel": "Diálogo: {title}",
+  "@dialogSemanticLabel": {
+    "description": "Semantic label describing the dialog title.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Settings"
+      }
+    }
+  },
+  "previousLabel": "Anterior",
+  "@previousLabel": {
+    "description": "Label for navigating to the previous item."
+  },
+  "nextLabel": "Siguiente",
+  "@nextLabel": {
+    "description": "Label for navigating to the next item."
+  },
+  "themePaletteJyotiGPTappLabel": "JyotiGPTapp",
+  "@themePaletteJyotiGPTappLabel": {
+    "description": "Palette name for the default JyotiGPTapp theme."
+  },
+  "themePaletteJyotiGPTappDescription": "Tema neutro y limpio diseñado para JyotiGPTapp.",
+  "@themePaletteJyotiGPTappDescription": {
+    "description": "Description of the JyotiGPTapp palette."
+  },
+  "themePaletteClaudeLabel": "Claude",
+  "@themePaletteClaudeLabel": {
+    "description": "Palette name inspired by the Claude web client."
+  },
+  "themePaletteClaudeDescription": "Paleta cálida y táctil inspirada en el cliente web de Claude.",
+  "@themePaletteClaudeDescription": {
+    "description": "Description of the Claude palette."
+  },
+  "themePaletteT3ChatLabel": "T3 Chat",
+  "@themePaletteT3ChatLabel": {
+    "description": "Palette name inspired by the T3 Stack brand."
+  },
+  "themePaletteT3ChatDescription": "Degradados divertidos inspirados en la marca T3 Stack.",
+  "@themePaletteT3ChatDescription": {
+    "description": "Description of the T3 Chat palette."
+  },
+  "themePaletteCatppuccinLabel": "Catppuccin",
+  "@themePaletteCatppuccinLabel": {
+    "description": "Palette name for Catppuccin colors."
+  },
+  "themePaletteCatppuccinDescription": "Paleta suave de tonos pastel.",
+  "@themePaletteCatppuccinDescription": {
+    "description": "Description of the Catppuccin palette."
+  },
+  "themePaletteTangerineLabel": "Tangerine",
+  "@themePaletteTangerineLabel": {
+    "description": "Palette name for Tangerine colors."
+  },
+  "themePaletteTangerineDescription": "Paleta cálida de tonos naranja y gris pizarra.",
+  "@themePaletteTangerineDescription": {
+    "description": "Description of the Tangerine palette."
+  },
+  "@notAnImageFile": {
+    "description": "Error when a referenced file is not an image.",
+    "placeholders": {
+      "fileName": {
+        "type": "String",
+        "example": "image.txt"
+      }
+    }
+  },
+  "@failedToLoadImage": {
+    "description": "Error including the underlying reason when image loading fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "@ttsVoicesForLanguage": {
+    "description": "Section header for voices matching the app language",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "EN"
+      }
+    }
+  },
+  "voiceCallReady": "Listo",
+  "@voiceCallReady": {
+    "description": "Status label shown when the voice call is ready to start."
+  },
+  "voiceCallConnecting": "Conectando...",
+  "@voiceCallConnecting": {
+    "description": "Status label shown while the voice call is connecting."
+  },
+  "voiceCallListening": "Escuchando",
+  "@voiceCallListening": {
+    "description": "Status label shown while the call is listening for input."
+  },
+  "voiceCallPaused": "En pausa",
+  "@voiceCallPaused": {
+    "description": "Status label shown when the call is paused."
+  },
+  "voiceCallProcessing": "Pensando...",
+  "@voiceCallProcessing": {
+    "description": "Status label shown while the call processes a response."
+  },
+  "voiceCallSpeaking": "Hablando",
+  "@voiceCallSpeaking": {
+    "description": "Status label shown while the assistant is speaking."
+  },
+  "voiceCallDisconnected": "Desconectado",
+  "@voiceCallDisconnected": {
+    "description": "Status label shown when the voice call has ended or disconnected."
+  },
+  "voiceCallErrorHelp": "Comprueba lo siguiente:\n• Los permisos del micrófono están concedidos\n• El reconocimiento de voz está disponible en tu dispositivo\n• Estás conectado al servidor",
+  "@voiceCallErrorHelp": {
+    "description": "Guidance shown when the voice call encounters an error."
+  },
+  "mermaidPreviewUnavailable": "La vista previa de Mermaid no está disponible en esta plataforma.",
+  "chartPreviewUnavailable": "La vista previa de gráficos no está disponible en esta plataforma.",
+  "notes": "Notas",
+  "searchNotes": "Buscar notas...",
+  "createNote": "Crear nota",
+  "noNotesYet": "Aún no hay notas",
+  "noNotesFound": "No se encontraron notas",
+  "createFirstNoteHint": "Toca + para crear tu primera nota.",
+  "tryDifferentSearch": "Prueba con otro término de búsqueda.",
+  "loadingNotes": "Cargando notas...",
+  "loadingNote": "Cargando nota...",
+  "failedToLoadNotes": "Error al cargar las notas",
+  "deleteNoteTitle": "Eliminar nota",
+  "deleteNoteMessage": "¿Eliminar \"{title}\"? Esta acción no se puede deshacer.",
+  "@deleteNoteMessage": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "writeNote": "Escribe algo...",
+  "saving": "Guardando...",
+  "saved": "Guardado",
+  "noteCopiedToClipboard": "Nota copiada al portapapeles",
+  "generateTitle": "Generar título",
+  "generatingTitle": "Generando título...",
+  "noContentToGenerateTitle": "Añade contenido primero para generar un título",
+  "failedToGenerateTitle": "Error al generar el título",
+  "noContentToEnhance": "Añade contenido primero para mejorar",
+  "noteEnhanced": "Nota mejorada con IA",
+  "failedToEnhanceNote": "Error al mejorar la nota",
+  "noModelSelected": "Por favor, selecciona un modelo primero",
+  "enhanceWithAI": "Mejorar con IA",
+  "enhanceNote": "Mejorar nota",
+  "startDictation": "Iniciar dictado",
+  "stopRecording": "Detener grabación",
+  "voiceInputUnavailable": "Entrada de voz no disponible",
+  "failedToStartDictation": "Error al iniciar el dictado",
+  "noteNotFound": "Nota no encontrada",
+  "untitled": "Sin título",
+  "today": "Hoy",
+  "yesterday": "Ayer",
+  "previous7Days": "Últimos 7 días",
+  "previous30Days": "Últimos 30 días",
+  "older": "Más antiguo",
+  "wordCount": "{count} palabras",
+  "@wordCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "charCount": "{count} caracteres",
+  "@charCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "promptVariablesTitle": "Completar detalles",
+  "promptVariablesDescription": "Complete los campos a continuación para personalizar este prompt.",
+  "promptVariableNumberMin": "El valor mínimo es {min}",
+  "@promptVariableNumberMin": {
+    "placeholders": {
+      "min": {
+        "type": "double"
+      }
+    }
+  },
+  "promptVariableNumberMax": "El valor máximo es {max}",
+  "@promptVariableNumberMax": {
+    "placeholders": {
+      "max": {
+        "type": "double"
+      }
+    }
+  },
+  "sso": "SSO",
+  "ssoDescription": "Iniciar sesión con el proveedor de identidad de su organización",
+  "signInWithSso": "Iniciar sesión con SSO",
+  "ssoAuthenticating": "Autenticando...",
+  "ssoAuthFailed": "Error de autenticación SSO",
+  "ssoLoadingLogin": "Cargando página de inicio de sesión...",
+  "ldap": "LDAP",
+  "ldapDescription": "Iniciar sesión con sus credenciales de directorio LDAP",
+  "signInWithLdap": "Iniciar sesión con LDAP",
+  "ldapUsername": "Nombre de usuario",
+  "ldapUsernameHint": "Ingrese su nombre de usuario LDAP",
+  "moreSignInOptions": "Más opciones de inicio de sesión",
+  "ldapNotEnabled": "La autenticación LDAP no está habilitada en este servidor",
+  "ssoPlatformNotSupported": "La autenticación SSO no es compatible con esta plataforma. Por favor, use credenciales o autenticación LDAP en su lugar.",
+  "continueWithProvider": "Continuar con {provider}",
+  "or": "o",
+  "usageInfo": "Info",
+  "usageInfoTitle": "Estadísticas de respuesta",
+  "usageTokenGeneration": "Generación de tokens",
+  "usagePromptEval": "Procesamiento del prompt",
+  "usageTotalDuration": "Duración total",
+  "usageTokensPerSecond": "{speed} t/s",
+  "@usageTokensPerSecond": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "usageTokenCount": "{count} tokens",
+  "@usageTokenCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "usageSecondsFormat": "{seconds}s",
+  "@usageSecondsFormat": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "usageLoadDuration": "Tiempo de carga del modelo",
+  "usageQueueTime": "Tiempo en cola",
+  "usageReasoningTokens": "Tokens de razonamiento",
+  "usageTotalTokens": "Tokens totales",
+  "proxyAuthentication": "Autenticación de Proxy",
+  "proxyAuthPlatformNotSupported": "La autenticación de proxy requiere un dispositivo móvil. Por favor, autentíquese primero a través de un navegador.",
+  "proxyAuthLoading": "Cargando página de autenticación...",
+  "proxyAuthFailed": "Error en la autenticación de proxy",
+  "proxyAuthHelpText": "Complete el inicio de sesión a través del proxy de su organización, luego inicie sesión en JyotiGPT. Será redirigido automáticamente.",
+  "proxyAuthHelpTextSimple": "Inicie sesión a través de su proxy. Una vez autenticado, toque Continuar para iniciar sesión.",
+  "continueButton": "Continuar",
+  "proxyAuthRequired": "Este servidor requiere autenticación de proxy",
+  "proxyAuthRequiredDescription": "Su servidor parece estar detrás de un proxy de autenticación (como oauth2-proxy). Deberá iniciar sesión a través del proxy primero.",
+  "authenticateThroughProxy": "Autenticar",
+  "voiceOptions": "Opciones de voz",
+  "dictation": "Dictado",
+  "dictationDescription": "Habla y convierte a texto en tiempo real",
+  "recordAudio": "Grabar audio",
+  "recordAudioDescription": "Guardar audio para transcripción posterior",
+  "recordingAudio": "Grabando...",
+  "preparingRecording": "Preparando...",
+  "recordingHint": "Toca detener cuando termines",
+  "stopAndSaveRecording": "Detener y guardar",
+  "processingRecording": "Procesando...",
+  "audioRecordingSaved": "Grabación de audio guardada",
+  "microphonePermissionDenied": "Permiso de micrófono denegado",
+  "recordingFailed": "Grabación fallida",
+  "removeFileConfirm": "¿Eliminar este archivo de la nota?",
+  "fileRemoved": "Archivo eliminado",
+  "playAudio": "Reproducir audio",
+  "removeFile": "Eliminar archivo",
+  "audioFileType": "Audio",
+  "imageFileType": "Imagen",
+  "failedToUploadAudio": "Error al subir el audio",
+  "audioAttachment": "Archivo de audio",
+  "loadingAudio": "Cargando audio...",
+  "failedToLoadAudio": "Error al cargar el audio",
+  "webPage": "Página Web",
+  "greetingTitle": "Hola, {username}",
+  "temporaryChat": "Temporary Chat",
+  "temporaryChatTooltip": "This chat won't appear in history",
+  "saveChat": "Save Chat",
+  "temporaryChatByDefault": "Temporary Chat by Default",
+  "temporaryChatByDefaultDescription": "New chats won't be saved to history unless you choose to save them",
+  "chatSaved": "Chat saved to history",
+  "chatSaveFailed": "Failed to save chat"
+}

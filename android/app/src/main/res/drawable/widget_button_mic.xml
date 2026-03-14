@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Mic button inside pill - lighter accent background -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#20FFFFFF">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/widget_mic_background_fallback" />
+        </shape>
+    </item>
+</ripple>
+
+
+
+

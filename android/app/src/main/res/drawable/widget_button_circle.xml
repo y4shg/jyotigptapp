@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Rounded button - ChatGPT style -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#20FFFFFF">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/widget_secondary_container_fallback" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+</ripple>
+
+
+

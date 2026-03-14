@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pill-shaped primary button - Material You dynamic color (darker accent) -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#40FFFFFF">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/widget_primary_dark" />
+            <corners android:radius="24dp" />
+        </shape>
+    </item>
+</ripple>
+
+
+
+

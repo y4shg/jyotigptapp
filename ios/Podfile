@@ -1,0 +1,97 @@
+# Uncomment this line to define a global platform for your project
+platform :ios, '16.0'
+
+# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+# Work around Xcode cycle false-positives by letting CocoaPods not declare IO paths
+install! 'cocoapods', :disable_input_output_paths => true
+
+project 'Runner', {
+  'Debug' => :debug,
+  'Profile' => :release,
+  'Release' => :release,
+}
+
+def flutter_root
+  generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__)
+  unless File.exist?(generated_xcode_build_settings_path)
+    raise "#{generated_xcode_build_settings_path} must exist. If you're running pod install manually, make sure flutter pub get is executed first"
+  end
+
+  File.foreach(generated_xcode_build_settings_path) do |line|
+    matches = line.match(/FLUTTER_ROOT\=(.*)/)
+    return matches[1].strip if matches
+  end
+  raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Generated.xcconfig, then run flutter pub get"
+end
+
+require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
+
+flutter_ios_podfile_setup
+
+target 'Runner' do
+  # Use dynamic frameworks for native extension compatibility
+  use_frameworks! :linkage => :dynamic
+  use_modular_headers!
+
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  # share_handler addition start
+  target 'ShareExtension' do
+    inherit! :search_paths
+    # Only models are needed in extension to avoid app-only APIs
+    pod "share_handler_ios_models", :path => ".symlinks/plugins/share_handler_ios/ios/Models"
+  end
+  # share_handler addition end
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+    target.build_configurations.each do |config|
+      defs = config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] || ['$(inherited)']
+      defs = [defs] if defs.is_a?(String)
+      %w[
+        PERMISSION_MICROPHONE=1
+        PERMISSION_SPEECH_RECOGNIZER=1
+        PERMISSION_NOTIFICATIONS=1
+      ].each do |flag|
+        defs << flag unless defs.include?(flag)
+      end
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = defs
+
+      # Flutter engine in this setup is arm64-only for simulator.
+      # Exclude x86_64 simulator architecture to avoid unresolved Flutter
+      # symbols when Xcode attempts a universal simulator link.
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'x86_64'
+    end
+  end
+
+  # Add -ObjC linker flag for objective_c native assets (required for Release builds)
+  # This fixes: "dlsym(RTLD_DEFAULT, DOBJC_initializeApi): symbol not found"
+  installer.aggregate_targets.each do |aggregate_target|
+    aggregate_target.user_project.native_targets.each do |native_target|
+      if ['Runner', 'ShareExtension'].include?(native_target.name)
+        native_target.build_configurations.each do |config|
+          config.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'NO'
+          config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'x86_64'
+           
+          # Add -ObjC and -lc++ flags for native extensions support
+          other_ldflags = config.build_settings['OTHER_LDFLAGS'] || ['$(inherited)']
+          other_ldflags = [other_ldflags] if other_ldflags.is_a?(String)
+          unless other_ldflags.include?('-ObjC')
+            other_ldflags << '-ObjC'
+          end
+          unless other_ldflags.include?('-lc++')
+            other_ldflags << '-lc++'
+          end
+          config.build_settings['OTHER_LDFLAGS'] = other_ldflags
+        end
+      end
+    end
+  end
+end

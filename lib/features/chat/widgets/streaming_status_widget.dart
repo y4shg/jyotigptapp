@@ -1,0 +1,539 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+import '../../../core/models/chat_message.dart';
+import '../../../core/utils/debug_logger.dart';
+import '../../../shared/theme/theme_extensions.dart';
+
+/// A minimal, unobtrusive streaming status widget inspired by JyotiGPT.
+/// Displays live status updates during AI response generation without
+/// drawing focus away from the actual response content.
+class StreamingStatusWidget extends StatefulWidget {
+  const StreamingStatusWidget({
+    super.key,
+    required this.updates,
+    this.isStreaming = true,
+  });
+
+  final List<ChatStatusUpdate> updates;
+  final bool isStreaming;
+
+  @override
+  State<StreamingStatusWidget> createState() => _StreamingStatusWidgetState();
+}
+
+class _StreamingStatusWidgetState extends State<StreamingStatusWidget> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final visible = widget.updates
+        .where((u) => u.hidden != true)
+        .toList(growable: false);
+    if (visible.isEmpty) return const SizedBox.shrink();
+
+    final current = visible.last;
+    final hasPrevious = visible.length > 1;
+    final isPending = current.done != true && widget.isStreaming;
+
+    return GestureDetector(
+      onTap: hasPrevious ? () => setState(() => _expanded = !_expanded) : null,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: Spacing.xs),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Current status (always visible) - minimal text only
+            _MinimalStatusRow(
+              update: current,
+              isPending: isPending,
+              hasPrevious: hasPrevious,
+              isExpanded: _expanded,
+            ),
+
+            // Expanded history timeline
+            if (_expanded && hasPrevious)
+              _MinimalHistoryTimeline(
+                updates: visible,
+                isStreaming: widget.isStreaming,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Minimal status row - just text with optional chevron.
+class _MinimalStatusRow extends StatelessWidget {
+  const _MinimalStatusRow({
+    required this.update,
+    required this.isPending,
+    required this.hasPrevious,
+    required this.isExpanded,
+  });
+
+  final ChatStatusUpdate update;
+  final bool isPending;
+  final bool hasPrevious;
+  final bool isExpanded;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.jyotigptappTheme;
+    final queries = _collectQueries(update);
+    final links = _collectLinks(update);
+    final description = _resolveStatusDescription(update);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Main status text
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (hasPrevious) ...[
+              Icon(
+                isExpanded
+                    ? Icons.keyboard_arrow_up_rounded
+                    : Icons.keyboard_arrow_down_rounded,
+                size: 14,
+                color: theme.textPrimary.withValues(alpha: 0.8),
+              ),
+              const SizedBox(width: 2),
+            ],
+            Flexible(child: _buildStatusText(context, description, isPending)),
+          ],
+        ),
+
+        // Query pills (inline, compact)
+        if (queries.isNotEmpty && !isExpanded) ...[
+          const SizedBox(height: Spacing.xxs),
+          _MinimalQueryChips(queries: queries),
+        ],
+
+        // Source links (inline, compact)
+        if (links.isNotEmpty && !isExpanded) ...[
+          const SizedBox(height: Spacing.xxs),
+          _MinimalSourceLinks(links: links),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildStatusText(
+    BuildContext context,
+    String description,
+    bool isPending,
+  ) {
+    final theme = context.jyotigptappTheme;
+    final baseColor = theme.textPrimary.withValues(alpha: 0.8);
+    final baseStyle = TextStyle(
+      fontSize: AppTypography.bodySmall,
+      color: baseColor,
+      height: 1.3,
+    );
+
+    if (!isPending) {
+      return Text(description, style: baseStyle, maxLines: 1);
+    }
+
+    // Shimmer effect for pending state
+    return Text(description, style: baseStyle, maxLines: 1)
+        .animate(onPlay: (controller) => controller.repeat())
+        .shimmer(
+          duration: 1500.ms,
+          color: theme.shimmerHighlight.withValues(alpha: 0.6),
+        );
+  }
+}
+
+/// Minimal timeline for expanded history - small dots like JyotiGPT.
+class _MinimalHistoryTimeline extends StatelessWidget {
+  const _MinimalHistoryTimeline({
+    required this.updates,
+    required this.isStreaming,
+  });
+
+  final List<ChatStatusUpdate> updates;
+  final bool isStreaming;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.jyotigptappTheme;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: Spacing.xs, left: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: updates.asMap().entries.map((entry) {
+          final index = entry.key;
+          final update = entry.value;
+          final isLast = index == updates.length - 1;
+          final isPending = isLast && update.done != true && isStreaming;
+          final description = _resolveStatusDescription(update);
+          final queries = _collectQueries(update);
+          final links = _collectLinks(update);
+
+          return IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Timeline dot and line
+                SizedBox(
+                  width: 12,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 5),
+                        width: 5,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: theme.textSecondary.withValues(alpha: 0.6),
+                        ),
+                      ),
+                      if (!isLast)
+                        Expanded(
+                          child: Container(
+                            width: 0.5,
+                            margin: const EdgeInsets.symmetric(vertical: 2),
+                            color: theme.dividerColor.withValues(alpha: 0.4),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: Spacing.xs),
+                // Content
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: Spacing.xs),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildStatusText(context, description, isPending),
+                        if (queries.isNotEmpty) ...[
+                          const SizedBox(height: 2),
+                          _MinimalQueryChips(queries: queries),
+                        ],
+                        if (links.isNotEmpty) ...[
+                          const SizedBox(height: 2),
+                          _MinimalSourceLinks(links: links),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildStatusText(
+    BuildContext context,
+    String description,
+    bool isPending,
+  ) {
+    final theme = context.jyotigptappTheme;
+    final baseColor = theme.textPrimary.withValues(alpha: 0.8);
+    final baseStyle = TextStyle(
+      fontSize: AppTypography.bodySmall,
+      color: baseColor,
+      height: 1.3,
+    );
+
+    if (!isPending) {
+      return Text(description, style: baseStyle);
+    }
+
+    // Shimmer effect for pending state
+    return Text(description, style: baseStyle)
+        .animate(onPlay: (controller) => controller.repeat())
+        .shimmer(
+          duration: 1500.ms,
+          color: theme.shimmerHighlight.withValues(alpha: 0.6),
+        );
+  }
+}
+
+/// Minimal query chips - smaller, less prominent.
+class _MinimalQueryChips extends StatelessWidget {
+  const _MinimalQueryChips({required this.queries});
+
+  final List<String> queries;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.jyotigptappTheme;
+
+    return Wrap(
+      spacing: 4,
+      runSpacing: 4,
+      children: queries.asMap().entries.map((entry) {
+        final index = entry.key;
+        final query = entry.value;
+        return GestureDetector(
+          onTap: () => _launchSearch(query),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+            decoration: BoxDecoration(
+              color: theme.surfaceContainer.withValues(alpha: 0.6),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.search_rounded,
+                  size: 11,
+                  color: theme.textSecondary,
+                ),
+                const SizedBox(width: 3),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 150),
+                  child: Text(
+                    query,
+                    style: TextStyle(
+                      fontSize: AppTypography.labelSmall,
+                      color: theme.textSecondary,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ).animate().fadeIn(duration: 150.ms, delay: (30 * index).ms),
+        );
+      }).toList(),
+    );
+  }
+
+  void _launchSearch(String query) async {
+    final url = 'https://www.google.com/search?q=${Uri.encodeComponent(query)}';
+    try {
+      await launchUrlString(url, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      DebugLogger.log('Failed to launch search: $e', scope: 'status');
+    }
+  }
+}
+
+/// Minimal source links - smaller, less prominent.
+class _MinimalSourceLinks extends StatelessWidget {
+  const _MinimalSourceLinks({required this.links});
+
+  final List<_LinkData> links;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.jyotigptappTheme;
+    final displayLinks = links.take(4).toList();
+    final remaining = links.length - 4;
+
+    return Wrap(
+      spacing: 4,
+      runSpacing: 4,
+      children: [
+        ...displayLinks.asMap().entries.map((entry) {
+          final index = entry.key;
+          final link = entry.value;
+          final domain = _extractDomain(link.url);
+
+          return GestureDetector(
+            onTap: () => _launchUrl(link.url),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              decoration: BoxDecoration(
+                color: theme.surfaceContainer.withValues(alpha: 0.6),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(2),
+                    child: Image.network(
+                      'https://www.google.com/s2/favicons?sz=16&domain=$domain',
+                      width: 12,
+                      height: 12,
+                      errorBuilder: (context, error, stackTrace) => Icon(
+                        Icons.public_rounded,
+                        size: 12,
+                        color: theme.textSecondary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 100),
+                    child: Text(
+                      link.title ?? domain,
+                      style: TextStyle(
+                        fontSize: AppTypography.labelSmall,
+                        color: theme.textSecondary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ).animate().fadeIn(duration: 150.ms, delay: (30 * index).ms),
+          );
+        }),
+        if (remaining > 0)
+          Text(
+            '+$remaining',
+            style: TextStyle(
+              fontSize: AppTypography.labelSmall,
+              color: theme.textSecondary,
+            ),
+          ).animate().fadeIn(
+            duration: 150.ms,
+            delay: (30 * displayLinks.length).ms,
+          ),
+      ],
+    );
+  }
+
+  void _launchUrl(String url) async {
+    try {
+      await launchUrlString(url, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      DebugLogger.log('Failed to launch URL: $e', scope: 'status');
+    }
+  }
+
+  String _extractDomain(String url) {
+    final uri = Uri.tryParse(url);
+    if (uri == null || uri.host.isEmpty) return url;
+    var host = uri.host;
+    if (host.startsWith('www.')) host = host.substring(4);
+    return host;
+  }
+}
+
+// Helper classes and functions
+
+class _LinkData {
+  const _LinkData({required this.url, this.title});
+  final String url;
+  final String? title;
+}
+
+List<String> _collectQueries(ChatStatusUpdate update) {
+  final merged = <String>[];
+  for (final query in update.queries) {
+    final trimmed = query.trim();
+    if (trimmed.isNotEmpty && !merged.contains(trimmed)) {
+      merged.add(trimmed);
+    }
+  }
+  final single = update.query?.trim();
+  if (single != null && single.isNotEmpty && !merged.contains(single)) {
+    merged.add(single);
+  }
+  return merged;
+}
+
+List<_LinkData> _collectLinks(ChatStatusUpdate update) {
+  final links = <_LinkData>[];
+
+  for (final item in update.items) {
+    final url = item.link;
+    if (url != null && url.isNotEmpty) {
+      links.add(_LinkData(url: url, title: item.title));
+    }
+  }
+
+  for (final url in update.urls) {
+    if (url.isNotEmpty && !links.any((l) => l.url == url)) {
+      links.add(_LinkData(url: url));
+    }
+  }
+
+  return links;
+}
+
+String _resolveStatusDescription(ChatStatusUpdate update) {
+  final description = update.description?.trim();
+  final action = update.action?.trim();
+
+  if (action == 'knowledge_search' && update.query?.isNotEmpty == true) {
+    return 'Searching Knowledge for "${update.query}"';
+  }
+
+  if (action == 'web_search_queries_generated' && update.queries.isNotEmpty) {
+    return 'Searching';
+  }
+
+  if (action == 'queries_generated' && update.queries.isNotEmpty) {
+    return 'Querying';
+  }
+
+  if (action == 'sources_retrieved' && update.count != null) {
+    final count = update.count!;
+    if (count == 0) return 'No sources found';
+    if (count == 1) return 'Retrieved 1 source';
+    return 'Retrieved $count sources';
+  }
+
+  if (description != null && description.isNotEmpty) {
+    if (description == 'Generating search query') {
+      return 'Generating search query';
+    }
+    if (description == 'No search query generated') {
+      return 'No search query generated';
+    }
+    if (description == 'Searching the web') {
+      return 'Searching the web';
+    }
+    return _replaceStatusPlaceholders(description, update);
+  }
+
+  if (action != null && action.isNotEmpty) {
+    return action.replaceAll('_', ' ').capitalize();
+  }
+
+  return 'Processing';
+}
+
+String _replaceStatusPlaceholders(String template, ChatStatusUpdate update) {
+  var result = template;
+
+  if (result.contains('{{count}}')) {
+    final count = update.count ?? update.urls.length + update.items.length;
+    result = result.replaceAll(
+      '{{count}}',
+      count > 0 ? count.toString() : 'multiple',
+    );
+  }
+
+  if (result.contains('{{searchQuery}}')) {
+    final query = update.query?.trim();
+    if (query != null && query.isNotEmpty) {
+      result = result.replaceAll('{{searchQuery}}', query);
+    }
+  }
+
+  return result;
+}
+
+extension _StringExtension on String {
+  String capitalize() {
+    if (isEmpty) return this;
+    return '${this[0].toUpperCase()}${substring(1)}';
+  }
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Widget dimensions (same for both modes) -->
+    <dimen name="widget_padding">12dp</dimen>
+    <dimen name="widget_button_spacing">6dp</dimen>
+    <dimen name="widget_corner_radius">24dp</dimen>
+    <dimen name="widget_button_corner_radius">16dp</dimen>
+    <dimen name="widget_secondary_corner_radius">12dp</dimen>
+</resources>
+
+
+
+

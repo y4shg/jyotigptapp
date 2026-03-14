@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Widget preview shown in the widget picker - Material 3 style -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/widget_surface_fallback" />
+            <corners android:radius="@dimen/widget_corner_radius" />
+        </shape>
+    </item>
+    <!-- Primary button preview -->
+    <item
+        android:left="16dp"
+        android:top="16dp"
+        android:right="16dp"
+        android:bottom="72dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/widget_primary_fallback" />
+            <corners android:radius="@dimen/widget_button_corner_radius" />
+        </shape>
+    </item>
+    <!-- Secondary buttons preview -->
+    <item
+        android:left="16dp"
+        android:top="80dp"
+        android:right="176dp"
+        android:bottom="16dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/widget_secondary_container_fallback" />
+            <corners android:radius="@dimen/widget_secondary_corner_radius" />
+        </shape>
+    </item>
+    <item
+        android:left="96dp"
+        android:top="80dp"
+        android:right="96dp"
+        android:bottom="16dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/widget_secondary_container_fallback" />
+            <corners android:radius="@dimen/widget_secondary_corner_radius" />
+        </shape>
+    </item>
+    <item
+        android:left="176dp"
+        android:top="80dp"
+        android:right="16dp"
+        android:bottom="16dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/widget_secondary_container_fallback" />
+            <corners android:radius="@dimen/widget_secondary_corner_radius" />
+        </shape>
+    </item>
+</layer-list>
+
+
+
+

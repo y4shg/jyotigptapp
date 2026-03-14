@@ -1,0 +1,907 @@
+{
+  "@@locale": "nl",
+  "appTitle": "JyotiGPT",
+  "requiredField": "This field is required",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+  "retry": "Opnieuw proberen",
+  "back": "Terug",
+  "you": "Jij",
+  "loadingProfile": "Profiel laden...",
+  "pleaseCheckConnection": "Controleer je verbinding en probeer het opnieuw",
+  "connectionIssueTitle": "Kan je server niet bereiken",
+  "@connectionIssueTitle": {
+    "description": "Titel die wordt weergegeven wanneer de geconfigureerde server onbereikbaar is"
+  },
+  "connectionIssueSubtitle": "Maak opnieuw verbinding om door te gaan of log uit om een andere server te kiezen.",
+  "@connectionIssueSubtitle": {
+    "description": "Ondertitel die beschikbare acties uitlegt wanneer de server niet bereikbaar is"
+  },
+  "account": "Account",
+  "supportJyotiGPTapp": "Ondersteun JyotiGPTapp",
+  "supportJyotiGPTappSubtitle": "Houd JyotiGPTapp onafhankelijk door doorlopende ontwikkeling te financieren.",
+  "githubSponsorsTitle": "GitHub Sponsors",
+  "githubSponsorsSubtitle": "Word een terugkerende sponsor om roadmap-items te financieren.",
+  "buyMeACoffeeTitle": "Buy Me a Coffee",
+  "buyMeACoffeeSubtitle": "Doe een eenmalige donatie om bedankt te zeggen.",
+  "signOut": "Uitloggen",
+  "endYourSession": "Beëindig je sessie",
+  "defaultModel": "Standaardmodel",
+  "autoSelect": "Serverstandaard",
+  "loadingModels": "Modellen laden...",
+  "failedToLoadModels": "Kan modellen niet laden",
+  "availableModels": "Beschikbare modellen",
+  "noResults": "Geen resultaten",
+  "searchModels": "Modellen zoeken...",
+  "errorMessage": "Er is iets misgegaan. Probeer het opnieuw.",
+  "closeButtonSemantic": "Sluiten",
+  "loadingContent": "Inhoud laden",
+  "noItems": "Geen items",
+  "noItemsToDisplay": "Geen items om weer te geven",
+  "knowledgeBase": "Kennisbank",
+  "attachments": "Bijlagen",
+  "takePhoto": "Foto maken",
+  "document": "Document",
+  "backToServerSetup": "Terug naar serverinstelling",
+  "connectedToServer": "Verbonden met server",
+  "signIn": "Inloggen",
+  "enterCredentials": "Voer je inloggegevens in om toegang te krijgen tot je AI-gesprekken",
+  "credentials": "Inloggegevens",
+  "apiKey": "API-sleutel",
+  "token": "Token",
+  "usernameOrEmail": "Gebruikersnaam of e-mail",
+  "password": "Wachtwoord",
+  "signInWithToken": "Inloggen met token",
+  "connectToServer": "Verbinden met server",
+  "enterServerAddress": "Voer je JyotiGPT serveradres in om te beginnen",
+  "serverUrl": "Server-URL",
+  "serverUrlHint": "https://jouw-server.com",
+  "enterServerUrlSemantic": "Voer je server-URL of IP-adres in",
+  "headerName": "Header-naam",
+  "headerValue": "Header-waarde",
+  "headerValueHint": "api-key-123 of Bearer token",
+  "addHeader": "Header toevoegen",
+  "maximumHeadersReached": "Maximum aantal headers bereikt",
+  "removeHeader": "Header verwijderen",
+  "connecting": "Verbinden...",
+  "connectToServerButton": "Verbinden met server",
+  "demoModeActive": "Demomodus actief",
+  "skipServerSetupTryDemo": "Serverinstelling overslaan en demo proberen",
+  "enterDemo": "Demo starten",
+  "demoBadge": "Demo",
+  "serverNotJyotiGPT": "Dit lijkt geen JyotiGPT server te zijn.",
+  "serverUrlEmpty": "Server-URL mag niet leeg zijn",
+  "invalidUrlFormat": "Ongeldig URL-formaat. Controleer je invoer.",
+  "onlyHttpHttps": "Alleen HTTP- en HTTPS-protocollen worden ondersteund.",
+  "serverAddressRequired": "Serveradres is vereist (bijv. 192.168.1.10 of example.com).",
+  "portRange": "Poort moet tussen 1 en 65535 zijn.",
+  "invalidIpFormat": "Ongeldig IP-adresformaat. Gebruik een formaat zoals 192.168.1.10.",
+  "couldNotConnectGeneric": "Kan geen verbinding maken. Controleer het adres en probeer het opnieuw.",
+  "weCouldntReachServer": "We konden de server niet bereiken. Controleer je verbinding en of de server actief is.",
+  "connectionTimedOut": "Verbinding time-out. De server is mogelijk druk of geblokkeerd door een firewall.",
+  "useHttpOrHttpsOnly": "Gebruik alleen http:// of https://.",
+  "loginFailed": "Inloggen mislukt",
+  "invalidCredentials": "Ongeldige gebruikersnaam of wachtwoord. Probeer het opnieuw.",
+  "serverRedirectingHttps": "De server leidt verzoeken om. Controleer de HTTPS-configuratie van je server.",
+  "unableToConnectServer": "Kan geen verbinding maken met server. Controleer je verbinding.",
+  "requestTimedOut": "Het verzoek is verlopen. Probeer het opnieuw.",
+  "genericSignInFailed": "We konden je niet inloggen. Controleer je inloggegevens en serverinstellingen.",
+  "attachmentLabel": "Bijlage",
+  "tools": "Hulpmiddelen",
+  "filters": "Filters",
+  "voiceInput": "Spraakinvoer",
+  "voice": "Stem",
+  "voiceStatusListening": "Luisteren...",
+  "voiceStatusRecording": "Opnemen...",
+  "voiceHoldToTalk": "Houd ingedrukt om te praten",
+  "voiceAutoSend": "Automatisch verzenden",
+  "voiceTranscript": "Transcriptie",
+  "voicePromptSpeakNow": "Spreek nu...",
+  "voicePromptTapStart": "Tik op Start om te beginnen",
+  "voiceActionStop": "Stop",
+  "voiceActionStart": "Start",
+  "messageHintText": "Vraag JyotiGPTapp",
+  "stopGenerating": "Stop met genereren",
+  "codeCopiedToClipboard": "Code gekopieerd naar klembord.",
+  "send": "Verzenden",
+  "sendMessage": "Bericht verzenden",
+  "file": "Bestand",
+  "photo": "Foto",
+  "camera": "Camera",
+  "pasteImage": "Afbeelding plakken",
+  "apiUnavailable": "API-service niet beschikbaar",
+  "unableToLoadImage": "Kan afbeelding niet laden",
+  "notAnImageFile": "Geen afbeeldingsbestand: {fileName}",
+  "failedToLoadImage": "Kan afbeelding niet laden: {error}",
+  "invalidDataUrl": "Ongeldig data-URL-formaat",
+  "failedToDecodeImage": "Kan afbeelding niet decoderen",
+  "invalidImageFormat": "Ongeldig afbeeldingsformaat",
+  "emptyImageData": "Lege afbeeldingsgegevens",
+  "confirm": "Bevestigen",
+  "cancel": "Annuleren",
+  "ok": "OK",
+  "inputField": "Invoerveld",
+  "checkConnection": "Verbinding controleren",
+  "openSettings": "Instellingen openen",
+  "goBack": "Terug",
+  "technicalDetails": "Technische details",
+  "save": "Opslaan",
+  "chooseModel": "Model kiezen",
+  "reviewerMode": "BEOORDELAARSMODUS",
+  "selectLanguage": "Taal selecteren",
+  "newFolder": "Nieuwe map",
+  "folderName": "Mapnaam",
+  "newChat": "Nieuwe chat",
+  "more": "Meer",
+  "clear": "Wissen",
+  "searchConversations": "Gesprekken zoeken...",
+  "create": "Aanmaken",
+  "failedToCreateFolder": "Kan map niet aanmaken",
+  "failedToMoveChat": "Kan chat niet verplaatsen",
+  "failedToLoadChats": "Kan chats niet laden",
+  "failedToUpdatePin": "Kan vastpinning niet bijwerken",
+  "failedToDeleteChat": "Kan chat niet verwijderen",
+  "manage": "Beheren",
+  "rename": "Hernoemen",
+  "delete": "Verwijderen",
+  "renameChat": "Chat hernoemen",
+  "enterChatName": "Chatnaam invoeren",
+  "failedToRenameChat": "Kan chat niet hernoemen",
+  "failedToUpdateArchive": "Kan archief niet bijwerken",
+  "unarchive": "Uit archief halen",
+  "archive": "Archiveren",
+  "pin": "Vastpinnen",
+  "unpin": "Losmaken",
+  "recent": "Recent",
+  "system": "Systeem",
+  "english": "English",
+  "deutsch": "Deutsch",
+  "francais": "Français",
+  "italiano": "Italiano",
+  "espanol": "Español",
+  "nederlands": "Nederlands",
+  "russian": "Русский",
+  "chinese": "中文",
+  "chineseSimplified": "Chinees (vereenvoudigd)",
+  "chineseTraditional": "Chinees (traditioneel)",
+  "korean": "한국어",
+  "deleteMessagesTitle": "Berichten verwijderen",
+  "deleteMessagesMessage": "{count} berichten verwijderen?",
+  "@deleteMessagesMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "routeNotFound": "Route niet gevonden: {routeName}",
+  "@routeNotFound": {
+    "placeholders": {
+      "routeName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteChatTitle": "Chat verwijderen",
+  "deleteChatMessage": "Deze chat wordt permanent verwijderd.",
+  "deleteFolderTitle": "Map verwijderen",
+  "deleteFolderMessage": "Deze map en zijn toewijzingen worden verwijderd.",
+  "failedToDeleteFolder": "Kan map niet verwijderen",
+  "aboutApp": "Over",
+  "aboutAppSubtitle": "JyotiGPTapp informatie en links",
+  "web": "Web",
+  "imageGen": "Afbeeldingsgeneratie",
+  "pinned": "Vastgepind",
+  "folders": "Mappen",
+  "archived": "Gearchiveerd",
+  "appLanguage": "App-taal",
+  "darkMode": "Donkere modus",
+  "webSearch": "Webzoekopdracht",
+  "webSearchDescription": "Doorzoek het web en citeer bronnen in antwoorden.",
+  "imageGeneration": "Afbeeldingsgeneratie",
+  "imageGenerationDescription": "Maak afbeeldingen van je prompts.",
+  "copy": "Kopiëren",
+  "ttsListen": "Luisteren",
+  "ttsStop": "Stoppen",
+  "edit": "Bewerken",
+  "regenerate": "Opnieuw genereren",
+  "noConversationsYet": "Nog geen gesprekken",
+  "usernameOrEmailHint": "Voer je gebruikersnaam of e-mail in",
+  "passwordHint": "Voer je wachtwoord in",
+  "enterToken": "Voer je JWT-token in",
+  "tokenHint": "Haal het JWT-token uit de JyotiGPT-instellingen. API-sleutels (sk-...) worden niet ondersteund voor streaming.",
+  "apiKeyNotSupported": "API-sleutels (sk-...) worden niet ondersteund. Gebruik in plaats daarvan een JWT-token.",
+  "apiKeyNoLongerSupported": "Je bent uitgelogd omdat API-sleutels niet meer worden ondersteund. Log in met een JWT-token uit de JyotiGPT-instellingen.",
+  "tokenTooShort": "Token is te kort",
+  "signingIn": "Inloggen...",
+  "advancedSettings": "Geavanceerde instellingen",
+  "customHeaders": "Aangepaste headers",
+  "customHeadersDescription": "Voeg aangepaste HTTP-headers toe voor authenticatie, API-sleutels of speciale serververeisten.",
+  "allowSelfSignedCertificates": "Vertrouw zelfondertekende certificaten",
+  "@allowSelfSignedCertificates": {
+    "description": "Schakelaar waarmee zelfondertekende TLS-certificaten voor de geconfigureerde server vertrouwd kunnen worden."
+  },
+  "allowSelfSignedCertificatesDescription": "Accepteer het TLS-certificaat van deze server, zelfs als het zelfondertekend is. Schakel dit alleen in voor servers die je vertrouwt.",
+  "@allowSelfSignedCertificatesDescription": {
+    "description": "Hulptekst die de risico's van het inschakelen van de schakelaar voor zelfondertekende certificaten verduidelijkt."
+  },
+  "headerNameTooLong": "Header-naam te lang (max 64 tekens)",
+  "headerNameInvalidChars": "Ongeldige header-naam. Gebruik alleen letters, cijfers en deze symbolen: !#$&-^_`|~",
+  "headerNameReserved": "Kan gereserveerde header '{key}' niet overschrijven",
+  "@headerNameReserved": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "headerValueTooLong": "Header-waarde te lang (max 1024 tekens)",
+  "headerValueInvalidChars": "Header-waarde bevat ongeldige tekens. Gebruik alleen afdrukbare ASCII.",
+  "headerValueUnsafe": "Header-waarde lijkt mogelijk onveilige inhoud te bevatten",
+  "headerAlreadyExists": "Header '{key}' bestaat al. Verwijder deze eerst om bij te werken.",
+  "@headerAlreadyExists": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "maxHeadersReachedDetail": "Maximaal 10 aangepaste headers toegestaan. Verwijder er enkele om meer toe te voegen.",
+  "noModelsAvailable": "Geen modellen beschikbaar",
+  "followingSystem": "Volgt systeem: {theme}",
+  "@followingSystem": {
+    "placeholders": {
+      "theme": {
+        "type": "String"
+      }
+    }
+  },
+  "themeDark": "Donker",
+  "themePalette": "Accentpalet",
+  "@themePalette": {
+    "description": "Titel voor het selecteren van het app-kleurenpalet."
+  },
+  "themeLight": "Licht",
+  "currentlyUsingDarkTheme": "Momenteel donker thema in gebruik",
+  "currentlyUsingLightTheme": "Momenteel licht thema in gebruik",
+  "aboutJyotiGPTapp": "Over JyotiGPTapp",
+  "versionLabel": "Versie: {version} ({build})",
+  "@versionLabel": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
+  "githubRepository": "GitHub-repository",
+  "unableToLoadAppInfo": "Kan app-info niet laden",
+  "thinking": "Denken...",
+  "thoughts": "Gedachten",
+  "thoughtForDuration": "Dacht {duration}",
+  "@thoughtForDuration": {
+    "description": "Toont hoe lang de assistent dacht voordat hij antwoordde.",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "3s"
+      }
+    }
+  },
+  "analyzing": "Analyseren…",
+  "analyzed": "Geanalyseerd",
+  "appCustomization": "Aanpassing",
+  "appCustomizationSubtitle": "Thema, taal, stem en quickpills",
+  "quickActionsDescription": "Snelkoppelingen in chat",
+  "chatSettings": "Chat",
+  "sendOnEnter": "Verzenden met Enter",
+  "sendOnEnterDescription": "Enter verzendt (softtoetsenbord). Cmd/Ctrl+Enter ook beschikbaar",
+  "androidAssistantTitle": "Android digital assistant",
+  "androidAssistantDescription": "Choose what happens when you trigger the Android digital assistant.",
+  "androidAssistantOverlayOption": "Show quick overlay (default)",
+  "androidAssistantNewChatOption": "Open JyotiGPTapp with a new chat",
+  "androidAssistantVoiceCallOption": "Start a voice call",
+  "sttSettings": "Spraak naar tekst",
+  "sttEngineLabel": "Herkenningsengine",
+  "sttEngineDevice": "Op het apparaat",
+  "sttEngineServer": "Server",
+  "sttEngineDeviceDescription": "Houdt audio op dit apparaat. Spraakinput werkt niet als het apparaat geen spraakherkenning ondersteunt.",
+  "sttEngineServerDescription": "Stuurt opnames altijd naar je JyotiGPT-server voor transcriptie.",
+  "sttDeviceUnavailableWarning": "Spraakherkenning op het apparaat is niet beschikbaar op dit apparaat.",
+  "sttServerUnavailableWarning": "Verbind met een server met transcriptie ingeschakeld om deze optie te gebruiken.",
+  "sttSilenceDuration": "Stilteduur",
+  "sttSilenceDurationDescription": "Tijd om te wachten na stilte voordat de opname automatisch stopt",
+  "ttsSettings": "Tekst naar spraak",
+  "ttsEngineDeviceDescription": "Houdt de synthese op dit apparaat. Spraakweergave werkt niet als het apparaat geen TTS ondersteunt.",
+  "ttsEngineServerDescription": "Vraagt altijd audio op bij je JyotiGPT-server.",
+  "ttsDeviceUnavailableWarning": "Spraaksynthese op het apparaat is niet beschikbaar op dit apparaat.",
+  "ttsServerUnavailableWarning": "Verbind met een server met tekst-naar-spraak ingeschakeld om deze optie te gebruiken.",
+  "ttsVoice": "Stem",
+  "ttsSpeechRate": "Spraaksnelheid",
+  "ttsPitch": "Toonhoogte",
+  "ttsVolume": "Volume",
+  "ttsPreview": "Stemvoorbeeld",
+  "ttsSystemDefault": "Systeemstandaard",
+  "ttsSelectVoice": "Selecteer stem",
+  "ttsPreviewText": "Dit is een voorbeeld van de geselecteerde stem.",
+  "ttsNoVoicesAvailable": "Geen stemmen beschikbaar",
+  "ttsVoicesForLanguage": "{language} stemmen",
+  "ttsOtherVoices": "Andere talen",
+  "error": "Fout",
+  "display": "Weergave",
+  "realtime": "Realtime",
+  "transportMode": "Transportmodus",
+  "mode": "Modus",
+  "transportModePolling": "Polling-fallback",
+  "transportModeWs": "Alleen WebSocket",
+  "transportModePollingInfo": "Valt terug op HTTP-polling wanneer WebSocket geblokkeerd is. Upgrade naar WebSocket zodra dat kan.",
+  "transportModeWsInfo": "Lagere overhead, maar kan mislukken achter strikte proxies/firewalls.",
+  "quickActionsSelectedCount": "{count, plural, =0{Geen acties geselecteerd} one{{count} actie geselecteerd} other{{count} acties geselecteerd}}",
+  "@quickActionsSelectedCount": {
+    "description": "Subtitle indicating how many quick actions are selected.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "autoSelectDescription": "Gebruik het standaardmodel dat op de server is geconfigureerd",
+  "@autoSelectDescription": {
+    "description": "Explains what the server-provided model setting does."
+  },
+  "ttsEngineLabel": "Engine",
+  "@ttsEngineLabel": {
+    "description": "Label for selecting the text-to-speech engine."
+  },
+  "ttsEngineDevice": "Op het apparaat",
+  "@ttsEngineDevice": {
+    "description": "Chip label for using on-device text-to-speech."
+  },
+  "ttsEngineServer": "Server",
+  "@ttsEngineServer": {
+    "description": "Chip label for using server-side text-to-speech."
+  },
+  "modelCapabilityMultimodal": "Multimodaal",
+  "@modelCapabilityMultimodal": {
+    "description": "Capability chip label for models that support multimodal input."
+  },
+  "modelCapabilityReasoning": "Redeneren",
+  "@modelCapabilityReasoning": {
+    "description": "Capability chip label for models that support reasoning features."
+  },
+  "voiceCallTitle": "Spraakoproep",
+  "@voiceCallTitle": {
+    "description": "Title displayed on the voice call screen."
+  },
+  "voiceCallPause": "Pauze",
+  "@voiceCallPause": {
+    "description": "Button label to pause a voice call."
+  },
+  "voiceCallResume": "Hervatten",
+  "@voiceCallResume": {
+    "description": "Button label to resume a paused voice call."
+  },
+  "voiceCallStop": "Stoppen",
+  "@voiceCallStop": {
+    "description": "Button label to stop the active voice call."
+  },
+  "voiceCallEnd": "Oproep beëindigen",
+  "@voiceCallEnd": {
+    "description": "Button label to end the voice call session."
+  },
+  "chooseDifferentFile": "Ander bestand kiezen",
+  "@chooseDifferentFile": {
+    "description": "Action label prompting the user to pick another file."
+  },
+  "errorWithMessage": "Fout: {message}",
+  "@errorWithMessage": {
+    "description": "Error label with appended message text.",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Network timeout"
+      }
+    }
+  },
+  "networkTimeoutError": "De verbinding is verlopen. Controleer je internetverbinding en probeer het opnieuw.",
+  "@networkTimeoutError": {
+    "description": "User-facing message when a network request times out."
+  },
+  "networkUnreachableError": "Server niet bereikbaar. Controleer de server-URL en je internetverbinding.",
+  "@networkUnreachableError": {
+    "description": "User-facing message when the server cannot be reached."
+  },
+  "networkServerNotResponding": "Server reageert niet. Controleer of de server actief en bereikbaar is.",
+  "@networkServerNotResponding": {
+    "description": "User-facing message when the server does not respond to a request."
+  },
+  "networkGenericError": "Netwerkprobleem. Controleer je internetverbinding.",
+  "@networkGenericError": {
+    "description": "Fallback message for generic network errors."
+  },
+  "serverError500": "De server heeft problemen. Dit is meestal tijdelijk.",
+  "@serverError500": {
+    "description": "Message when a 500 error is encountered."
+  },
+  "serverErrorUnavailable": "Server tijdelijk niet beschikbaar. Probeer het zo weer.",
+  "@serverErrorUnavailable": {
+    "description": "Message when a 502/503 error is encountered."
+  },
+  "serverErrorTimeout": "De server deed te lang over een antwoord. Probeer het opnieuw.",
+  "@serverErrorTimeout": {
+    "description": "Message when the server times out."
+  },
+  "serverErrorGeneric": "De server ondervindt problemen. Probeer het later opnieuw.",
+  "@serverErrorGeneric": {
+    "description": "Fallback server error message."
+  },
+  "authSessionExpired": "Je sessie is verlopen. Log opnieuw in.",
+  "@authSessionExpired": {
+    "description": "Message when an authentication session expires."
+  },
+  "authForbidden": "Je hebt geen toestemming voor deze actie.",
+  "@authForbidden": {
+    "description": "Message when the user lacks required permissions."
+  },
+  "authInvalidToken": "Authenticatietoken is ongeldig. Log opnieuw in.",
+  "@authInvalidToken": {
+    "description": "Message when the authentication token is invalid."
+  },
+  "authGenericError": "Authenticatieprobleem. Log opnieuw in.",
+  "@authGenericError": {
+    "description": "Fallback authentication error message."
+  },
+  "validationInvalidEmail": "Voer een geldig e-mailadres in.",
+  "@validationInvalidEmail": {
+    "description": "Validation message for invalid email input."
+  },
+  "validationWeakPassword": "Het wachtwoord voldoet niet aan de vereisten. Controleer het en probeer opnieuw.",
+  "@validationWeakPassword": {
+    "description": "Validation message for weak passwords."
+  },
+  "validationMissingRequired": "Vul alle verplichte velden in.",
+  "@validationMissingRequired": {
+    "description": "Validation message when required fields are missing."
+  },
+  "validationFormatError": "Sommige informatie heeft het verkeerde formaat. Controleer en probeer opnieuw.",
+  "@validationFormatError": {
+    "description": "Validation message for generic formatting issues."
+  },
+  "validationGenericError": "Controleer je invoer en probeer opnieuw.",
+  "@validationGenericError": {
+    "description": "Fallback validation message."
+  },
+  "fileNotFound": "Bestand niet gevonden. Het is mogelijk verplaatst of verwijderd.",
+  "@fileNotFound": {
+    "description": "Message when a file cannot be located."
+  },
+  "fileAccessDenied": "Kan geen toegang krijgen tot het bestand. Controleer de rechten.",
+  "@fileAccessDenied": {
+    "description": "Message when file access is denied."
+  },
+  "fileTooLarge": "Het bestand is te groot. Kies een kleiner bestand.",
+  "@fileTooLarge": {
+    "description": "Message when a file exceeds size limits."
+  },
+  "fileGenericError": "Probleem met het bestand. Probeer een ander bestand.",
+  "@fileGenericError": {
+    "description": "Fallback file error message."
+  },
+  "permissionCameraRequired": "Cameratoegang is vereist. Schakel dit in via de instellingen.",
+  "@permissionCameraRequired": {
+    "description": "Message when camera permission is missing."
+  },
+  "permissionStorageRequired": "Opslagtoegang is vereist. Schakel dit in via de instellingen.",
+  "@permissionStorageRequired": {
+    "description": "Message when storage permission is missing."
+  },
+  "permissionMicrophoneRequired": "Microfoontoegang is vereist. Schakel dit in via de instellingen.",
+  "@permissionMicrophoneRequired": {
+    "description": "Message when microphone permission is missing."
+  },
+  "permissionGenericError": "Toestemming vereist. Controleer de app-machtigingen in de instellingen.",
+  "@permissionGenericError": {
+    "description": "Fallback permission error message."
+  },
+  "actionRetryRequest": "Probeer de aanvraag opnieuw.",
+  "@actionRetryRequest": {
+    "description": "Description for retrying a failed request."
+  },
+  "actionVerifyConnection": "Controleer je internetverbinding.",
+  "@actionVerifyConnection": {
+    "description": "Description for checking internet connectivity."
+  },
+  "actionRetryOperation": "Probeer de actie opnieuw.",
+  "@actionRetryOperation": {
+    "description": "Description for retrying the same operation."
+  },
+  "actionRetryAfterDelay": "Wacht even en probeer het opnieuw.",
+  "@actionRetryAfterDelay": {
+    "description": "Description suggesting a short delay before retrying."
+  },
+  "actionSignInToAccount": "Log in op je account.",
+  "@actionSignInToAccount": {
+    "description": "Description for signing back into the app."
+  },
+  "actionSelectAnotherFile": "Kies een ander bestand.",
+  "@actionSelectAnotherFile": {
+    "description": "Description for choosing a different file."
+  },
+  "actionOpenAppSettings": "Open de app-instellingen om toestemming te geven.",
+  "@actionOpenAppSettings": {
+    "description": "Description for opening system or app settings."
+  },
+  "actionRetryAfterPermission": "Probeer opnieuw nadat je toestemming hebt gegeven.",
+  "@actionRetryAfterPermission": {
+    "description": "Description for retrying once permissions are granted."
+  },
+  "actionReturnToPrevious": "Keer terug naar het vorige scherm.",
+  "@actionReturnToPrevious": {
+    "description": "Description for navigating back to the prior screen."
+  },
+  "continueAction": "Doorgaan",
+  "@continueAction": {
+    "description": "Button label to continue an action or flow."
+  },
+  "loadingShort": "Laden",
+  "@loadingShort": {
+    "description": "Short loading label used for accessibility."
+  },
+  "loadingAnnouncement": "Laden: {message}",
+  "@loadingAnnouncement": {
+    "description": "Screen reader announcement when loading a resource.",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Messages"
+      }
+    }
+  },
+  "errorAnnouncement": "Fout: {error}",
+  "@errorAnnouncement": {
+    "description": "Screen reader announcement for an error.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network timeout"
+      }
+    }
+  },
+  "errorAnnouncementWithSuggestion": "Fout: {error}. {suggestion}",
+  "@errorAnnouncementWithSuggestion": {
+    "description": "Screen reader announcement for an error with a follow-up suggestion.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network timeout"
+      },
+      "suggestion": {
+        "type": "String",
+        "example": "Please try again later."
+      }
+    }
+  },
+  "successAnnouncement": "Succes: {message}",
+  "@successAnnouncement": {
+    "description": "Screen reader announcement for successful actions.",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Profile updated"
+      }
+    }
+  },
+  "requiredFieldLabel": "{label} *",
+  "@requiredFieldLabel": {
+    "description": "Label text indicating a required field.",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Email"
+      }
+    }
+  },
+  "requiredFieldHelper": "Verplicht veld",
+  "@requiredFieldHelper": {
+    "description": "Helper text indicating that the field is required."
+  },
+  "switchOnLabel": "Aan",
+  "@switchOnLabel": {
+    "description": "Semantic label when a switch is enabled."
+  },
+  "switchOffLabel": "Uit",
+  "@switchOffLabel": {
+    "description": "Semantic label when a switch is disabled."
+  },
+  "dialogSemanticLabel": "Dialoog: {title}",
+  "@dialogSemanticLabel": {
+    "description": "Semantic label describing the dialog title.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Settings"
+      }
+    }
+  },
+  "previousLabel": "Vorige",
+  "@previousLabel": {
+    "description": "Label for navigating to the previous item."
+  },
+  "nextLabel": "Volgende",
+  "@nextLabel": {
+    "description": "Label for navigating to the next item."
+  },
+  "themePaletteJyotiGPTappLabel": "JyotiGPTapp",
+  "@themePaletteJyotiGPTappLabel": {
+    "description": "Palette name for the default JyotiGPTapp theme."
+  },
+  "themePaletteJyotiGPTappDescription": "Strak neutraal thema ontworpen voor JyotiGPTapp.",
+  "@themePaletteJyotiGPTappDescription": {
+    "description": "Description of the JyotiGPTapp palette."
+  },
+  "themePaletteClaudeLabel": "Claude",
+  "@themePaletteClaudeLabel": {
+    "description": "Palette name inspired by the Claude web client."
+  },
+  "themePaletteClaudeDescription": "Warm, tactiel palet geïnspireerd op de Claude-webclient.",
+  "@themePaletteClaudeDescription": {
+    "description": "Description of the Claude palette."
+  },
+  "themePaletteT3ChatLabel": "T3 Chat",
+  "@themePaletteT3ChatLabel": {
+    "description": "Palette name inspired by the T3 Stack brand."
+  },
+  "themePaletteT3ChatDescription": "Speelse verlopen geïnspireerd op het T3 Stack-merk.",
+  "@themePaletteT3ChatDescription": {
+    "description": "Description of the T3 Chat palette."
+  },
+  "themePaletteCatppuccinLabel": "Catppuccin",
+  "@themePaletteCatppuccinLabel": {
+    "description": "Palette name for Catppuccin colors."
+  },
+  "themePaletteCatppuccinDescription": "Zacht pastelkleurig palet.",
+  "@themePaletteCatppuccinDescription": {
+    "description": "Description of the Catppuccin palette."
+  },
+  "themePaletteTangerineLabel": "Tangerine",
+  "@themePaletteTangerineLabel": {
+    "description": "Palette name for Tangerine colors."
+  },
+  "themePaletteTangerineDescription": "Warm oranje-en-leisteenpalet.",
+  "@themePaletteTangerineDescription": {
+    "description": "Description of the Tangerine palette."
+  },
+  "@notAnImageFile": {
+    "description": "Error when a referenced file is not an image.",
+    "placeholders": {
+      "fileName": {
+        "type": "String",
+        "example": "image.txt"
+      }
+    }
+  },
+  "@failedToLoadImage": {
+    "description": "Error including the underlying reason when image loading fails.",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "@ttsVoicesForLanguage": {
+    "description": "Section header for voices matching the app language",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "EN"
+      }
+    }
+  },
+  "voiceCallReady": "Gereed",
+  "@voiceCallReady": {
+    "description": "Status label shown when the voice call is ready to start."
+  },
+  "voiceCallConnecting": "Verbinding maken...",
+  "@voiceCallConnecting": {
+    "description": "Status label shown while the voice call is connecting."
+  },
+  "voiceCallListening": "Luistert",
+  "@voiceCallListening": {
+    "description": "Status label shown while the call is listening for input."
+  },
+  "voiceCallPaused": "Gepauzeerd",
+  "@voiceCallPaused": {
+    "description": "Status label shown when the call is paused."
+  },
+  "voiceCallProcessing": "Denkt na...",
+  "@voiceCallProcessing": {
+    "description": "Status label shown while the call processes a response."
+  },
+  "voiceCallSpeaking": "Spreekt",
+  "@voiceCallSpeaking": {
+    "description": "Status label shown while the assistant is speaking."
+  },
+  "voiceCallDisconnected": "Verbinding verbroken",
+  "@voiceCallDisconnected": {
+    "description": "Status label shown when the voice call has ended or disconnected."
+  },
+  "voiceCallErrorHelp": "Controleer het volgende:\n• Microfoonmachtigingen zijn toegestaan\n• Spraakherkenning is beschikbaar op je apparaat\n• Je bent verbonden met de server",
+  "@voiceCallErrorHelp": {
+    "description": "Guidance shown when the voice call encounters an error."
+  },
+  "mermaidPreviewUnavailable": "Mermaid-voorbeeld is niet beschikbaar op dit platform.",
+  "chartPreviewUnavailable": "Grafiekvoorbeeld is niet beschikbaar op dit platform.",
+  "notes": "Notities",
+  "searchNotes": "Notities zoeken...",
+  "createNote": "Notitie maken",
+  "noNotesYet": "Nog geen notities",
+  "noNotesFound": "Geen notities gevonden",
+  "createFirstNoteHint": "Tik op + om je eerste notitie te maken.",
+  "tryDifferentSearch": "Probeer een andere zoekterm.",
+  "loadingNotes": "Notities laden...",
+  "loadingNote": "Notitie laden...",
+  "failedToLoadNotes": "Notities laden mislukt",
+  "deleteNoteTitle": "Notitie verwijderen",
+  "deleteNoteMessage": "\"{title}\" verwijderen? Dit kan niet ongedaan worden gemaakt.",
+  "@deleteNoteMessage": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "writeNote": "Schrijf iets...",
+  "saving": "Opslaan...",
+  "saved": "Opgeslagen",
+  "noteCopiedToClipboard": "Notitie gekopieerd naar klembord",
+  "generateTitle": "Titel genereren",
+  "generatingTitle": "Titel genereren...",
+  "noContentToGenerateTitle": "Voeg eerst inhoud toe om een titel te genereren",
+  "failedToGenerateTitle": "Titel genereren mislukt",
+  "noContentToEnhance": "Voeg eerst inhoud toe om te verbeteren",
+  "noteEnhanced": "Notitie verbeterd met AI",
+  "failedToEnhanceNote": "Notitie verbeteren mislukt",
+  "noModelSelected": "Selecteer eerst een model",
+  "enhanceWithAI": "Verbeteren met AI",
+  "enhanceNote": "Notitie verbeteren",
+  "startDictation": "Dicteren starten",
+  "stopRecording": "Opname stoppen",
+  "voiceInputUnavailable": "Spraakinvoer niet beschikbaar",
+  "failedToStartDictation": "Dicteren starten mislukt",
+  "noteNotFound": "Notitie niet gevonden",
+  "untitled": "Naamloos",
+  "today": "Vandaag",
+  "yesterday": "Gisteren",
+  "previous7Days": "Afgelopen 7 dagen",
+  "previous30Days": "Afgelopen 30 dagen",
+  "older": "Ouder",
+  "wordCount": "{count} woorden",
+  "@wordCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "charCount": "{count} tekens",
+  "@charCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "promptVariablesTitle": "Details invullen",
+  "promptVariablesDescription": "Vul de onderstaande velden in om deze prompt aan te passen.",
+  "promptVariableNumberMin": "Minimale waarde is {min}",
+  "@promptVariableNumberMin": {
+    "placeholders": {
+      "min": {
+        "type": "double"
+      }
+    }
+  },
+  "promptVariableNumberMax": "Maximale waarde is {max}",
+  "@promptVariableNumberMax": {
+    "placeholders": {
+      "max": {
+        "type": "double"
+      }
+    }
+  },
+  "sso": "SSO",
+  "ssoDescription": "Aanmelden met de identiteitsprovider van uw organisatie",
+  "signInWithSso": "Aanmelden met SSO",
+  "ssoAuthenticating": "Authenticeren...",
+  "ssoAuthFailed": "SSO-authenticatie mislukt",
+  "ssoLoadingLogin": "Inlogpagina laden...",
+  "ldap": "LDAP",
+  "ldapDescription": "Aanmelden met uw LDAP-directorygegevens",
+  "signInWithLdap": "Aanmelden met LDAP",
+  "ldapUsername": "Gebruikersnaam",
+  "ldapUsernameHint": "Voer uw LDAP-gebruikersnaam in",
+  "moreSignInOptions": "Meer aanmeldopties",
+  "ldapNotEnabled": "LDAP-authenticatie is niet ingeschakeld op deze server",
+  "ssoPlatformNotSupported": "SSO-authenticatie wordt niet ondersteund op dit platform. Gebruik in plaats daarvan inloggegevens of LDAP-authenticatie.",
+  "continueWithProvider": "Doorgaan met {provider}",
+  "or": "of",
+  "usageInfo": "Info",
+  "usageInfoTitle": "Antwoordstatistieken",
+  "usageTokenGeneration": "Tokengeneratie",
+  "usagePromptEval": "Promptverwerking",
+  "usageTotalDuration": "Totale duur",
+  "usageTokensPerSecond": "{speed} t/s",
+  "@usageTokensPerSecond": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "usageTokenCount": "{count} tokens",
+  "@usageTokenCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "usageSecondsFormat": "{seconds}s",
+  "@usageSecondsFormat": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "usageLoadDuration": "Modellaadtijd",
+  "usageQueueTime": "Wachttijd",
+  "usageReasoningTokens": "Redeneertokens",
+  "usageTotalTokens": "Totaal tokens",
+  "proxyAuthentication": "Proxy-authenticatie",
+  "proxyAuthPlatformNotSupported": "Proxy-authenticatie vereist een mobiel apparaat. Authenticeer eerst via een browser.",
+  "proxyAuthLoading": "Authenticatiepagina laden...",
+  "proxyAuthFailed": "Proxy-authenticatie mislukt",
+  "proxyAuthHelpText": "Meld u aan via de proxy van uw organisatie en vervolgens bij JyotiGPT. U wordt automatisch doorgestuurd.",
+  "proxyAuthHelpTextSimple": "Meld u aan via uw proxy. Na authenticatie tikt u op Doorgaan om in te loggen.",
+  "continueButton": "Doorgaan",
+  "proxyAuthRequired": "Deze server vereist proxy-authenticatie",
+  "proxyAuthRequiredDescription": "Uw server lijkt achter een authenticatieproxy (zoals oauth2-proxy) te staan. U moet eerst inloggen via de proxy.",
+  "authenticateThroughProxy": "Authenticeren",
+  "voiceOptions": "Spraakopties",
+  "dictation": "Dicteren",
+  "dictationDescription": "Spreek en converteer naar tekst in realtime",
+  "recordAudio": "Audio opnemen",
+  "recordAudioDescription": "Audio opslaan voor latere transcriptie",
+  "recordingAudio": "Opnemen...",
+  "preparingRecording": "Voorbereiden...",
+  "recordingHint": "Tik op stop wanneer klaar",
+  "stopAndSaveRecording": "Stop en opslaan",
+  "processingRecording": "Verwerken...",
+  "audioRecordingSaved": "Audio-opname opgeslagen",
+  "microphonePermissionDenied": "Microfoontoegang geweigerd",
+  "recordingFailed": "Opname mislukt",
+  "removeFileConfirm": "Dit bestand uit de notitie verwijderen?",
+  "fileRemoved": "Bestand verwijderd",
+  "playAudio": "Audio afspelen",
+  "removeFile": "Bestand verwijderen",
+  "audioFileType": "Audio",
+  "imageFileType": "Afbeelding",
+  "failedToUploadAudio": "Audio uploaden mislukt",
+  "audioAttachment": "Audiobijlage",
+  "loadingAudio": "Audio laden...",
+  "failedToLoadAudio": "Audio laden mislukt",
+  "webPage": "Webpagina",
+  "greetingTitle": "Hallo, {username}",
+  "temporaryChat": "Temporary Chat",
+  "temporaryChatTooltip": "This chat won't appear in history",
+  "saveChat": "Save Chat",
+  "temporaryChatByDefault": "Temporary Chat by Default",
+  "temporaryChatByDefaultDescription": "New chats won't be saved to history unless you choose to save them",
+  "chatSaved": "Chat saved to history",
+  "chatSaveFailed": "Failed to save chat"
+}
