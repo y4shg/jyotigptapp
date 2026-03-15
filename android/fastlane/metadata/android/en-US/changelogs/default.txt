@@ -1,1 +1,1 @@
-https://github.com/y4shg/jyotigptapp/releases/tag/v0.9.4
+https://github.com/y4shg/jyotigptapp/releases/tag/v26.4.14

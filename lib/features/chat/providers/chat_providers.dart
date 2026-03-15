@@ -1628,14 +1628,11 @@ Future<void> regenerateMessage(
     final bgTasks = <String, dynamic>{
       if (shouldGenerateTitle) 'title_generation': true,
       if (shouldGenerateTitle) 'tags_generation': true,
-      'follow_up_generation': true,
       if (webSearchEnabled) 'web_search': true,
       if (imageGenerationEnabled) 'image_generation': true,
     };
+    final backgroundTasksPayload = bgTasks.isNotEmpty ? bgTasks : null;
 
-    final bool isBackgroundToolsFlowPre =
-        (selectedToolIds.isNotEmpty) ||
-        (toolServers != null && toolServers.isNotEmpty);
     final bool isBackgroundWebSearchPre = webSearchEnabled;
 
     // Find the last user message ID for proper parent linking
@@ -1648,12 +1645,7 @@ Future<void> regenerateMessage(
     }
 
     // Dispatch using unified send pipeline (background tools flow)
-    final bool isBackgroundFlowPre =
-        isBackgroundToolsFlowPre ||
-        isBackgroundWebSearchPre ||
-        imageGenerationEnabled;
-    final bool passSocketSession =
-        wantSessionBinding && (isBackgroundFlowPre || bgTasks.isNotEmpty);
+    final bool passSocketSession = wantSessionBinding;
     final response = api!.sendMessage(
       messages: conversationMessages,
       model: selectedModel.id,
@@ -1666,7 +1658,7 @@ Future<void> regenerateMessage(
       sessionIdOverride: passSocketSession ? socketSessionId : null,
       socketSessionId: socketSessionId,
       toolServers: toolServers,
-      backgroundTasks: bgTasks,
+      backgroundTasks: backgroundTasksPayload,
       responseMessageId: assistantMessageId,
       userSettings: userSettingsData,
       parentMessageId: lastUserMessageId,
@@ -2374,20 +2366,15 @@ Future<void> _sendMessageInternal(
       } catch (_) {}
     }
 
-    // Match web client: request background follow-ups always; title/tags on first turn
     final bgTasks = <String, dynamic>{
       if (shouldGenerateTitle) 'title_generation': true,
       if (shouldGenerateTitle) 'tags_generation': true,
-      'follow_up_generation': true,
       if (webSearchEnabled) 'web_search': true, // enable bg web search
       if (imageGenerationEnabled)
         'image_generation': true, // enable bg image flow
     };
+    final backgroundTasksPayload = bgTasks.isNotEmpty ? bgTasks : null;
 
-    // Determine if we need background task flow (tools/tool servers or web search)
-    final bool isBackgroundToolsFlowPre =
-        (toolIdsForApi != null && toolIdsForApi.isNotEmpty) ||
-        (toolServers != null && toolServers.isNotEmpty);
     final bool isBackgroundWebSearchPre = webSearchEnabled;
 
     // Find the last user message ID for proper parent linking
@@ -2399,12 +2386,7 @@ Future<void> _sendMessageInternal(
       }
     }
 
-    final bool shouldBindSession =
-        wantSessionBinding &&
-        (isBackgroundToolsFlowPre ||
-            isBackgroundWebSearchPre ||
-            imageGenerationEnabled ||
-            bgTasks.isNotEmpty);
+    final bool shouldBindSession = wantSessionBinding;
 
     final response = await api.sendMessage(
       messages: conversationMessages,
@@ -2421,7 +2403,7 @@ Future<void> _sendMessageInternal(
       sessionIdOverride: shouldBindSession ? socketSessionId : null,
       socketSessionId: socketSessionId,
       toolServers: toolServers,
-      backgroundTasks: bgTasks,
+      backgroundTasks: backgroundTasksPayload,
       responseMessageId: assistantMessageId,
       userSettings: userSettingsData,
       parentMessageId: lastUserMessageId,

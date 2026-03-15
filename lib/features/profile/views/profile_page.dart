@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 
 import '../../../core/providers/app_providers.dart';
 import '../../../core/services/api_service.dart';
@@ -27,6 +28,8 @@ class ProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final useAdaptivePlatformChrome = PlatformInfo.isIOS;
+    final useNativeToolbar = PlatformInfo.isIOS26OrHigher();
     final authUser = ref.watch(currentUserProvider2);
     final asyncUser = ref.watch(currentUserProvider);
     final user = asyncUser.maybeWhen(
@@ -42,18 +45,48 @@ class ProfilePage extends ConsumerWidget {
             ImprovedLoadingState(
               message: AppLocalizations.of(context)!.loadingProfile,
             ),
+            useAdaptivePlatformChrome: useAdaptivePlatformChrome,
           )
-        : _buildProfileBody(context, ref, user, api);
+        : _buildProfileBody(
+            context,
+            ref,
+            user,
+            api,
+            useAdaptivePlatformChrome: useAdaptivePlatformChrome,
+          );
 
-    return ErrorBoundary(child: _buildScaffold(context, body: body));
+    return ErrorBoundary(
+      child: _buildScaffold(
+        context,
+        body: body,
+        useAdaptivePlatformChrome: useAdaptivePlatformChrome,
+        useNativeToolbar: useNativeToolbar,
+      ),
+    );
   }
 
-  Scaffold _buildScaffold(BuildContext context, {required Widget body}) {
+  Widget _buildScaffold(
+    BuildContext context, {
+    required Widget body,
+    required bool useAdaptivePlatformChrome,
+    required bool useNativeToolbar,
+  }) {
     final canPop = ModalRoute.of(context)?.canPop ?? false;
     final l10n = AppLocalizations.of(context)!;
+    final theme = context.jyotigptappTheme;
+
+    if (useAdaptivePlatformChrome) {
+      return AdaptiveScaffold(
+        appBar: AdaptiveAppBar(
+          title: l10n.you,
+          useNativeToolbar: useNativeToolbar,
+        ),
+        body: ColoredBox(color: theme.surfaceBackground, child: body),
+      );
+    }
 
     return Scaffold(
-      backgroundColor: context.jyotigptappTheme.surfaceBackground,
+      backgroundColor: theme.surfaceBackground,
       extendBodyBehindAppBar: true,
       appBar: FloatingAppBar(
         leading: canPop ? const FloatingAppBarBackButton() : null,
@@ -63,8 +96,15 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildCenteredState(BuildContext context, Widget child) {
-    final topPadding = MediaQuery.of(context).padding.top + kToolbarHeight + 24;
+  Widget _buildCenteredState(
+    BuildContext context,
+    Widget child, {
+    required bool useAdaptivePlatformChrome,
+  }) {
+    final topPadding =
+        useAdaptivePlatformChrome
+            ? 24.0
+            : (MediaQuery.of(context).padding.top + kToolbarHeight + 24);
     return Padding(
       padding: EdgeInsets.fromLTRB(
         Spacing.pagePadding,
@@ -81,8 +121,12 @@ class ProfilePage extends ConsumerWidget {
     WidgetRef ref,
     dynamic userData,
     ApiService? api,
+    {required bool useAdaptivePlatformChrome}
   ) {
-    final topPadding = MediaQuery.of(context).padding.top + kToolbarHeight + 24;
+    final topPadding =
+        useAdaptivePlatformChrome
+            ? 24.0
+            : (MediaQuery.of(context).padding.top + kToolbarHeight + 24);
     return ListView(
       physics: const BouncingScrollPhysics(
         parent: AlwaysScrollableScrollPhysics(),

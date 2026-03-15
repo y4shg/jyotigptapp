@@ -227,12 +227,7 @@ class _Header extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        BrandService.createBrandIcon(
-          size: 56,
-          useGradient: true,
-          addShadow: true,
-          context: context,
-        ),
+        BrandService.createLauncherIcon(size: 56, addShadow: true),
         const SizedBox(height: Spacing.md),
         Text(
           title,
