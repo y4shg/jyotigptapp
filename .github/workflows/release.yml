@@ -100,7 +100,7 @@ jobs:
 
   build-ios:
     name: Build iOS
-    runs-on: macos-latest
+    runs-on: macos-15
     permissions:
       contents: write
 
@@ -131,7 +131,13 @@ jobs:
         with:
           xcode-version: latest-stable
 
-        #5 Cache CocoaPods
+        #5 Update CocoaPods to support latest Xcode format
+      - name: Update CocoaPods
+        run: |
+          sudo gem update cocoapods
+          sudo gem update xcodeproj
+
+        #6 Cache CocoaPods
       - name: Cache CocoaPods
         uses: actions/cache@v4
         with:
@@ -146,7 +152,7 @@ jobs:
           cd ios
           pod install --verbose
 
-        #6 Cache Xcode DerivedData
+        #7 Cache Xcode DerivedData
       - name: Cache Xcode DerivedData
         uses: actions/cache@v4
         with:
@@ -160,7 +166,7 @@ jobs:
         run: |
           flutter build ios --release --no-codesign
 
-        #7 Create IPA from App Bundle
+        #8 Create IPA from App Bundle
       - name: Create IPA
         run: |
           mkdir -p build/ios/ipa
@@ -170,7 +176,7 @@ jobs:
           zip -r ../ipa/jyotigptapp.ipa Payload
           cd ../ipa
 
-        #8 Upload Artifacts
+        #9 Upload Artifacts
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -178,7 +184,7 @@ jobs:
           path: |
             build/ios/ipa/*.ipa
 
-        #9 Update Release
+        #10 Update Release
       - name: Update Release with IPA
         if: github.ref_type == 'tag' || github.event_name == 'workflow_dispatch'
         uses: ncipollo/release-action@v1
