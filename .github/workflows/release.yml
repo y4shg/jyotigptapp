@@ -131,11 +131,9 @@ jobs:
         with:
           xcode-version: latest-stable
 
-        #5 Update CocoaPods to support latest Xcode format
-      - name: Update CocoaPods
-        run: |
-          sudo gem update cocoapods
-          sudo gem update xcodeproj
+        #5 Install xcodeproj pre-release to support Xcode 26 format
+      - name: Update xcodeproj gem
+        run: sudo gem install xcodeproj --pre
 
         #6 Cache CocoaPods
       - name: Cache CocoaPods
