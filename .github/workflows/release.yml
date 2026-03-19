@@ -60,7 +60,7 @@ jobs:
         #5 Setup Keystore
       - name: Create Keystore
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > app/jyotigptapp-keystore.jks
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > app/jyotigptapp.jks
           echo "${{ secrets.ANDROID_KEY_PROPERTIES_BASE64 }}" | base64 --decode > key.properties
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
