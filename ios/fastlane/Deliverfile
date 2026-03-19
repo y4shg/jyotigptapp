@@ -4,9 +4,9 @@
 submit_for_review(true)
 skip_metadata(false)
 release_notes({
-  'default' => "https://github.com/y4shg/jyotigptapp/releases/tag/v26.4.14",
+  'default' => "https://github.com/y4shg/jyotigptapp/releases/tag/v26.3.19",
 })
-promotional_text({'default' => "https://github.com/y4shg/jyotigptapp/releases/tag/v26.4.14"})
+promotional_text({'default' => "https://github.com/y4shg/jyotigptapp/releases/tag/v26.3.19"})
 skip_screenshots(true)
 run_precheck_before_submit(false)
 ipa("../build/ios/ipa/jyotigptapp.ipa")
