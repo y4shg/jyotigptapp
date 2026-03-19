@@ -2,8 +2,10 @@ name: jyotigptapp
 description: AI spiritual assistant for exploring Brahma Kumaris teachings
 version: 26.4.14+1
 publish_to: 'none'
+
 environment:
   sdk: ">=3.8.0 <4.0.0"
+
 dependencies:
   flutter:
     sdk: flutter
@@ -20,6 +22,7 @@ dependencies:
   dio: ^5.9.0
   http_parser: ^4.0.2
   
+  
   # Storage
   flutter_secure_storage: ^10.0.0
   hive_ce: ^2.14.0
@@ -32,6 +35,8 @@ dependencies:
   webview_flutter: ^4.7.0
   socket_io_client: ^3.1.2
   yaml: ^3.1.2
+  
+  
   
   # Modern Animations
   flutter_animate: ^4.5.0
@@ -80,6 +85,8 @@ dependencies:
   adaptive_platform_ui: ^0.1.103
   flutter_tex: ^5.2.6
   super_clipboard: ^0.9.1
+  
+  # Clipboard functionality is available through flutter/services (part of Flutter SDK)
 
 dev_dependencies:
   flutter_test:
@@ -98,21 +105,35 @@ dev_dependencies:
 dependency_overrides:
   riverpod_lint: 3.0.3
   custom_lint_builder: 0.8.1
+  super_native_extensions:
+    git:
+      url: https://github.com/dilumdesilva/super_native_extensions
+      ref: main
+      path: super_native_extensions
 
 flutter:
   uses-material-design: true
   generate: true
-
+  # Localization
+  # ARB files live in lib/l10n (configured via l10n.yaml)
+  
   assets:
     - assets/icons/
     - assets/mermaid.min.js
     - assets/chartjs.min.js
 
 flutter_native_splash:
+  # Splash background matches the light theme; `color_dark` handles dark mode.
   color: "#FFFFFF"
   color_dark: "#0A0A0A"
+  # Image to display on the splash screen
   image: assets/icons/icon.png
+
+  
+  # Android specific settings
   android_12:
     color: "#FFFFFF"
     color_dark: "#0A0A0A"
+  
+  # Web specific settings
   web: false
