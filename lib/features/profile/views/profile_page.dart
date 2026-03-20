@@ -413,7 +413,7 @@ class ProfilePage extends ConsumerWidget {
                 keyName: 'enableNotifications',
                 title: 'Account notifications',
                 subtitle: 'Sync your account preference for notifications.',
-                iosIcon: CupertinoIcons.bell_badge,
+                iosIcon: CupertinoIcons.bell,
                 androidIcon: Icons.notifications_active_outlined,
               ),
               const SizedBox(height: Spacing.md),
@@ -600,7 +600,10 @@ class ProfilePage extends ConsumerWidget {
 
     final editableUser = _resolveEditableUser(user);
     if (editableUser == null) {
-      UiUtils.showMessage(context, 'Unable to update your profile right now.');
+      UiUtils.showMessage(
+        context,
+        'Unable to update your profile right now.',
+      );
       return;
     }
 
@@ -634,13 +637,19 @@ class ProfilePage extends ConsumerWidget {
     final bytes = await image.readAsBytes();
     final dataUrl = _imageDataUrl(bytes, image.path);
     final storage = ref.read(optimizedStorageServiceProvider);
+    final asyncUser = ref.read(currentUserProvider);
     final currentUser = _resolveEditableUser(
-      ref.read(currentUserProvider).valueOrNull ?? ref.read(currentUserProvider2),
+      asyncUser.maybeWhen(
+        data: (value) => value ?? ref.read(currentUserProvider2),
+        orElse: () => ref.read(currentUserProvider2),
+      ),
     );
 
     await storage.saveLocalUserAvatar(dataUrl);
     if (currentUser != null) {
-      await storage.saveLocalUser(currentUser.copyWith(profileImage: dataUrl));
+      await storage.saveLocalUser(
+        currentUser.copyWith(profileImage: dataUrl),
+      );
     }
     ref.invalidate(currentUserProvider);
 
