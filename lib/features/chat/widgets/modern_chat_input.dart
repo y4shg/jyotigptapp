@@ -1297,11 +1297,31 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
 
     // For compact mode, render text field shell with floating buttons on sides
     if (showCompactComposer) {
+      const double compactActionSize = 36.0;
+      final double trailingActionWidth =
+          compactActionSize + Spacing.sm + Spacing.xs;
+      final Widget primaryAction = _buildPrimaryButton(
+        _hasText,
+        isGenerating,
+        stopGeneration,
+        voiceAvailable,
+        allUploadsComplete,
+        hasUploadsInProgress,
+        dense: true,
+      );
+      final Widget? trailingSecondaryAction =
+          !_hasText && voiceAvailable && !isGenerating
+          ? SizedBox(
+              height: compactActionSize,
+              child: Center(child: _buildInlineMicAction(voiceAvailable)),
+            )
+          : null;
+
       final textFieldContent = Container(
         padding: EdgeInsets.fromLTRB(
           Spacing.md,
           0,
-          Spacing.md,
+          Spacing.sm + trailingActionWidth,
           _isMultiline ? Spacing.sm : 0,
         ),
         constraints: const BoxConstraints(minHeight: TouchTarget.input),
@@ -1309,52 +1329,41 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            Row(
-              crossAxisAlignment: _isMultiline
-                  ? CrossAxisAlignment.end
-                  : CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: _buildComposerTextField(
-                    brightness: brightness,
-                    sendOnEnter: sendOnEnter,
-                    voiceAvailable: voiceAvailable,
-                    isGenerating: isGenerating,
-                    allUploadsComplete: allUploadsComplete,
-                    placeholderBase: placeholderBase,
-                    placeholderFocused: placeholderFocused,
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: Spacing.xs,
-                    ),
-                    isActive: isActive,
-                  ),
+            _buildComposerTextField(
+              brightness: brightness,
+              sendOnEnter: sendOnEnter,
+              voiceAvailable: voiceAvailable,
+              isGenerating: isGenerating,
+              allUploadsComplete: allUploadsComplete,
+              placeholderBase: placeholderBase,
+              placeholderFocused: placeholderFocused,
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: Spacing.xs,
+              ),
+              isActive: isActive,
+            ),
+            Positioned(
+              right: Spacing.xs,
+              bottom: _isMultiline ? Spacing.xs : null,
+              top: _isMultiline ? null : 0,
+              child: SizedBox(
+                height: _isMultiline ? compactActionSize : TouchTarget.input,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (trailingSecondaryAction != null) ...[
+                      trailingSecondaryAction,
+                      const SizedBox(width: Spacing.xs),
+                    ],
+                    primaryAction,
+                  ],
                 ),
-                if (!_hasText && voiceAvailable && !isGenerating) ...[
-                  const SizedBox(width: Spacing.xs),
-                  // Wrap in the same height as the dense primary button so
-                  // the mic icon's visual center aligns with the button when
-                  // bottom-aligned in the multiline (crossAxisAlignment.end)
-                  // layout.
-                  SizedBox(
-                    height: 36.0,
-                    child: Center(child: _buildInlineMicAction(voiceAvailable)),
-                  ),
-                ],
-                const SizedBox(width: Spacing.xs),
-                _buildPrimaryButton(
-                  _hasText,
-                  isGenerating,
-                  stopGeneration,
-                  voiceAvailable,
-                  allUploadsComplete,
-                  hasUploadsInProgress,
-                  dense: true,
-                ),
-              ],
+              ),
             ),
             Positioned(
               top: Spacing.xs,
-              right: 0,
+              right: trailingActionWidth,
               child: AnimatedOpacity(
                 opacity: (_showExpandButton && !_expandModalOpen) ? 1.0 : 0.0,
                 duration: const Duration(milliseconds: 160),

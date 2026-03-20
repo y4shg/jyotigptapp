@@ -228,12 +228,15 @@ class _JyotiGPTappAppState extends ConsumerState<JyotiGPTappApp> {
           debugShowCheckedModeBanner: false,
         ),
         builder: (context, child) {
-          // Resolve brightness from themeMode rather than
-          // Theme.of(context) — on iOS, CupertinoApp's
-          // auto-generated Theme may not reflect themeMode.
-          final brightness = themeMode == ThemeMode.dark
-              ? Brightness.dark
-              : Brightness.light;
+          final mediaQuery = MediaQuery.of(context);
+          // Resolve the effective brightness from the selected theme mode.
+          // When the user picks `ThemeMode.system`, fall back to the current
+          // platform brightness instead of assuming light mode.
+          final brightness = switch (themeMode) {
+            ThemeMode.dark => Brightness.dark,
+            ThemeMode.light => Brightness.light,
+            ThemeMode.system => mediaQuery.platformBrightness,
+          };
           if (_lastAppliedOverlayBrightness != brightness) {
             _lastAppliedOverlayBrightness = brightness;
             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -243,7 +246,6 @@ class _JyotiGPTappAppState extends ConsumerState<JyotiGPTappApp> {
               );
             });
           }
-          final mediaQuery = MediaQuery.of(context);
           final safeChild =
               child ?? const SizedBox.shrink();
 

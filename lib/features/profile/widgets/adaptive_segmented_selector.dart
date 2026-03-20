@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -98,61 +99,29 @@ class ThemeModeSegmentedControl extends StatelessWidget {
   final ThemeMode value;
   final ValueChanged<ThemeMode> onChanged;
 
+  static const List<ThemeMode> _themeModes = <ThemeMode>[
+    ThemeMode.system,
+    ThemeMode.light,
+    ThemeMode.dark,
+  ];
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final isCupertino =
-        Platform.isIOS || Theme.of(context).platform == TargetPlatform.macOS;
+    final selectedIndex = _themeModes.indexOf(value);
 
-    if (isCupertino) {
-      return CupertinoSlidingSegmentedControl<ThemeMode>(
-        groupValue: value,
-        onValueChanged: (next) {
-          if (next != null) {
-            onChanged(next);
-          }
-        },
-        children: {
-          ThemeMode.system: ThemeModeSegmentLabel(
-            icon: CupertinoIcons.gear_alt,
-            label: l10n.system,
-          ),
-          ThemeMode.light: ThemeModeSegmentLabel(
-            icon: CupertinoIcons.sun_max,
-            label: l10n.themeLight,
-          ),
-          ThemeMode.dark: ThemeModeSegmentLabel(
-            icon: CupertinoIcons.moon_fill,
-            label: l10n.themeDark,
-          ),
-        },
-      );
-    }
-
-    return SegmentedButton<ThemeMode>(
-      selected: {value},
-      segments: [
-        ButtonSegment<ThemeMode>(
-          value: ThemeMode.system,
-          icon: const Icon(Icons.brightness_auto),
-          label: Text(l10n.system),
-        ),
-        ButtonSegment<ThemeMode>(
-          value: ThemeMode.light,
-          icon: const Icon(Icons.light_mode),
-          label: Text(l10n.themeLight),
-        ),
-        ButtonSegment<ThemeMode>(
-          value: ThemeMode.dark,
-          icon: const Icon(Icons.dark_mode),
-          label: Text(l10n.themeDark),
-        ),
+    return AdaptiveSegmentedControl(
+      labels: <String>[
+        l10n.system,
+        l10n.themeLight,
+        l10n.themeDark,
       ],
-      showSelectedIcon: false,
-      onSelectionChanged: (selection) {
-        if (selection.isNotEmpty) {
-          onChanged(selection.first);
+      selectedIndex: selectedIndex >= 0 ? selectedIndex : 0,
+      onValueChanged: (index) {
+        if (index < 0 || index >= _themeModes.length) {
+          return;
         }
+        onChanged(_themeModes[index]);
       },
     );
   }
