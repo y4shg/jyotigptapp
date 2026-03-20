@@ -75,7 +75,8 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
 
   static const double _composerRadius = AppBorderRadius.card;
   static const double _compactActionSize = 36.0;
-  static const double _compactActionEdgeInset = 2.0;
+  static const double _compactActionEdgeInset = 0.0;
+  static const double _compactActionGap = 4.0;
 
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
@@ -1306,32 +1307,32 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
         hasUploadsInProgress,
         dense: true,
       );
-      final Widget? trailingSecondaryAction =
-          !_hasText && voiceAvailable && !isGenerating
-          ? SizedBox(
-              height: _compactActionSize,
-              child: Center(child: _buildInlineMicAction(voiceAvailable)),
-            )
-          : null;
-      final List<double> trailingActionWidths = <double>[
-        if (trailingSecondaryAction != null) _compactActionSize,
-        _compactActionSize,
-      ];
-      final double trailingActionsWidth = trailingActionWidths.fold<double>(
-        0,
-        (sum, width) => sum + width,
+      final bool showTrailingSecondaryAction =
+          !_hasText && voiceAvailable && !isGenerating;
+      final Widget trailingSecondaryAction = SizedBox(
+        width: _compactActionSize,
+        height: _compactActionSize,
+        child: Center(
+          child: AnimatedOpacity(
+            opacity: showTrailingSecondaryAction ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 160),
+            child: IgnorePointer(
+              ignoring: !showTrailingSecondaryAction,
+              child: _buildInlineMicAction(voiceAvailable),
+            ),
+          ),
+        ),
       );
-      final double trailingActionGap = trailingSecondaryAction != null
-          ? Spacing.xs
-          : 0;
       final double trailingActionInset =
-          trailingActionsWidth + trailingActionGap + _compactActionEdgeInset;
+          (_compactActionSize * 2) +
+          _compactActionGap +
+          _compactActionEdgeInset;
 
       final textFieldContent = Container(
         padding: EdgeInsets.fromLTRB(
           Spacing.md,
           0,
-          trailingActionInset + _compactActionEdgeInset,
+          trailingActionInset,
           _isMultiline ? Spacing.sm : 0,
         ),
         constraints: const BoxConstraints(minHeight: TouchTarget.input),
@@ -1366,10 +1367,8 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      if (trailingSecondaryAction != null) ...[
-                        trailingSecondaryAction,
-                        const SizedBox(width: Spacing.xs),
-                      ],
+                      trailingSecondaryAction,
+                      const SizedBox(width: _compactActionGap),
                       primaryAction,
                     ],
                   ),

@@ -88,6 +88,10 @@ class SettingsService {
     return _preferencesBox().put(_animationSpeedKey, sanitized);
   }
 
+  /// Whether haptic feedback is currently enabled.
+  static bool get isHapticFeedbackEnabled =>
+      (_preferencesBox().get(_hapticFeedbackKey) as bool?) ?? true;
+
   /// Get haptic feedback preference
   static Future<bool> getHapticFeedback() {
     final value = _preferencesBox().get(_hapticFeedbackKey) as bool?;
