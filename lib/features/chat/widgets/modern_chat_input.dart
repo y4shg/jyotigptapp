@@ -1298,8 +1298,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     // For compact mode, render text field shell with floating buttons on sides
     if (showCompactComposer) {
       const double compactActionSize = 36.0;
-      final double trailingActionWidth =
-          compactActionSize + Spacing.sm + Spacing.xs;
       final Widget primaryAction = _buildPrimaryButton(
         _hasText,
         isGenerating,
@@ -1316,12 +1314,25 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
               child: Center(child: _buildInlineMicAction(voiceAvailable)),
             )
           : null;
+      final List<double> trailingActionWidths = <double>[
+        if (trailingSecondaryAction != null) compactActionSize,
+        compactActionSize,
+      ];
+      final double trailingActionsWidth = trailingActionWidths.fold<double>(
+        0,
+        (sum, width) => sum + width,
+      );
+      final double trailingActionGap = trailingSecondaryAction != null
+          ? Spacing.xs
+          : 0;
+      final double trailingActionInset =
+          trailingActionsWidth + trailingActionGap + Spacing.xs;
 
       final textFieldContent = Container(
         padding: EdgeInsets.fromLTRB(
           Spacing.md,
           0,
-          Spacing.sm + trailingActionWidth,
+          Spacing.sm + trailingActionInset,
           _isMultiline ? Spacing.sm : 0,
         ),
         constraints: const BoxConstraints(minHeight: TouchTarget.input),
@@ -1363,7 +1374,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
             ),
             Positioned(
               top: Spacing.xs,
-              right: trailingActionWidth,
+              right: trailingActionInset,
               child: AnimatedOpacity(
                 opacity: (_showExpandButton && !_expandModalOpen) ? 1.0 : 0.0,
                 duration: const Duration(milliseconds: 160),
