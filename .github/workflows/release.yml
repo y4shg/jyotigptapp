@@ -100,6 +100,9 @@ jobs:
 
   build-ios:
     name: Build iOS
+    # Pin `runs-on` to macos-15 so the workflow keeps using the Xcode 26 image
+    # for reproducible builds; update this runner manually when GitHub deprecates
+    # it, and re-evaluate the pin periodically alongside Xcode support changes.
     runs-on: macos-15
     permissions:
       contents: write
@@ -131,9 +134,9 @@ jobs:
         with:
           xcode-version: latest-stable
 
-        #5 Install xcodeproj pre-release to support Xcode 26 format
-      - name: Update xcodeproj gem
-        run: sudo gem install xcodeproj --pre
+        #5 Install a stable xcodeproj gem version that supports Xcode 26 projects
+      - name: Update xcodeproj gem for Xcode 26 support
+        run: sudo gem install xcodeproj -v '1.27.0'
 
         #6 Cache CocoaPods
       - name: Cache CocoaPods

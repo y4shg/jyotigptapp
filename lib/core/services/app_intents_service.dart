@@ -179,7 +179,7 @@ class AppIntentCoordinator extends _$AppIntentCoordinator {
 
     try {
       await _prepareChatWithOptions(
-        prompt: 'Please review this link:',
+        prompt: 'Please review this link: $url',
         focusComposer: true,
         resetChat: true,
       );

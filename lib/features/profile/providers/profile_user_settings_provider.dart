@@ -1,14 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/providers/app_providers.dart';
 
-final profileUserSettingsProvider = AsyncNotifierProvider<
-    ProfileUserSettingsController, Map<String, dynamic>>(
-  ProfileUserSettingsController.new,
-);
+part 'profile_user_settings_provider.g.dart';
 
-class ProfileUserSettingsController
-    extends AsyncNotifier<Map<String, dynamic>> {
+@Riverpod(keepAlive: true)
+class ProfileUserSettingsController extends _$ProfileUserSettingsController {
+  Future<void> _pendingWrite = Future<void>.value();
+
   @override
   Future<Map<String, dynamic>> build() async {
     final api = ref.watch(apiServiceProvider);
@@ -21,6 +21,11 @@ class ProfileUserSettingsController
   }
 
   Future<void> updateSetting(String key, dynamic value) async {
+    final api = ref.read(apiServiceProvider);
+    if (api == null) {
+      throw StateError('No API client available for user settings.');
+    }
+
     final current = Map<String, dynamic>.from(
       state.maybeWhen(data: (value) => value, orElse: () => null) ??
           await future,
@@ -30,16 +35,35 @@ class ProfileUserSettingsController
 
     state = AsyncData(next);
 
-    final api = ref.read(apiServiceProvider);
-    if (api == null) {
-      return;
+    final write = _pendingWrite.then((_) async {
+      try {
+        await api.updateUserSettings(next);
+      } catch (error, stackTrace) {
+        final currentState = state.valueOrNull;
+        if (currentState != null && _mapsEqual(currentState, next)) {
+          state = AsyncData(previous);
+        }
+        Error.throwWithStackTrace(error, stackTrace);
+      }
+    });
+
+    _pendingWrite = write.catchError((_) {});
+    await write;
+  }
+
+  bool _mapsEqual(Map<String, dynamic> left, Map<String, dynamic> right) {
+    if (identical(left, right)) {
+      return true;
+    }
+    if (left.length != right.length) {
+      return false;
     }
 
-    try {
-      await api.updateUserSettings(next);
-    } catch (error, stackTrace) {
-      state = AsyncData(previous);
-      Error.throwWithStackTrace(error, stackTrace);
+    for (final entry in left.entries) {
+      if (right[entry.key] != entry.value) {
+        return false;
+      }
     }
+    return true;
   }
 }

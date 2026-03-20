@@ -40,8 +40,8 @@
             }
           ],
           "glass" : true,
-          "image-name" : "ing (3).svg",
-          "name" : "ing (3)",
+          "image-name" : "icon-layer.svg",
+          "name" : "icon-layer",
           "opacity-specializations" : [
             {
               "value" : 1

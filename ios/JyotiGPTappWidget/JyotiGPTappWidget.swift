@@ -140,7 +140,6 @@ struct JyotiGPTappWidgetEntryView: View {
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 28, height: 28)
-            .foregroundStyle(onAccentColor.opacity(0.95))
     }
 }
 
