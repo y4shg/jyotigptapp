@@ -12,7 +12,6 @@ import '../providers/app_providers.dart';
 import '../utils/debug_logger.dart';
 import 'navigation_service.dart';
 import '../../features/chat/providers/chat_providers.dart';
-import '../../features/chat/providers/context_attachments_provider.dart';
 import '../../features/auth/providers/unified_auth_providers.dart';
 import '../../features/chat/voice_call/presentation/voice_call_launcher.dart';
 import '../../features/chat/services/file_attachment_service.dart';
@@ -179,76 +178,13 @@ class AppIntentCoordinator extends _$AppIntentCoordinator {
     }
 
     try {
-      // Determine if this is a YouTube URL
-      final isYoutube =
-          url.startsWith('https://www.youtube.com') ||
-          url.startsWith('https://youtu.be') ||
-          url.startsWith('https://youtube.com') ||
-          url.startsWith('https://m.youtube.com');
-
-      // Try to fetch the URL content first
-      String? content;
-      String? name;
-      String? collectionName;
-      final api = ref.read(apiServiceProvider);
-      if (api != null) {
-        final result = isYoutube
-            ? await api.processYoutube(url: url)
-            : await api.processWebpage(url: url);
-
-        final file = (result?['file'] as Map?)?.cast<String, dynamic>();
-        final fileData = (file?['data'] as Map?)?.cast<String, dynamic>();
-        content = fileData?['content']?.toString() ?? '';
-        final meta = (file?['meta'] as Map?)?.cast<String, dynamic>();
-        name = meta?['name']?.toString() ?? Uri.parse(url).host;
-        collectionName = result?['collection_name']?.toString();
-      }
-
-      final prompt = isYoutube
-          ? 'Please summarize or analyze this video:'
-          : 'Please summarize or analyze this page:';
-
-      // Reset chat first, then add attachments (startNewChat clears attachments)
       await _prepareChatWithOptions(
-        prompt: prompt,
+        prompt: 'Please review this link:',
         focusComposer: true,
         resetChat: true,
       );
 
-      // Add attachments after reset so they aren't cleared
-      final bool contentAttached = content != null && content.isNotEmpty;
-      if (contentAttached) {
-        final notifier = ref.read(contextAttachmentsProvider.notifier);
-        if (isYoutube) {
-          notifier.addYoutube(
-            displayName: name ?? Uri.parse(url).host,
-            content: content,
-            url: url,
-            collectionName: collectionName,
-          );
-        } else {
-          notifier.addWeb(
-            displayName: name ?? Uri.parse(url).host,
-            content: content,
-            url: url,
-            collectionName: collectionName,
-          );
-        }
-      }
-
-      if (contentAttached) {
-        return {
-          'success': true,
-          'value': isYoutube
-              ? 'YouTube video attached in JyotiGPT'
-              : 'Webpage attached in JyotiGPT',
-        };
-      } else {
-        return {
-          'success': true,
-          'value': 'Opening JyotiGPT with URL (content could not be fetched)',
-        };
-      }
+      return {'success': true, 'value': 'Opening JyotiGPT with URL'};
     } catch (error, stackTrace) {
       DebugLogger.error(
         'app-intents-url',

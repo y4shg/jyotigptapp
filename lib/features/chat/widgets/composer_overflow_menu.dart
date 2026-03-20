@@ -121,13 +121,11 @@ class ComposerOverflowSheet extends ConsumerStatefulWidget {
     this.onFileAttachment,
     this.onImageAttachment,
     this.onCameraCapture,
-    this.onWebAttachment,
   });
 
   final VoidCallback? onFileAttachment;
   final VoidCallback? onImageAttachment;
   final VoidCallback? onCameraCapture;
-  final VoidCallback? onWebAttachment;
 
   @override
   ConsumerState<ComposerOverflowSheet> createState() =>
@@ -142,16 +140,6 @@ class _ComposerOverflowSheetState
     final theme = context.jyotigptappTheme;
 
     final attachments = <Widget>[
-      _buildAction(
-        icon: Platform.isIOS ? CupertinoIcons.doc : Icons.attach_file,
-        label: l10n.file,
-        onTap: widget.onFileAttachment == null
-            ? null
-            : () {
-                HapticFeedback.lightImpact();
-                widget.onFileAttachment!();
-              },
-      ),
       _buildAction(
         icon: Platform.isIOS ? CupertinoIcons.photo : Icons.image,
         label: l10n.photo,
@@ -173,13 +161,13 @@ class _ComposerOverflowSheetState
               },
       ),
       _buildAction(
-        icon: Icons.public,
-        label: l10n.webPage,
-        onTap: widget.onWebAttachment == null
+        icon: Platform.isIOS ? CupertinoIcons.doc : Icons.attach_file,
+        label: l10n.file,
+        onTap: widget.onFileAttachment == null
             ? null
             : () {
                 HapticFeedback.lightImpact();
-                widget.onWebAttachment!();
+                widget.onFileAttachment!();
               },
       ),
     ];

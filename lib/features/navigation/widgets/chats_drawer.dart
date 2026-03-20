@@ -1253,7 +1253,7 @@ class _ChatsDrawerState extends ConsumerState<ChatsDrawer> {
     ref.read(chat.chatMessagesProvider.notifier).clearMessages();
     ref.read(activeConversationProvider.notifier).clear();
 
-    // Clear context attachments (web pages, YouTube, knowledge base docs)
+    // Clear context attachments (knowledge base docs)
     ref.read(contextAttachmentsProvider.notifier).clear();
 
     // Reset to default model for new conversations (fixes #296)

@@ -47,7 +47,6 @@ class ModernChatInput extends ConsumerStatefulWidget {
   final Function()? onFileAttachment;
   final Function()? onImageAttachment;
   final Function()? onCameraCapture;
-  final Function()? onWebAttachment;
 
   /// Callback invoked when images or files are pasted from clipboard.
   final Future<void> Function(List<LocalAttachment>)? onPastedAttachments;
@@ -61,7 +60,6 @@ class ModernChatInput extends ConsumerStatefulWidget {
     this.onFileAttachment,
     this.onImageAttachment,
     this.onCameraCapture,
-    this.onWebAttachment,
     this.onPastedAttachments,
   });
 
@@ -2208,7 +2206,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
         onFileAttachment: widget.onFileAttachment,
         onImageAttachment: widget.onImageAttachment,
         onCameraCapture: widget.onCameraCapture,
-        onWebAttachment: widget.onWebAttachment,
       ),
     ).whenComplete(() {
       if (mounted) {
