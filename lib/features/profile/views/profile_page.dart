@@ -565,7 +565,7 @@ class ProfilePage extends ConsumerWidget {
     dynamic user,
   ) async {
     final initialValue = deriveUserDisplayName(user).trim();
-    final result = await AdaptiveAlertDialog.show(
+    final result = await AdaptiveAlertDialog.inputShow(
       context: context,
       title: 'Change display name',
       message: 'Update the name shown in the app.',
