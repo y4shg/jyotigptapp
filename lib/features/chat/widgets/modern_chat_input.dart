@@ -74,6 +74,8 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
   bool get _useIOS26NativeControls => PlatformInfo.isIOS26OrHigher();
 
   static const double _composerRadius = AppBorderRadius.card;
+  static const double _compactActionSize = 36.0;
+  static const double _compactActionEdgeInset = 2.0;
 
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
@@ -1295,7 +1297,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
 
     // For compact mode, render text field shell with floating buttons on sides
     if (showCompactComposer) {
-      const double compactActionSize = 36.0;
       final Widget primaryAction = _buildPrimaryButton(
         _hasText,
         isGenerating,
@@ -1308,13 +1309,13 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
       final Widget? trailingSecondaryAction =
           !_hasText && voiceAvailable && !isGenerating
           ? SizedBox(
-              height: compactActionSize,
+              height: _compactActionSize,
               child: Center(child: _buildInlineMicAction(voiceAvailable)),
             )
           : null;
       final List<double> trailingActionWidths = <double>[
-        if (trailingSecondaryAction != null) compactActionSize,
-        compactActionSize,
+        if (trailingSecondaryAction != null) _compactActionSize,
+        _compactActionSize,
       ];
       final double trailingActionsWidth = trailingActionWidths.fold<double>(
         0,
@@ -1324,13 +1325,13 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
           ? Spacing.xs
           : 0;
       final double trailingActionInset =
-          trailingActionsWidth + trailingActionGap + Spacing.xs;
+          trailingActionsWidth + trailingActionGap + _compactActionEdgeInset;
 
       final textFieldContent = Container(
         padding: EdgeInsets.fromLTRB(
           Spacing.md,
           0,
-          Spacing.sm + trailingActionInset,
+          trailingActionInset + _compactActionEdgeInset,
           _isMultiline ? Spacing.sm : 0,
         ),
         constraints: const BoxConstraints(minHeight: TouchTarget.input),
@@ -1358,7 +1359,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
                     : Alignment.centerRight,
                 child: Padding(
                   padding: EdgeInsets.only(
-                    right: Spacing.xs,
+                    right: _compactActionEdgeInset,
                     bottom: _isMultiline ? Spacing.xs : 0,
                   ),
                   child: Row(
@@ -1850,24 +1851,27 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
 
   Widget _buildInlineMicAction(bool voiceAvailable) {
     final bool enabledMic = widget.enabled && voiceAvailable;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: enabledMic
-          ? () {
-              HapticFeedback.selectionClick();
-              _toggleVoice();
-            }
-          : null,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Spacing.xs),
+    final Color iconColor = _isRecording
+        ? context.jyotigptappTheme.buttonPrimary
+        : context.jyotigptappTheme.textSecondary.withValues(
+            alpha: enabledMic ? Alpha.strong : Alpha.disabled,
+          );
+
+    return AdaptiveTooltip(
+      message: AppLocalizations.of(context)!.voiceInput,
+      child: _buildComposerIconButton(
+        key: const ValueKey('secondary-btn-mic'),
+        onPressed: enabledMic
+            ? () {
+                HapticFeedback.selectionClick();
+                _toggleVoice();
+              }
+            : null,
+        size: _compactActionSize,
         child: Icon(
           Platform.isIOS ? CupertinoIcons.mic : Icons.mic,
           size: IconSize.large,
-          color: _isRecording
-              ? context.jyotigptappTheme.buttonPrimary
-              : context.jyotigptappTheme.textSecondary.withValues(
-                  alpha: enabledMic ? Alpha.strong : Alpha.disabled,
-                ),
+          color: iconColor,
         ),
       ),
     );

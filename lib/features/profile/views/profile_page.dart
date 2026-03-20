@@ -107,17 +107,23 @@ class ProfilePage extends ConsumerWidget {
     Widget child, {
     required bool useAdaptivePlatformChrome,
   }) {
+    final mediaQuery = MediaQuery.of(context);
     final topPadding = useAdaptivePlatformChrome
-        ? 24.0
-        : (MediaQuery.of(context).padding.top + kToolbarHeight + 40);
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        Spacing.pagePadding,
-        topPadding,
-        Spacing.pagePadding,
-        Spacing.pagePadding + MediaQuery.of(context).padding.bottom,
+        ? Spacing.lg
+        : (mediaQuery.padding.top + kToolbarHeight + 40);
+
+    return SafeArea(
+      top: useAdaptivePlatformChrome,
+      bottom: false,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          Spacing.pagePadding,
+          topPadding,
+          Spacing.pagePadding,
+          Spacing.pagePadding + mediaQuery.padding.bottom,
+        ),
+        child: Center(child: child),
       ),
-      child: Center(child: child),
     );
   }
 
@@ -128,31 +134,36 @@ class ProfilePage extends ConsumerWidget {
     ApiService? api, {
     required bool useAdaptivePlatformChrome,
   }) {
+    final mediaQuery = MediaQuery.of(context);
     final topPadding = useAdaptivePlatformChrome
-        ? 24.0
-        : (MediaQuery.of(context).padding.top + kToolbarHeight + 40);
+        ? Spacing.lg
+        : (mediaQuery.padding.top + kToolbarHeight + 40);
 
-    return ListView(
-      physics: const BouncingScrollPhysics(
-        parent: AlwaysScrollableScrollPhysics(),
+    return SafeArea(
+      top: useAdaptivePlatformChrome,
+      bottom: false,
+      child: ListView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
+        padding: EdgeInsets.fromLTRB(
+          Spacing.pagePadding,
+          topPadding,
+          Spacing.pagePadding,
+          Spacing.pagePadding + mediaQuery.padding.bottom,
+        ),
+        children: [
+          _buildProfileHeader(context, userData, api),
+          const SizedBox(height: Spacing.xl),
+          _buildProfileSection(context, ref, userData, api),
+          const SizedBox(height: Spacing.xl),
+          _buildPreferencesSection(context, ref),
+          const SizedBox(height: Spacing.xl),
+          _buildBackendSettingsSection(context, ref),
+          const SizedBox(height: Spacing.xl),
+          _buildAccountSection(context, ref),
+        ],
       ),
-      padding: EdgeInsets.fromLTRB(
-        Spacing.pagePadding,
-        topPadding,
-        Spacing.pagePadding,
-        Spacing.pagePadding + MediaQuery.of(context).padding.bottom,
-      ),
-      children: [
-        _buildProfileHeader(context, userData, api),
-        const SizedBox(height: Spacing.xl),
-        _buildProfileSection(context, ref, userData, api),
-        const SizedBox(height: Spacing.xl),
-        _buildPreferencesSection(context, ref),
-        const SizedBox(height: Spacing.xl),
-        _buildBackendSettingsSection(context, ref),
-        const SizedBox(height: Spacing.xl),
-        _buildAccountSection(context, ref),
-      ],
     );
   }
 
