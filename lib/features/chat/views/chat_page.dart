@@ -80,19 +80,8 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     return fileSize <= (maxSizeMB * 1024 * 1024);
   }
 
-  void startNewChat() {
-    // Clear current conversation
-    ref.read(chatMessagesProvider.notifier).clearMessages();
-    ref.read(activeConversationProvider.notifier).clear();
-
-    // Clear context attachments (knowledge base docs)
-    ref.read(contextAttachmentsProvider.notifier).clear();
-
-    // Clear any pending folder selection
-    ref.read(pendingFolderIdProvider.notifier).clear();
-
-    // Reset to default model for new conversations (fixes #296)
-    restoreDefaultModel(ref);
+  void _startNewChat() {
+    startNewChat(ref);
 
     // Scroll to top
     if (_scrollController.hasClients) {
@@ -555,7 +544,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
 
   void _handleNewChat() {
     // Start a new chat using the existing function
-    startNewChat();
+    _startNewChat();
 
     // Hide scroll-to-bottom button for a fresh chat
     if (mounted) {

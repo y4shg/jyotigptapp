@@ -1,5 +1,5 @@
-/// Represents a non-file attachment that enriches a chat message,
-/// such as an existing knowledge base document reference.
+/// Represents a knowledge-base document reference that enriches a
+/// chat message.
 class ChatContextAttachment {
   const ChatContextAttachment({
     required this.id,

@@ -1822,7 +1822,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
       child: _buildComposerIconButton(
         onPressed: enabled
             ? () {
-                HapticFeedback.selectionClick();
+                PlatformUtils.selectionHaptic();
                 _showOverflowSheet();
               }
             : null,
@@ -1862,7 +1862,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
         key: const ValueKey('secondary-btn-mic'),
         onPressed: enabledMic
             ? () {
-                HapticFeedback.selectionClick();
+                PlatformUtils.selectionHaptic();
                 _toggleVoice();
               }
             : null,
@@ -1898,7 +1898,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
         child: _buildComposerIconButton(
           key: const ValueKey('primary-btn-stop'),
           onPressed: () {
-            HapticFeedback.lightImpact();
+            PlatformUtils.lightHaptic();
             stopGeneration();
           },
           size: buttonSize,
@@ -2014,7 +2014,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
           onTap: onTap == null
               ? null
               : () {
-                  HapticFeedback.mediumImpact();
+                  PlatformUtils.mediumHaptic();
                   onTap();
                 },
           child: AnimatedContainer(
@@ -2197,7 +2197,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
   }
 
   void _showOverflowSheet() {
-    HapticFeedback.selectionClick();
+    PlatformUtils.selectionHaptic();
     final prevCanRequest = _focusNode.canRequestFocus;
     final wasFocused = _focusNode.hasFocus;
     _focusNode.canRequestFocus = false;
@@ -2330,7 +2330,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     await _voiceService.stopListening();
     if (!mounted) return;
     setState(() => _isRecording = false);
-    HapticFeedback.selectionClick();
+    PlatformUtils.selectionHaptic();
   }
 
   // When on-device STT is unavailable we rely on server transcription.

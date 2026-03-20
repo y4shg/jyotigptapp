@@ -263,21 +263,22 @@ class ProfilePage extends ConsumerWidget {
     dynamic user,
     ApiService? api,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = context.jyotigptappTheme;
     final headingStyle = theme.headingSmall?.copyWith(
       color: theme.sidebarForeground,
     );
     final displayName = deriveUserDisplayName(user);
     final avatarUrl = resolveUserAvatarUrlForUser(api, user);
-    final email = _extractEmail(user) ?? 'Signed in account';
+    final email = _extractEmail(user) ?? l10n.profileSignedInAccount;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (headingStyle != null)
-          Text('Profile', style: headingStyle)
+          Text(l10n.profileSectionTitle, style: headingStyle)
         else
-          const Text('Profile'),
+          Text(l10n.profileSectionTitle),
         const SizedBox(height: Spacing.sm),
         ProfileSettingTile(
           onTap: () => _changeProfilePhoto(context, ref),
@@ -289,8 +290,8 @@ class ProfilePage extends ConsumerWidget {
             ),
             color: theme.buttonPrimary,
           ),
-          title: 'Profile picture',
-          subtitle: 'Choose a new photo for this device.',
+          title: l10n.profilePictureTitle,
+          subtitle: l10n.profilePictureSubtitle,
           trailing: UserAvatar(
             size: 32,
             imageUrl: avatarUrl,
@@ -311,8 +312,8 @@ class ProfilePage extends ConsumerWidget {
             ),
             color: theme.buttonPrimary,
           ),
-          title: 'Display name',
-          subtitle: displayName.isEmpty ? 'Set your name' : displayName,
+          title: l10n.displayNameTitle,
+          subtitle: displayName.isEmpty ? l10n.displayNameUnset : displayName,
         ),
         const SizedBox(height: Spacing.md),
         ProfileSettingTile(
@@ -324,7 +325,7 @@ class ProfilePage extends ConsumerWidget {
             ),
             color: theme.buttonPrimary,
           ),
-          title: 'Email',
+          title: l10n.emailTitle,
           subtitle: email,
           showChevron: false,
         ),
@@ -333,6 +334,7 @@ class ProfilePage extends ConsumerWidget {
   }
 
   Widget _buildPreferencesSection(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final themeMode = ref.watch(appThemeModeProvider);
     final themeModeNotifier = ref.read(appThemeModeProvider.notifier);
     final voiceCallNotificationsEnabled = ref.watch(
@@ -355,9 +357,9 @@ class ProfilePage extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (headingStyle != null)
-          Text('App', style: headingStyle)
+          Text(l10n.appSectionTitle, style: headingStyle)
         else
-          const Text('App'),
+          Text(l10n.appSectionTitle),
         const SizedBox(height: Spacing.sm),
         JyotiGPTappCard(
           padding: const EdgeInsets.all(Spacing.md),
@@ -365,7 +367,7 @@ class ProfilePage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Theme',
+                l10n.themeTitle,
                 style: theme.bodyMedium?.copyWith(
                   color: theme.sidebarForeground,
                   fontWeight: FontWeight.w600,
@@ -390,7 +392,7 @@ class ProfilePage extends ConsumerWidget {
             ),
             color: theme.buttonPrimary,
           ),
-          title: 'Language',
+          title: l10n.languageTitle,
           subtitle: _languageLabel(context, appLocale),
         ),
         const SizedBox(height: Spacing.md),
@@ -403,9 +405,8 @@ class ProfilePage extends ConsumerWidget {
             ),
             color: theme.buttonPrimary,
           ),
-          title: 'Notifications',
-          subtitle:
-              'Enable notifications and voice call controls for this device.',
+          title: l10n.notificationsTitle,
+          subtitle: l10n.notificationsSubtitle,
           onTap: () => _toggleNotifications(context, ref, !notificationsEnabled),
           trailing: AdaptiveSwitch(
             value: notificationsEnabled,
@@ -418,6 +419,7 @@ class ProfilePage extends ConsumerWidget {
   }
 
   Widget _buildBackendSettingsSection(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = context.jyotigptappTheme;
     final headingStyle = theme.headingSmall?.copyWith(
       color: theme.sidebarForeground,
@@ -428,9 +430,9 @@ class ProfilePage extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (headingStyle != null)
-          Text('Account settings', style: headingStyle)
+          Text(l10n.accountSettingsTitle, style: headingStyle)
         else
-          const Text('Account settings'),
+          Text(l10n.accountSettingsTitle),
         const SizedBox(height: Spacing.sm),
         backendSettings.when(
           data: (settings) => Column(
@@ -440,8 +442,8 @@ class ProfilePage extends ConsumerWidget {
                 ref,
                 settings: settings,
                 keyName: 'enableSounds',
-                title: 'Sounds',
-                subtitle: 'Play sounds for account-level interactions.',
+                title: l10n.accountSoundsTitle,
+                subtitle: l10n.accountSoundsSubtitle,
                 iosIcon: CupertinoIcons.speaker_2,
                 androidIcon: Icons.volume_up_outlined,
               ),
@@ -451,8 +453,8 @@ class ProfilePage extends ConsumerWidget {
                 ref,
                 settings: settings,
                 keyName: 'hapticFeedback',
-                title: _hapticsToggleTitle(settings),
-                subtitle: _hapticsToggleSubtitle(settings),
+                title: _hapticsToggleTitle(context, settings),
+                subtitle: _hapticsToggleSubtitle(context, settings),
                 iosIcon: CupertinoIcons.hand_raised,
                 androidIcon: Icons.vibration_outlined,
               ),
@@ -461,13 +463,13 @@ class ProfilePage extends ConsumerWidget {
           error: (_, __) => JyotiGPTappCard(
             padding: const EdgeInsets.all(Spacing.md),
             child: Text(
-              'Unable to load account settings right now.',
+              l10n.accountSettingsLoadError,
               style: theme.bodyMedium?.copyWith(
                 color: theme.sidebarForeground,
               ),
             ),
           ),
-          loading: () => const JyotiGPTappCard(
+          loading: () => JyotiGPTappCard(
             padding: EdgeInsets.all(Spacing.md),
             child: Row(
               children: [
@@ -477,7 +479,7 @@ class ProfilePage extends ConsumerWidget {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 ),
                 SizedBox(width: Spacing.sm),
-                Expanded(child: Text('Loading account settings...')),
+                Expanded(child: Text(l10n.accountSettingsLoading)),
               ],
             ),
           ),
@@ -486,24 +488,32 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  String _hapticsToggleTitle(Map<String, dynamic> settings) {
+  String _hapticsToggleTitle(
+    BuildContext context,
+    Map<String, dynamic> settings,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
     final enabled = _readBoolSetting(
       settings,
       'hapticFeedback',
       defaultValue: true,
     );
-    return enabled ? 'Haptics off' : 'Haptics on';
+    return enabled ? l10n.hapticsOffTitle : l10n.hapticsOnTitle;
   }
 
-  String _hapticsToggleSubtitle(Map<String, dynamic> settings) {
+  String _hapticsToggleSubtitle(
+    BuildContext context,
+    Map<String, dynamic> settings,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
     final enabled = _readBoolSetting(
       settings,
       'hapticFeedback',
       defaultValue: true,
     );
     return enabled
-        ? 'Turn off tactile feedback for this device.'
-        : 'Turn on tactile feedback for this device.';
+        ? l10n.hapticsOffSubtitle
+        : l10n.hapticsOnSubtitle;
   }
 
   Widget _buildBackendToggleTile(
@@ -562,9 +572,9 @@ class ProfilePage extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (headingStyle != null)
-          Text('Account', style: headingStyle)
+          Text(AppLocalizations.of(context)!.account, style: headingStyle)
         else
-          const Text('Account'),
+          Text(AppLocalizations.of(context)!.account),
         const SizedBox(height: Spacing.sm),
         _buildAboutTile(context),
         const SizedBox(height: Spacing.md),
@@ -610,22 +620,22 @@ class ProfilePage extends ConsumerWidget {
     final initialValue = deriveUserDisplayName(user).trim();
     final result = await AdaptiveAlertDialog.inputShow(
       context: context,
-      title: 'Change display name',
-      message: 'Update the name shown in the app.',
+      title: AppLocalizations.of(context)!.changeDisplayNameTitle,
+      message: AppLocalizations.of(context)!.changeDisplayNameMessage,
       icon: 'person.text.rectangle',
       input: AdaptiveAlertDialogInput(
-        placeholder: 'Your name',
+        placeholder: AppLocalizations.of(context)!.displayNamePlaceholder,
         initialValue: initialValue,
         keyboardType: TextInputType.name,
       ),
       actions: [
         AlertAction(
-          title: 'Cancel',
+          title: AppLocalizations.of(context)!.cancel,
           style: AlertActionStyle.cancel,
           onPressed: () {},
         ),
         AlertAction(
-          title: 'Save',
+          title: AppLocalizations.of(context)!.save,
           style: AlertActionStyle.primary,
           onPressed: () {},
         ),
@@ -645,7 +655,7 @@ class ProfilePage extends ConsumerWidget {
     if (editableUser == null) {
       UiUtils.showMessage(
         context,
-        'Unable to update your profile right now.',
+        AppLocalizations.of(context)!.profileUpdateFailed,
       );
       return;
     }
@@ -661,7 +671,7 @@ class ProfilePage extends ConsumerWidget {
 
     UiUtils.showMessage(
       context,
-      'Display name updated on this device. Server profile sync is not available yet.',
+      AppLocalizations.of(context)!.displayNameUpdatedLocalOnly,
     );
   }
 
@@ -702,7 +712,7 @@ class ProfilePage extends ConsumerWidget {
 
     UiUtils.showMessage(
       context,
-      'Profile picture updated on this device. Server profile sync is not available yet.',
+      AppLocalizations.of(context)!.profilePictureUpdatedLocalOnly,
     );
   }
 
@@ -728,7 +738,7 @@ class ProfilePage extends ConsumerWidget {
       if (context.mounted) {
         UiUtils.showMessage(
           context,
-          'Language changed locally, but account sync failed.',
+          AppLocalizations.of(context)!.languageChangedLocalOnly,
         );
       }
       return;
@@ -738,7 +748,7 @@ class ProfilePage extends ConsumerWidget {
       return;
     }
 
-    UiUtils.showMessage(context, 'Language updated.');
+    UiUtils.showMessage(context, AppLocalizations.of(context)!.languageUpdated);
   }
 
   Future<_LanguagePickerValue?> _showLanguagePicker(
@@ -747,8 +757,8 @@ class ProfilePage extends ConsumerWidget {
   ) async {
     final currentLocale = ref.read(appLocaleProvider);
     final options = <_LanguagePickerValue>[
-      const _LanguagePickerValue(
-        label: 'System default',
+      _LanguagePickerValue(
+        label: AppLocalizations.of(context)!.systemDefaultLanguageOption,
         locale: null,
       ),
       for (final locale in AppLocalizations.supportedLocales)
@@ -762,7 +772,7 @@ class ProfilePage extends ConsumerWidget {
       return showCupertinoModalPopup<_LanguagePickerValue>(
         context: context,
         builder: (context) => CupertinoActionSheet(
-          title: const Text('App language'),
+          title: Text(AppLocalizations.of(context)!.appLanguageTitle),
           actions: [
             for (final option in options)
               CupertinoActionSheetAction(
@@ -773,7 +783,7 @@ class ProfilePage extends ConsumerWidget {
           ],
           cancelButton: CupertinoActionSheetAction(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
         ),
       );
@@ -813,16 +823,23 @@ class ProfilePage extends ConsumerWidget {
     WidgetRef ref,
     bool enabled,
   ) async {
+    final l10n = AppLocalizations.of(context)!;
     final settingsNotifier = ref.read(appSettingsProvider.notifier);
     if (!enabled) {
-      await settingsNotifier.setVoiceCallNotificationsEnabled(false);
-      await _updateBackendSetting(
-        context,
-        ref,
-        const <String, dynamic>{},
-        'enableNotifications',
-        false,
-      );
+      final previous = ref.read(appSettingsProvider).voiceCallNotificationsEnabled;
+      try {
+        await _updateBackendSetting(
+          context,
+          ref,
+          const <String, dynamic>{},
+          'enableNotifications',
+          false,
+          rethrowOnError: true,
+        );
+        await settingsNotifier.setVoiceCallNotificationsEnabled(false);
+      } catch (_) {
+        await settingsNotifier.setVoiceCallNotificationsEnabled(previous);
+      }
       return;
     }
 
@@ -843,21 +860,27 @@ class ProfilePage extends ConsumerWidget {
       );
       UiUtils.showMessage(
         context,
-        'Notifications were not enabled. Check system settings if needed.',
+        l10n.notificationsNotEnabledMessage,
       );
       return;
     }
 
-    await settingsNotifier.setVoiceCallNotificationsEnabled(true);
-    await _updateBackendSetting(
-      context,
-      ref,
-      const <String, dynamic>{},
-      'enableNotifications',
-      true,
-    );
-    if (context.mounted) {
-      UiUtils.showMessage(context, 'Notifications enabled.');
+    final previous = ref.read(appSettingsProvider).voiceCallNotificationsEnabled;
+    try {
+      await _updateBackendSetting(
+        context,
+        ref,
+        const <String, dynamic>{},
+        'enableNotifications',
+        true,
+        rethrowOnError: true,
+      );
+      await settingsNotifier.setVoiceCallNotificationsEnabled(true);
+      if (context.mounted) {
+        UiUtils.showMessage(context, l10n.notificationsEnabledMessage);
+      }
+    } catch (_) {
+      await settingsNotifier.setVoiceCallNotificationsEnabled(previous);
     }
   }
 
@@ -866,8 +889,9 @@ class ProfilePage extends ConsumerWidget {
     WidgetRef ref,
     Map<String, dynamic> settings,
     String key,
-    bool value,
-  ) async {
+    bool value, {
+    bool rethrowOnError = false,
+  }) async {
     final resolvedKey = _resolveSettingKey(settings, key);
 
     try {
@@ -879,13 +903,15 @@ class ProfilePage extends ConsumerWidget {
         await ref.read(appSettingsProvider.notifier).setHapticFeedback(value);
       }
     } catch (_) {
-      if (!context.mounted) {
-        return;
+      if (context.mounted) {
+        UiUtils.showMessage(
+          context,
+          AppLocalizations.of(context)!.settingUpdateFailed(key),
+        );
       }
-      UiUtils.showMessage(
-        context,
-        'Unable to update $key right now.',
-      );
+      if (rethrowOnError) {
+        rethrow;
+      }
     }
   }
 
@@ -1035,7 +1061,9 @@ class ProfilePage extends ConsumerWidget {
   String _languageLabel(BuildContext context, Locale? locale) {
     if (locale == null) {
       final systemLocale = Localizations.localeOf(context);
-      return 'System default (${_languageName(systemLocale)})';
+      return AppLocalizations.of(
+        context,
+      )!.systemDefaultLanguageLabel(_languageName(systemLocale));
     }
     return _languageName(locale);
   }
