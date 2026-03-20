@@ -102,15 +102,27 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
+  double _topContentPadding(
+    MediaQueryData mediaQuery, {
+    required bool useAdaptivePlatformChrome,
+  }) {
+    if (useAdaptivePlatformChrome) {
+      return Spacing.xl;
+    }
+
+    return mediaQuery.padding.top + kToolbarHeight + Spacing.xxl;
+  }
+
   Widget _buildCenteredState(
     BuildContext context,
     Widget child, {
     required bool useAdaptivePlatformChrome,
   }) {
     final mediaQuery = MediaQuery.of(context);
-    final topPadding = useAdaptivePlatformChrome
-        ? Spacing.lg
-        : (mediaQuery.padding.top + kToolbarHeight + 40);
+    final topPadding = _topContentPadding(
+      mediaQuery,
+      useAdaptivePlatformChrome: useAdaptivePlatformChrome,
+    );
 
     return SafeArea(
       top: useAdaptivePlatformChrome,
@@ -135,9 +147,10 @@ class ProfilePage extends ConsumerWidget {
     required bool useAdaptivePlatformChrome,
   }) {
     final mediaQuery = MediaQuery.of(context);
-    final topPadding = useAdaptivePlatformChrome
-        ? Spacing.lg
-        : (mediaQuery.padding.top + kToolbarHeight + 40);
+    final topPadding = _topContentPadding(
+      mediaQuery,
+      useAdaptivePlatformChrome: useAdaptivePlatformChrome,
+    );
 
     return SafeArea(
       top: useAdaptivePlatformChrome,
@@ -438,8 +451,8 @@ class ProfilePage extends ConsumerWidget {
                 ref,
                 settings: settings,
                 keyName: 'hapticFeedback',
-                title: 'Haptic feedback',
-                subtitle: 'Use tactile feedback when the backend supports it.',
+                title: _hapticsToggleTitle(settings),
+                subtitle: _hapticsToggleSubtitle(settings),
                 iosIcon: CupertinoIcons.hand_raised,
                 androidIcon: Icons.vibration_outlined,
               ),
@@ -473,6 +486,26 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
+  String _hapticsToggleTitle(Map<String, dynamic> settings) {
+    final enabled = _readBoolSetting(
+      settings,
+      'hapticFeedback',
+      defaultValue: true,
+    );
+    return enabled ? 'Haptics off' : 'Haptics on';
+  }
+
+  String _hapticsToggleSubtitle(Map<String, dynamic> settings) {
+    final enabled = _readBoolSetting(
+      settings,
+      'hapticFeedback',
+      defaultValue: true,
+    );
+    return enabled
+        ? 'Turn off tactile feedback for this device.'
+        : 'Turn on tactile feedback for this device.';
+  }
+
   Widget _buildBackendToggleTile(
     BuildContext context,
     WidgetRef ref, {
@@ -484,7 +517,11 @@ class ProfilePage extends ConsumerWidget {
     required IconData androidIcon,
   }) {
     final theme = context.jyotigptappTheme;
-    final value = _readBoolSetting(settings, keyName);
+    final value = _readBoolSetting(
+      settings,
+      keyName,
+      defaultValue: keyName == 'hapticFeedback',
+    );
 
     return ProfileSettingTile(
       leading: _buildIconBadge(
@@ -966,7 +1003,11 @@ class ProfilePage extends ConsumerWidget {
     return null;
   }
 
-  bool _readBoolSetting(Map<String, dynamic> settings, String key) {
+  bool _readBoolSetting(
+    Map<String, dynamic> settings,
+    String key, {
+    bool defaultValue = false,
+  }) {
     final value = _settingKeyCandidates(key)
         .map((candidate) => settings[candidate])
         .firstWhere((candidate) => candidate != null, orElse: () => null);
@@ -980,7 +1021,7 @@ class ProfilePage extends ConsumerWidget {
     if (value is num) {
       return value != 0;
     }
-    return false;
+    return defaultValue;
   }
 
   List<String> _settingKeyCandidates(String key) {
