@@ -22,7 +22,8 @@ class ProfileUserSettingsController
 
   Future<void> updateSetting(String key, dynamic value) async {
     final current = Map<String, dynamic>.from(
-      state.valueOrNull ?? await future,
+      state.maybeWhen(data: (value) => value, orElse: () => null) ??
+          await future,
     );
     final previous = Map<String, dynamic>.from(current);
     final next = <String, dynamic>{...current, key: value};
