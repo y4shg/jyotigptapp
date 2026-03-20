@@ -1,9 +1,14 @@
+import 'dart:convert';
+
+import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
+import 'package:path/path.dart' as path;
 
+import '../../../core/models/user.dart';
 import '../../../core/providers/app_providers.dart';
 import '../../../core/services/api_service.dart';
 import '../../../core/services/settings_service.dart';
@@ -19,6 +24,7 @@ import '../../../shared/widgets/jyotigptapp_loading.dart';
 import '../../../shared/widgets/themed_dialogs.dart';
 import '../../../shared/widgets/user_avatar.dart';
 import '../../chat/services/voice_call_notification_service.dart';
+import '../providers/profile_user_settings_provider.dart';
 import '../widgets/adaptive_segmented_selector.dart';
 import '../widgets/profile_setting_tile.dart';
 
@@ -101,10 +107,9 @@ class ProfilePage extends ConsumerWidget {
     Widget child, {
     required bool useAdaptivePlatformChrome,
   }) {
-    final topPadding =
-        useAdaptivePlatformChrome
-            ? 24.0
-            : (MediaQuery.of(context).padding.top + kToolbarHeight + 24);
+    final topPadding = useAdaptivePlatformChrome
+        ? 24.0
+        : (MediaQuery.of(context).padding.top + kToolbarHeight + 24);
     return Padding(
       padding: EdgeInsets.fromLTRB(
         Spacing.pagePadding,
@@ -120,13 +125,13 @@ class ProfilePage extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     dynamic userData,
-    ApiService? api,
-    {required bool useAdaptivePlatformChrome}
-  ) {
-    final topPadding =
-        useAdaptivePlatformChrome
-            ? 24.0
-            : (MediaQuery.of(context).padding.top + kToolbarHeight + 24);
+    ApiService? api, {
+    required bool useAdaptivePlatformChrome,
+  }) {
+    final topPadding = useAdaptivePlatformChrome
+        ? 24.0
+        : (MediaQuery.of(context).padding.top + kToolbarHeight + 24);
+
     return ListView(
       physics: const BouncingScrollPhysics(
         parent: AlwaysScrollableScrollPhysics(),
@@ -140,7 +145,11 @@ class ProfilePage extends ConsumerWidget {
       children: [
         _buildProfileHeader(context, userData, api),
         const SizedBox(height: Spacing.xl),
+        _buildProfileSection(context, ref, userData, api),
+        const SizedBox(height: Spacing.xl),
         _buildPreferencesSection(context, ref),
+        const SizedBox(height: Spacing.xl),
+        _buildBackendSettingsSection(context, ref),
         const SizedBox(height: Spacing.xl),
         _buildAccountSection(context, ref),
       ],
@@ -157,33 +166,7 @@ class ProfilePage extends ConsumerWidget {
     final initial =
         characters.isNotEmpty ? characters.first.toUpperCase() : 'U';
     final avatarUrl = resolveUserAvatarUrlForUser(api, user);
-
-    String? extractEmail(dynamic source) {
-      if (source is Map) {
-        final value = source['email'];
-        if (value is String && value.trim().isNotEmpty) {
-          return value.trim();
-        }
-        final nested = source['user'];
-        if (nested is Map) {
-          final nestedValue = nested['email'];
-          if (nestedValue is String && nestedValue.trim().isNotEmpty) {
-            return nestedValue.trim();
-          }
-        }
-      }
-      try {
-        final dynamic email = source?.email;
-        if (email is String && email.trim().isNotEmpty) {
-          return email.trim();
-        }
-      } catch (_) {
-        // best-effort
-      }
-      return null;
-    }
-
-    final email = extractEmail(user) ?? '';
+    final email = _extractEmail(user) ?? '';
     final theme = context.jyotigptappTheme;
 
     return Container(
@@ -248,27 +231,100 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildPreferencesSection(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(appThemeModeProvider);
-    final themeModeNotifier = ref.read(appThemeModeProvider.notifier);
-
-    final voiceCallNotificationsEnabled = ref.watch(
-      appSettingsProvider.select((s) => s.voiceCallNotificationsEnabled),
-    );
-    final settingsNotifier = ref.read(appSettingsProvider.notifier);
-
+  Widget _buildProfileSection(
+    BuildContext context,
+    WidgetRef ref,
+    dynamic user,
+    ApiService? api,
+  ) {
     final theme = context.jyotigptappTheme;
     final headingStyle = theme.headingSmall?.copyWith(
       color: theme.sidebarForeground,
     );
+    final displayName = deriveUserDisplayName(user);
+    final avatarUrl = resolveUserAvatarUrlForUser(api, user);
+    final email = _extractEmail(user) ?? 'Signed in account';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (headingStyle != null)
-          Text('Preferences', style: headingStyle)
+          Text('Profile', style: headingStyle)
         else
-          const Text('Preferences'),
+          const Text('Profile'),
+        const SizedBox(height: Spacing.sm),
+        ProfileSettingTile(
+          onTap: () => _changeProfilePhoto(context, ref),
+          leading: _buildIconBadge(
+            context,
+            UiUtils.platformIcon(
+              ios: CupertinoIcons.camera,
+              android: Icons.photo_camera_outlined,
+            ),
+            color: theme.buttonPrimary,
+          ),
+          title: 'Profile picture',
+          subtitle: 'Choose a new photo for this device.',
+          trailing: UserAvatar(
+            size: 32,
+            imageUrl: avatarUrl,
+            fallbackText: displayName.characters.isNotEmpty
+                ? displayName.characters.first.toUpperCase()
+                : 'U',
+          ),
+          showChevron: false,
+        ),
+        const SizedBox(height: Spacing.md),
+        ProfileSettingTile(
+          onTap: () => _changeDisplayName(context, ref, user),
+          leading: _buildIconBadge(
+            context,
+            UiUtils.platformIcon(
+              ios: CupertinoIcons.person_crop_circle,
+              android: Icons.badge_outlined,
+            ),
+            color: theme.buttonPrimary,
+          ),
+          title: 'Display name',
+          subtitle: displayName.isEmpty ? 'Set your name' : displayName,
+        ),
+        const SizedBox(height: Spacing.md),
+        ProfileSettingTile(
+          leading: _buildIconBadge(
+            context,
+            UiUtils.platformIcon(
+              ios: CupertinoIcons.mail,
+              android: Icons.alternate_email,
+            ),
+            color: theme.buttonPrimary,
+          ),
+          title: 'Email',
+          subtitle: email,
+          showChevron: false,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPreferencesSection(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(appThemeModeProvider);
+    final themeModeNotifier = ref.read(appThemeModeProvider.notifier);
+    final voiceCallNotificationsEnabled = ref.watch(
+      appSettingsProvider.select((s) => s.voiceCallNotificationsEnabled),
+    );
+    final theme = context.jyotigptappTheme;
+    final headingStyle = theme.headingSmall?.copyWith(
+      color: theme.sidebarForeground,
+    );
+    final appLocale = ref.watch(appLocaleProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (headingStyle != null)
+          Text('App', style: headingStyle)
+        else
+          const Text('App'),
         const SizedBox(height: Spacing.sm),
         JyotiGPTappCard(
           padding: const EdgeInsets.all(Spacing.md),
@@ -292,6 +348,20 @@ class ProfilePage extends ConsumerWidget {
         ),
         const SizedBox(height: Spacing.md),
         ProfileSettingTile(
+          onTap: () => _changeLanguage(context, ref),
+          leading: _buildIconBadge(
+            context,
+            UiUtils.platformIcon(
+              ios: CupertinoIcons.globe,
+              android: Icons.language,
+            ),
+            color: theme.buttonPrimary,
+          ),
+          title: 'Language',
+          subtitle: _languageLabel(context, appLocale),
+        ),
+        const SizedBox(height: Spacing.md),
+        ProfileSettingTile(
           leading: _buildIconBadge(
             context,
             UiUtils.platformIcon(
@@ -300,43 +370,142 @@ class ProfilePage extends ConsumerWidget {
             ),
             color: theme.buttonPrimary,
           ),
-          title: 'Voice call controls notification',
-          subtitle:
-              'Show an ongoing notification during voice calls '
-              'for quick mute/end controls.',
-          onTap: () => settingsNotifier.setVoiceCallNotificationsEnabled(
+          title: 'Voice call notifications',
+          subtitle: 'Show a live notification with quick mute and end controls.',
+          onTap: () => _toggleVoiceCallNotifications(
+            context,
+            ref,
             !voiceCallNotificationsEnabled,
           ),
-          trailing: Switch.adaptive(
+          trailing: AdaptiveSwitch(
             value: voiceCallNotificationsEnabled,
-            onChanged: settingsNotifier.setVoiceCallNotificationsEnabled,
+            onChanged: (value) =>
+                _toggleVoiceCallNotifications(context, ref, value),
           ),
           showChevron: false,
-        ),
-        const SizedBox(height: Spacing.md),
-        ProfileSettingTile(
-          leading: _buildIconBadge(
-            context,
-            UiUtils.platformIcon(
-              ios: CupertinoIcons.lock_shield,
-              android: Icons.security_outlined,
-            ),
-            color: theme.buttonPrimary,
-          ),
-          title: 'Request notification permission',
-          subtitle: 'Enable notifications in system settings if prompted.',
-          onTap: () => _requestNotificationPermission(context),
         ),
       ],
     );
   }
 
-  Future<void> _requestNotificationPermission(BuildContext context) async {
-    final granted = await VoiceCallNotificationService().requestPermissions();
-    if (!context.mounted) return;
-    UiUtils.showMessage(
-      context,
-      granted ? 'Notifications enabled.' : 'Notifications not enabled.',
+  Widget _buildBackendSettingsSection(BuildContext context, WidgetRef ref) {
+    final theme = context.jyotigptappTheme;
+    final headingStyle = theme.headingSmall?.copyWith(
+      color: theme.sidebarForeground,
+    );
+    final backendSettings = ref.watch(profileUserSettingsProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (headingStyle != null)
+          Text('Account settings', style: headingStyle)
+        else
+          const Text('Account settings'),
+        const SizedBox(height: Spacing.sm),
+        backendSettings.when(
+          data: (settings) => Column(
+            children: [
+              _buildBackendToggleTile(
+                context,
+                ref,
+                settings: settings,
+                keyName: 'enableNotifications',
+                title: 'Account notifications',
+                subtitle: 'Sync your account preference for notifications.',
+                iosIcon: CupertinoIcons.bell_badge,
+                androidIcon: Icons.notifications_active_outlined,
+              ),
+              const SizedBox(height: Spacing.md),
+              _buildBackendToggleTile(
+                context,
+                ref,
+                settings: settings,
+                keyName: 'enableSounds',
+                title: 'Sounds',
+                subtitle: 'Play sounds for account-level interactions.',
+                iosIcon: CupertinoIcons.speaker_2,
+                androidIcon: Icons.volume_up_outlined,
+              ),
+              const SizedBox(height: Spacing.md),
+              _buildBackendToggleTile(
+                context,
+                ref,
+                settings: settings,
+                keyName: 'reduceMotion',
+                title: 'Reduce motion',
+                subtitle: 'Prefer calmer animations on synced devices.',
+                iosIcon: CupertinoIcons.settings,
+                androidIcon: Icons.motion_photos_off_outlined,
+              ),
+              const SizedBox(height: Spacing.md),
+              _buildBackendToggleTile(
+                context,
+                ref,
+                settings: settings,
+                keyName: 'hapticFeedback',
+                title: 'Haptic feedback',
+                subtitle: 'Use tactile feedback when the backend supports it.',
+                iosIcon: CupertinoIcons.hand_raised,
+                androidIcon: Icons.vibration_outlined,
+              ),
+            ],
+          ),
+          error: (_, __) => JyotiGPTappCard(
+            padding: const EdgeInsets.all(Spacing.md),
+            child: Text(
+              'Unable to load account settings right now.',
+              style: theme.bodyMedium?.copyWith(
+                color: theme.sidebarForeground,
+              ),
+            ),
+          ),
+          loading: () => const JyotiGPTappCard(
+            padding: EdgeInsets.all(Spacing.md),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+                SizedBox(width: Spacing.sm),
+                Expanded(child: Text('Loading account settings...')),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBackendToggleTile(
+    BuildContext context,
+    WidgetRef ref, {
+    required Map<String, dynamic> settings,
+    required String keyName,
+    required String title,
+    required String subtitle,
+    required IconData iosIcon,
+    required IconData androidIcon,
+  }) {
+    final theme = context.jyotigptappTheme;
+    final value = _readBoolSetting(settings, keyName);
+
+    return ProfileSettingTile(
+      leading: _buildIconBadge(
+        context,
+        UiUtils.platformIcon(ios: iosIcon, android: androidIcon),
+        color: theme.buttonPrimary,
+      ),
+      title: title,
+      subtitle: subtitle,
+      onTap: () => _updateBackendSetting(context, ref, keyName, !value),
+      trailing: AdaptiveSwitch(
+        value: value,
+        onChanged: (next) => _updateBackendSetting(context, ref, keyName, next),
+      ),
+      showChevron: false,
     );
   }
 
@@ -388,6 +557,256 @@ class ProfilePage extends ConsumerWidget {
       title: AppLocalizations.of(context)!.aboutApp,
       subtitle: AppLocalizations.of(context)!.aboutAppSubtitle,
     );
+  }
+
+  Future<void> _changeDisplayName(
+    BuildContext context,
+    WidgetRef ref,
+    dynamic user,
+  ) async {
+    final initialValue = deriveUserDisplayName(user).trim();
+    final result = await AdaptiveAlertDialog.show(
+      context: context,
+      title: 'Change display name',
+      message: 'Update the name shown in the app.',
+      icon: 'person.text.rectangle',
+      input: AdaptiveAlertDialogInput(
+        placeholder: 'Your name',
+        initialValue: initialValue,
+        keyboardType: TextInputType.name,
+      ),
+      actions: [
+        AlertAction(
+          title: 'Cancel',
+          style: AlertActionStyle.cancel,
+          onPressed: () {},
+        ),
+        AlertAction(
+          title: 'Save',
+          style: AlertActionStyle.primary,
+          onPressed: () {},
+        ),
+      ],
+    );
+
+    if (!context.mounted || result == null) {
+      return;
+    }
+
+    final nextName = result.toString().trim();
+    if (nextName.isEmpty || nextName == initialValue) {
+      return;
+    }
+
+    final editableUser = _resolveEditableUser(user);
+    if (editableUser == null) {
+      UiUtils.showMessage(context, 'Unable to update your profile right now.');
+      return;
+    }
+
+    final updatedUser = editableUser.copyWith(name: nextName);
+    final storage = ref.read(optimizedStorageServiceProvider);
+    await storage.saveLocalUser(updatedUser);
+    ref.invalidate(currentUserProvider);
+
+    if (!context.mounted) {
+      return;
+    }
+
+    UiUtils.showMessage(
+      context,
+      'Display name updated on this device. Server profile sync is not available yet.',
+    );
+  }
+
+  Future<void> _changeProfilePhoto(BuildContext context, WidgetRef ref) async {
+    final picker = ImagePicker();
+    final image = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 85,
+      maxWidth: 1024,
+    );
+
+    if (!context.mounted || image == null) {
+      return;
+    }
+
+    final bytes = await image.readAsBytes();
+    final dataUrl = _imageDataUrl(bytes, image.path);
+    final storage = ref.read(optimizedStorageServiceProvider);
+    final currentUser = _resolveEditableUser(
+      ref.read(currentUserProvider).valueOrNull ?? ref.read(currentUserProvider2),
+    );
+
+    await storage.saveLocalUserAvatar(dataUrl);
+    if (currentUser != null) {
+      await storage.saveLocalUser(currentUser.copyWith(profileImage: dataUrl));
+    }
+    ref.invalidate(currentUserProvider);
+
+    if (!context.mounted) {
+      return;
+    }
+
+    UiUtils.showMessage(
+      context,
+      'Profile picture updated on this device. Server profile sync is not available yet.',
+    );
+  }
+
+  Future<void> _changeLanguage(BuildContext context, WidgetRef ref) async {
+    final selected = await _showLanguagePicker(context, ref);
+    if (!context.mounted) {
+      return;
+    }
+
+    if (selected == null) {
+      return;
+    }
+
+    final notifier = ref.read(appLocaleProvider.notifier);
+    await notifier.setLocale(selected.locale);
+
+    final resolvedLocale = selected.locale ?? Localizations.localeOf(context);
+    try {
+      await ref
+          .read(profileUserSettingsProvider.notifier)
+          .updateSetting('language', resolvedLocale.toLanguageTag());
+    } catch (_) {
+      if (context.mounted) {
+        UiUtils.showMessage(
+          context,
+          'Language changed locally, but account sync failed.',
+        );
+      }
+      return;
+    }
+
+    if (!context.mounted) {
+      return;
+    }
+
+    UiUtils.showMessage(context, 'Language updated.');
+  }
+
+  Future<_LanguagePickerValue?> _showLanguagePicker(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final currentLocale = ref.read(appLocaleProvider);
+    final options = <_LanguagePickerValue>[
+      const _LanguagePickerValue(
+        label: 'System default',
+        locale: null,
+      ),
+      for (final locale in AppLocalizations.supportedLocales)
+        _LanguagePickerValue(
+          locale: locale,
+          label: _languageLabel(context, locale),
+        ),
+    ];
+
+    if (PlatformInfo.isIOS) {
+      return showCupertinoModalPopup<_LanguagePickerValue>(
+        context: context,
+        builder: (context) => CupertinoActionSheet(
+          title: const Text('App language'),
+          actions: [
+            for (final option in options)
+              CupertinoActionSheetAction(
+                onPressed: () => Navigator.of(context).pop(option),
+                isDefaultAction: option.locale == currentLocale,
+                child: Text(option.label),
+              ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+        ),
+      );
+    }
+
+    return showModalBottomSheet<_LanguagePickerValue>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) {
+        final theme = context.jyotigptappTheme;
+        return SafeArea(
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: options.length,
+            separatorBuilder: (_, __) => const Divider(height: 1),
+            itemBuilder: (context, index) {
+              final option = options[index];
+              return ListTile(
+                title: Text(option.label),
+                trailing: option.locale == currentLocale
+                    ? Icon(
+                        Icons.check,
+                        color: theme.buttonPrimary,
+                      )
+                    : null,
+                onTap: () => Navigator.of(context).pop(option),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _toggleVoiceCallNotifications(
+    BuildContext context,
+    WidgetRef ref,
+    bool enabled,
+  ) async {
+    final settingsNotifier = ref.read(appSettingsProvider.notifier);
+    if (!enabled) {
+      await settingsNotifier.setVoiceCallNotificationsEnabled(false);
+      return;
+    }
+
+    final granted = await VoiceCallNotificationService().requestPermissions();
+    if (!context.mounted) {
+      return;
+    }
+
+    if (!granted) {
+      await settingsNotifier.setVoiceCallNotificationsEnabled(false);
+      UiUtils.showMessage(
+        context,
+        'Notifications were not enabled. Check system settings if needed.',
+      );
+      return;
+    }
+
+    await settingsNotifier.setVoiceCallNotificationsEnabled(true);
+    if (context.mounted) {
+      UiUtils.showMessage(context, 'Notifications enabled.');
+    }
+  }
+
+  Future<void> _updateBackendSetting(
+    BuildContext context,
+    WidgetRef ref,
+    String key,
+    bool value,
+  ) async {
+    try {
+      await ref.read(profileUserSettingsProvider.notifier).updateSetting(
+            key,
+            value,
+          );
+    } catch (_) {
+      if (!context.mounted) {
+        return;
+      }
+      UiUtils.showMessage(
+        context,
+        'Unable to update $key right now.',
+      );
+    }
   }
 
   Future<void> _showAboutDialog(BuildContext context) async {
@@ -455,4 +874,104 @@ class ProfilePage extends ConsumerWidget {
       child: Icon(icon, color: color, size: IconSize.medium),
     );
   }
+
+  String? _extractEmail(dynamic source) {
+    if (source is Map) {
+      final value = source['email'];
+      if (value is String && value.trim().isNotEmpty) {
+        return value.trim();
+      }
+      final nested = source['user'];
+      if (nested is Map) {
+        final nestedValue = nested['email'];
+        if (nestedValue is String && nestedValue.trim().isNotEmpty) {
+          return nestedValue.trim();
+        }
+      }
+    }
+    try {
+      final dynamic email = source?.email;
+      if (email is String && email.trim().isNotEmpty) {
+        return email.trim();
+      }
+    } catch (_) {
+      return null;
+    }
+    return null;
+  }
+
+  User? _resolveEditableUser(dynamic source) {
+    if (source is User) {
+      return source;
+    }
+    if (source is Map) {
+      try {
+        return User.fromJson(Map<String, dynamic>.from(source));
+      } catch (_) {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  bool _readBoolSetting(Map<String, dynamic> settings, String key) {
+    final value = settings[key];
+    if (value is bool) {
+      return value;
+    }
+    if (value is String) {
+      final normalized = value.trim().toLowerCase();
+      return normalized == 'true' || normalized == '1';
+    }
+    if (value is num) {
+      return value != 0;
+    }
+    return false;
+  }
+
+  String _languageLabel(BuildContext context, Locale? locale) {
+    if (locale == null) {
+      final systemLocale = Localizations.localeOf(context);
+      return 'System default (${_languageName(systemLocale)})';
+    }
+    return _languageName(locale);
+  }
+
+  String _languageName(Locale locale) {
+    final tag = locale.toLanguageTag();
+    return switch (tag) {
+      'de' => 'Deutsch',
+      'en' => 'English',
+      'es' => 'Español',
+      'fr' => 'Français',
+      'it' => 'Italiano',
+      'ko' => '한국어',
+      'nl' => 'Nederlands',
+      'ru' => 'Русский',
+      'zh' => '简体中文',
+      'zh-Hant' => '繁體中文',
+      _ => locale.languageCode,
+    };
+  }
+
+  String _imageDataUrl(List<int> bytes, String filePath) {
+    final extension = path.extension(filePath).toLowerCase();
+    final format = switch (extension) {
+      '.png' => 'png',
+      '.webp' => 'webp',
+      '.gif' => 'gif',
+      _ => 'jpeg',
+    };
+    return 'data:image/$format;base64,${base64Encode(bytes)}';
+  }
+}
+
+class _LanguagePickerValue {
+  const _LanguagePickerValue({
+    required this.label,
+    required this.locale,
+  });
+
+  final String label;
+  final Locale? locale;
 }
