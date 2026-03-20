@@ -40,10 +40,11 @@ struct JyotiGPTappWidgetEntryView: View {
     @Environment(\.widgetFamily) var family
     @Environment(\.colorScheme) var colorScheme
 
-    /// Adaptive text/icon color based on color scheme
-    private var contentColor: Color {
-        colorScheme == .dark ? .white : .black
-    }
+    /// Widget accent color aligned with the app's red theme.
+    private var accentColor: Color { Color("AccentColor") }
+
+    /// Primary content color when drawn on the accent background.
+    private var onAccentColor: Color { .white }
 
     /// Adaptive button background based on color scheme
     private var buttonBackground: Color {
@@ -57,15 +58,15 @@ struct JyotiGPTappWidgetEntryView: View {
             // Main "Ask JyotiGPT" pill - ChatGPT style
             Link(destination: URL(string: "jyotigptapp://new_chat?homeWidget=true")!) {
                 HStack(spacing: 12) {
-                    Image("HubIcon")
-                        .renderingMode(.template)
+                    Image("WiconIcon")
+                        .renderingMode(.original)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 28, height: 28)
-                        .foregroundStyle(contentColor.opacity(0.85))
+                        .foregroundStyle(onAccentColor.opacity(0.95))
                     Text("Ask JyotiGPT")
                         .font(.system(size: 18, weight: .medium, design: .rounded))
-                        .foregroundStyle(contentColor.opacity(0.85))
+                        .foregroundStyle(onAccentColor.opacity(0.95))
                     Spacer()
                 }
                 .padding(.horizontal, 20)
@@ -73,7 +74,7 @@ struct JyotiGPTappWidgetEntryView: View {
                 .frame(height: 56)
                 .background(
                     Capsule()
-                        .fill(buttonBackground)
+                        .fill(accentColor)
                 )
             }
             .buttonStyle(.plain)
@@ -83,25 +84,25 @@ struct JyotiGPTappWidgetEntryView: View {
                 CircularIconButton(
                     symbol: "camera",
                     url: "jyotigptapp://camera?homeWidget=true",
-                    contentColor: contentColor,
+                    accentColor: accentColor,
                     buttonBackground: buttonBackground
                 )
                 CircularIconButton(
                     symbol: "photo.on.rectangle.angled",
                     url: "jyotigptapp://photos?homeWidget=true",
-                    contentColor: contentColor,
+                    accentColor: accentColor,
                     buttonBackground: buttonBackground
                 )
                 CircularIconButton(
                     symbol: "waveform",
                     url: "jyotigptapp://mic?homeWidget=true",
-                    contentColor: contentColor,
+                    accentColor: accentColor,
                     buttonBackground: buttonBackground
                 )
                 CircularIconButton(
                     symbol: "doc.on.clipboard",
                     url: "jyotigptapp://clipboard?homeWidget=true",
-                    contentColor: contentColor,
+                    accentColor: accentColor,
                     buttonBackground: buttonBackground
                 )
             }
@@ -115,14 +116,14 @@ struct JyotiGPTappWidgetEntryView: View {
 struct CircularIconButton: View {
     let symbol: String
     let url: String
-    let contentColor: Color
+    let accentColor: Color
     let buttonBackground: Color
 
     var body: some View {
         Link(destination: URL(string: url)!) {
             Image(systemName: symbol)
                 .font(.system(size: 24, weight: .medium))
-                .foregroundStyle(contentColor.opacity(0.85))
+                .foregroundStyle(accentColor.opacity(0.95))
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(
                     RoundedRectangle(cornerRadius: 16, style: .continuous)
@@ -162,4 +163,3 @@ struct JyotiGPTappWidget: Widget {
 } timeline: {
     JyotiGPTappEntry(date: .now)
 }
-
