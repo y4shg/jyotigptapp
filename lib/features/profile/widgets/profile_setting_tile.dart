@@ -45,6 +45,8 @@ class ProfileSettingTile extends StatelessWidget {
               children: [
                 Text(
                   title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: theme.bodyMedium?.copyWith(
                     color: textColor,
                     fontWeight: FontWeight.w600,
@@ -53,6 +55,8 @@ class ProfileSettingTile extends StatelessWidget {
                 const SizedBox(height: Spacing.xs),
                 Text(
                   subtitle,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: theme.bodySmall?.copyWith(color: subtitleColor),
                 ),
               ],

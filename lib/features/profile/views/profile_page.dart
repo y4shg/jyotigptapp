@@ -109,7 +109,7 @@ class ProfilePage extends ConsumerWidget {
   }) {
     final topPadding = useAdaptivePlatformChrome
         ? 24.0
-        : (MediaQuery.of(context).padding.top + kToolbarHeight + 24);
+        : (MediaQuery.of(context).padding.top + kToolbarHeight + 40);
     return Padding(
       padding: EdgeInsets.fromLTRB(
         Spacing.pagePadding,
@@ -130,7 +130,7 @@ class ProfilePage extends ConsumerWidget {
   }) {
     final topPadding = useAdaptivePlatformChrome
         ? 24.0
-        : (MediaQuery.of(context).padding.top + kToolbarHeight + 24);
+        : (MediaQuery.of(context).padding.top + kToolbarHeight + 40);
 
     return ListView(
       physics: const BouncingScrollPhysics(
@@ -180,7 +180,7 @@ class ProfilePage extends ConsumerWidget {
         ),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           UserAvatar(size: 56, imageUrl: avatarUrl, fallbackText: initial),
           const SizedBox(width: Spacing.md),
@@ -190,6 +190,8 @@ class ProfilePage extends ConsumerWidget {
               children: [
                 Text(
                   displayName.isEmpty ? 'User' : displayName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: theme.headingMedium?.copyWith(
                     color: theme.sidebarForeground,
                     fontWeight: FontWeight.w600,
@@ -312,6 +314,13 @@ class ProfilePage extends ConsumerWidget {
     final voiceCallNotificationsEnabled = ref.watch(
       appSettingsProvider.select((s) => s.voiceCallNotificationsEnabled),
     );
+    final backendSettings = ref.watch(profileUserSettingsProvider);
+    final accountNotificationsEnabled = backendSettings.maybeWhen(
+      data: (settings) => _readBoolSetting(settings, 'enableNotifications'),
+      orElse: () => true,
+    );
+    final notificationsEnabled =
+        voiceCallNotificationsEnabled && accountNotificationsEnabled;
     final theme = context.jyotigptappTheme;
     final headingStyle = theme.headingSmall?.copyWith(
       color: theme.sidebarForeground,
@@ -370,17 +379,13 @@ class ProfilePage extends ConsumerWidget {
             ),
             color: theme.buttonPrimary,
           ),
-          title: 'Voice call notifications',
-          subtitle: 'Show a live notification with quick mute and end controls.',
-          onTap: () => _toggleVoiceCallNotifications(
-            context,
-            ref,
-            !voiceCallNotificationsEnabled,
-          ),
+          title: 'Notifications',
+          subtitle:
+              'Enable notifications and voice call controls for this device.',
+          onTap: () => _toggleNotifications(context, ref, !notificationsEnabled),
           trailing: AdaptiveSwitch(
-            value: voiceCallNotificationsEnabled,
-            onChanged: (value) =>
-                _toggleVoiceCallNotifications(context, ref, value),
+            value: notificationsEnabled,
+            onChanged: (value) => _toggleNotifications(context, ref, value),
           ),
           showChevron: false,
         ),
@@ -410,33 +415,11 @@ class ProfilePage extends ConsumerWidget {
                 context,
                 ref,
                 settings: settings,
-                keyName: 'enableNotifications',
-                title: 'Account notifications',
-                subtitle: 'Sync your account preference for notifications.',
-                iosIcon: CupertinoIcons.bell,
-                androidIcon: Icons.notifications_active_outlined,
-              ),
-              const SizedBox(height: Spacing.md),
-              _buildBackendToggleTile(
-                context,
-                ref,
-                settings: settings,
                 keyName: 'enableSounds',
                 title: 'Sounds',
                 subtitle: 'Play sounds for account-level interactions.',
                 iosIcon: CupertinoIcons.speaker_2,
                 androidIcon: Icons.volume_up_outlined,
-              ),
-              const SizedBox(height: Spacing.md),
-              _buildBackendToggleTile(
-                context,
-                ref,
-                settings: settings,
-                keyName: 'reduceMotion',
-                title: 'Reduce motion',
-                subtitle: 'Prefer calmer animations on synced devices.',
-                iosIcon: CupertinoIcons.settings,
-                androidIcon: Icons.motion_photos_off_outlined,
               ),
               const SizedBox(height: Spacing.md),
               _buildBackendToggleTile(
@@ -500,10 +483,22 @@ class ProfilePage extends ConsumerWidget {
       ),
       title: title,
       subtitle: subtitle,
-      onTap: () => _updateBackendSetting(context, ref, keyName, !value),
+      onTap: () => _updateBackendSetting(
+        context,
+        ref,
+        settings,
+        keyName,
+        !value,
+      ),
       trailing: AdaptiveSwitch(
         value: value,
-        onChanged: (next) => _updateBackendSetting(context, ref, keyName, next),
+        onChanged: (next) => _updateBackendSetting(
+          context,
+          ref,
+          settings,
+          keyName,
+          next,
+        ),
       ),
       showChevron: false,
     );
@@ -765,7 +760,7 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Future<void> _toggleVoiceCallNotifications(
+  Future<void> _toggleNotifications(
     BuildContext context,
     WidgetRef ref,
     bool enabled,
@@ -773,9 +768,17 @@ class ProfilePage extends ConsumerWidget {
     final settingsNotifier = ref.read(appSettingsProvider.notifier);
     if (!enabled) {
       await settingsNotifier.setVoiceCallNotificationsEnabled(false);
+      await _updateBackendSetting(
+        context,
+        ref,
+        const <String, dynamic>{},
+        'enableNotifications',
+        false,
+      );
       return;
     }
 
+    await VoiceCallNotificationService().initialize();
     final granted = await VoiceCallNotificationService().requestPermissions();
     if (!context.mounted) {
       return;
@@ -783,6 +786,13 @@ class ProfilePage extends ConsumerWidget {
 
     if (!granted) {
       await settingsNotifier.setVoiceCallNotificationsEnabled(false);
+      await _updateBackendSetting(
+        context,
+        ref,
+        const <String, dynamic>{},
+        'enableNotifications',
+        false,
+      );
       UiUtils.showMessage(
         context,
         'Notifications were not enabled. Check system settings if needed.',
@@ -791,6 +801,13 @@ class ProfilePage extends ConsumerWidget {
     }
 
     await settingsNotifier.setVoiceCallNotificationsEnabled(true);
+    await _updateBackendSetting(
+      context,
+      ref,
+      const <String, dynamic>{},
+      'enableNotifications',
+      true,
+    );
     if (context.mounted) {
       UiUtils.showMessage(context, 'Notifications enabled.');
     }
@@ -799,14 +816,20 @@ class ProfilePage extends ConsumerWidget {
   Future<void> _updateBackendSetting(
     BuildContext context,
     WidgetRef ref,
+    Map<String, dynamic> settings,
     String key,
     bool value,
   ) async {
+    final resolvedKey = _resolveSettingKey(settings, key);
+
     try {
       await ref.read(profileUserSettingsProvider.notifier).updateSetting(
-            key,
+            resolvedKey,
             value,
           );
+      if (key == 'hapticFeedback') {
+        await ref.read(appSettingsProvider.notifier).setHapticFeedback(value);
+      }
     } catch (_) {
       if (!context.mounted) {
         return;
@@ -816,6 +839,15 @@ class ProfilePage extends ConsumerWidget {
         'Unable to update $key right now.',
       );
     }
+  }
+
+  String _resolveSettingKey(Map<String, dynamic> settings, String key) {
+    for (final candidate in _settingKeyCandidates(key)) {
+      if (settings.containsKey(candidate)) {
+        return candidate;
+      }
+    }
+    return key;
   }
 
   Future<void> _showAboutDialog(BuildContext context) async {
@@ -924,7 +956,9 @@ class ProfilePage extends ConsumerWidget {
   }
 
   bool _readBoolSetting(Map<String, dynamic> settings, String key) {
-    final value = settings[key];
+    final value = _settingKeyCandidates(key)
+        .map((candidate) => settings[candidate])
+        .firstWhere((candidate) => candidate != null, orElse: () => null);
     if (value is bool) {
       return value;
     }
@@ -936,6 +970,14 @@ class ProfilePage extends ConsumerWidget {
       return value != 0;
     }
     return false;
+  }
+
+  List<String> _settingKeyCandidates(String key) {
+    final snakeCase = key.replaceAllMapped(
+      RegExp(r'(?<!^)([A-Z])'),
+      (match) => '_${match.group(1)!.toLowerCase()}',
+    );
+    return <String>{key, snakeCase}.toList(growable: false);
   }
 
   String _languageLabel(BuildContext context, Locale? locale) {
