@@ -1351,22 +1351,27 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
               ),
               isActive: isActive,
             ),
-            Positioned(
-              right: Spacing.xs,
-              bottom: _isMultiline ? Spacing.xs : null,
-              top: _isMultiline ? null : 0,
-              child: SizedBox(
-                height: _isMultiline ? compactActionSize : TouchTarget.input,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (trailingSecondaryAction != null) ...[
-                      trailingSecondaryAction,
-                      const SizedBox(width: Spacing.xs),
+            Positioned.fill(
+              child: Align(
+                alignment: _isMultiline
+                    ? Alignment.bottomRight
+                    : Alignment.centerRight,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    right: Spacing.xs,
+                    bottom: _isMultiline ? Spacing.xs : 0,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (trailingSecondaryAction != null) ...[
+                        trailingSecondaryAction,
+                        const SizedBox(width: Spacing.xs),
+                      ],
+                      primaryAction,
                     ],
-                    primaryAction,
-                  ],
+                  ),
                 ),
               ),
             ),
