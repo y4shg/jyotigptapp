@@ -134,20 +134,13 @@ struct JyotiGPTappWidgetEntryView: View {
         .padding(16)
     }
 
-    @ViewBuilder
     private var widgetLogo: some View {
-        let image = Image("WiconIcon")
+        Image("WiconIcon")
             .renderingMode(.original)
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 28, height: 28)
             .foregroundStyle(onAccentColor.opacity(0.95))
-
-        if #available(iOSApplicationExtension 18.0, *) {
-            image.widgetAccentedRenderingMode(.fullColor)
-        } else {
-            image
-        }
     }
 }
 
