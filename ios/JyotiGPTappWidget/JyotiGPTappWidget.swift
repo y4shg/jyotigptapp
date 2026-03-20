@@ -82,13 +82,7 @@ struct JyotiGPTappWidgetEntryView: View {
             // Main "Ask JyotiGPT" pill - ChatGPT style
             Link(destination: URL(string: "jyotigptapp://new_chat?homeWidget=true")!) {
                 HStack(spacing: 12) {
-                    Image("WiconIcon")
-                        .renderingMode(.original)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 28, height: 28)
-                        .foregroundStyle(onAccentColor.opacity(0.95))
-                        .modifier(WidgetAccentRenderingModifier())
+                    widgetLogo
                     Text("Ask JyotiGPT")
                         .font(.system(size: 18, weight: .medium, design: .rounded))
                         .foregroundStyle(onAccentColor.opacity(0.95))
@@ -139,6 +133,22 @@ struct JyotiGPTappWidgetEntryView: View {
         }
         .padding(16)
     }
+
+    @ViewBuilder
+    private var widgetLogo: some View {
+        let image = Image("WiconIcon")
+            .renderingMode(.original)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 28, height: 28)
+            .foregroundStyle(onAccentColor.opacity(0.95))
+
+        if #available(iOSApplicationExtension 18.0, *) {
+            image.widgetAccentedRenderingMode(.fullColor)
+        } else {
+            image
+        }
+    }
 }
 
 // MARK: - Circular Icon Button (ChatGPT Style)
@@ -184,16 +194,6 @@ private struct WidgetAccentForegroundModifier: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOSApplicationExtension 18.0, *), isTinted {
             content.foregroundStyle(.white)
-        } else {
-            content
-        }
-    }
-}
-
-private struct WidgetAccentRenderingModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        if #available(iOSApplicationExtension 18.0, *) {
-            content.widgetAccentedRenderingMode(.fullColor)
         } else {
             content
         }
