@@ -53,8 +53,10 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
     target.build_configurations.each do |config|
-      if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 12.0
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+      current = config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f
+      min = target.name.include?('adaptive_platform_ui') ? 13.0 : 12.0
+      if current < min
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = min.to_s
       end
 
       defs = config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] || ['$(inherited)']
