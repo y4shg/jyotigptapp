@@ -413,19 +413,25 @@ class ProfilePage extends ConsumerWidget {
           ),
           title: l10n.notificationsTitle,
           subtitle: l10n.notificationsSubtitle,
-          onTap: () => _toggleNotifications(
-            context,
-            ref,
-            settingsMap,
-            !notificationsEnabled,
+          onTap: backendSettings.maybeWhen(
+            data: (_) => () => _toggleNotifications(
+                  context,
+                  ref,
+                  settingsMap,
+                  !notificationsEnabled,
+                ),
+            orElse: () => null,
           ),
           trailing: AdaptiveSwitch(
             value: notificationsEnabled,
-            onChanged: (value) => _toggleNotifications(
-              context,
-              ref,
-              settingsMap,
-              value,
+            onChanged: backendSettings.maybeWhen(
+              data: (_) => (value) => _toggleNotifications(
+                    context,
+                    ref,
+                    settingsMap,
+                    value,
+                  ),
+              orElse: () => null,
             ),
           ),
           showChevron: false,
@@ -709,11 +715,28 @@ class ProfilePage extends ConsumerWidget {
 
   Future<void> _changeProfilePhoto(BuildContext context, WidgetRef ref) async {
     final picker = ImagePicker();
-    final image = await picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 85,
-      maxWidth: 1024,
-    );
+    XFile? image;
+    try {
+      image = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+        maxWidth: 1024,
+      );
+    } catch (error, stackTrace) {
+      DebugLogger.error(
+        'profile-avatar-picker-failed',
+        scope: 'profile/local',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      if (context.mounted) {
+        UiUtils.showMessage(
+          context,
+          AppLocalizations.of(context)!.profileUpdateFailed,
+        );
+      }
+      return;
+    }
 
     if (!context.mounted || image == null) {
       return;

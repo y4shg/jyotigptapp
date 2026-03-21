@@ -8,6 +8,7 @@ part 'profile_user_settings_provider.g.dart';
 @Riverpod(keepAlive: true)
 class ProfileUserSettings extends _$ProfileUserSettings {
   Future<void> _pendingWrite = Future<void>.value();
+  Map<String, dynamic>? _lastConfirmedSettings;
 
   @override
   Future<Map<String, dynamic>> build() async {
@@ -17,7 +18,8 @@ class ProfileUserSettings extends _$ProfileUserSettings {
     }
 
     final settings = await api.getUserSettings();
-    return Map<String, dynamic>.from(settings);
+    _lastConfirmedSettings = Map<String, dynamic>.from(settings);
+    return _lastConfirmedSettings!;
   }
 
   Future<void> updateSetting(String key, Object? value) async {
@@ -30,7 +32,6 @@ class ProfileUserSettings extends _$ProfileUserSettings {
       state.maybeWhen(data: (value) => value, orElse: () => null) ??
           await future,
     );
-    final previous = Map<String, dynamic>.from(current);
     final next = Map<String, dynamic>.from(current);
     if (value == null) {
       next.remove(key);
@@ -43,12 +44,17 @@ class ProfileUserSettings extends _$ProfileUserSettings {
     final write = _pendingWrite.then((_) async {
       try {
         await api.updateUserSettings(next);
+        _lastConfirmedSettings = next;
       } catch (error, stackTrace) {
         final currentState = state.asData?.value;
         if (ref.mounted &&
             currentState != null &&
             _mapsEqual(currentState, next)) {
-          state = AsyncData(previous);
+          if (_lastConfirmedSettings != null) {
+            state = AsyncData(_lastConfirmedSettings!);
+          } else {
+            ref.invalidateSelf();
+          }
         }
         Error.throwWithStackTrace(error, stackTrace);
       }

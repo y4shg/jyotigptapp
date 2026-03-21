@@ -903,7 +903,7 @@
   "temporaryChatByDefault": "Temporary Chat by Default",
   "temporaryChatByDefaultDescription": "New chats won't be saved to history unless you choose to save them",
   "chatSaved": "Chat saved to history",
-  "chatSaveFailed": "Failed to save chat",
+  "chatSaveFailed": "Speichern des Chats fehlgeschlagen",
   "profileSectionTitle": "Profil",
   "@profileSectionTitle": {
     "description": "Section header for profile-related settings."
