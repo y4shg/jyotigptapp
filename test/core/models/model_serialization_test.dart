@@ -435,7 +435,9 @@ void main() {
         'name': 'Dev',
         'url': 'http://localhost',
       });
+      check(config.id).equals('s2');
       check(config.name).equals('Dev');
+      check(config.url).equals('http://localhost');
     });
   });
 
@@ -457,25 +459,25 @@ void main() {
       check(settings.hapticFeedback).isTrue();
     });
 
-    test('fromJson/toJson round-trip', () {
+    test('fromJson/toJson round-trip with snake_case', () {
       final json = {
-        'showReadReceipts': false,
-        'enableNotifications': false,
-        'enableSounds': true,
+        'show_read_receipts': false,
+        'enable_notifications': false,
+        'enable_sounds': true,
         'theme': 'dark',
         'temperature': 0.9,
-        'maxTokens': 4096,
-        'streamResponses': true,
-        'webSearchEnabled': true,
-        'saveConversations': false,
-        'shareUsageData': true,
+        'max_tokens': 4096,
+        'stream_responses': true,
+        'web_search_enabled': true,
+        'save_conversations': false,
+        'share_usage_data': true,
         'density': 'compact',
-        'fontSize': 16.0,
+        'font_size': 16.0,
         'language': 'fr',
-        'reduceMotion': true,
-        'hapticFeedback': false,
-        'defaultModelId': 'gpt-4',
-        'customSettings': {'key': 'val'},
+        'reduce_motion': true,
+        'haptic_feedback': false,
+        'default_model_id': 'gpt-4',
+        'custom_settings': {'key': 'val'},
       };
 
       final settings = UserSettings.fromJson(json);
@@ -487,9 +489,9 @@ void main() {
       final output = settings.toJson();
       check(output['theme']).equals('dark');
       check(output['temperature']).equals(0.9);
-      check(output['maxTokens']).equals(4096);
-      check(output['defaultModelId']).equals('gpt-4');
-      check(output['customSettings'] as Map)
+      check(output['max_tokens']).equals(4096);
+      check(output['default_model_id']).equals('gpt-4');
+      check(output['custom_settings'] as Map)
           .deepEquals({'key': 'val'});
     });
   });

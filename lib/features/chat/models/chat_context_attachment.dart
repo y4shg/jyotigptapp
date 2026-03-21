@@ -20,4 +20,9 @@ class ChatContextAttachment {
   final String? fileId;
 }
 
-enum ChatContextAttachmentType { knowledge }
+/// Represents the source or category of a chat context attachment.
+enum ChatContextAttachmentType {
+  /// Indicates an attachment sourced from the knowledge base, providing
+  /// supplementary information for RAG (Retrieval-Augmented Generation).
+  knowledge
+}

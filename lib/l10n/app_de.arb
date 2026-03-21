@@ -924,7 +924,7 @@
   "@displayNameUnset": {
     "description": "Subtitle shown when the user has not configured a display name yet."
   },
-  "emailTitle": "Email",
+  "emailTitle": "E-Mail",
   "@emailTitle": {
     "description": "Title for the email settings tile."
   },

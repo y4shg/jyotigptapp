@@ -134,8 +134,8 @@ jobs:
         with:
           xcode-version: latest-stable
 
-        #5 Install a stable xcodeproj gem version that supports Xcode 26 projects
-      - name: Update xcodeproj gem for Xcode 26 support
+        #5 Install xcodeproj gem v1.27.0 (supports up to Xcode 16)
+      - name: Install xcodeproj gem
         run: sudo gem install xcodeproj -v '1.27.0'
 
         #6 Cache CocoaPods

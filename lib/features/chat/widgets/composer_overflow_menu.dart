@@ -12,6 +12,7 @@ import '../../../shared/widgets/modal_safe_area.dart';
 import '../../../core/models/tool.dart';
 import '../../../core/models/toggle_filter.dart';
 import '../../../core/providers/app_providers.dart';
+import '../../../shared/utils/platform_utils.dart';
 import '../../tools/providers/tools_providers.dart';
 import '../providers/chat_providers.dart';
 import 'package:jyotigptapp/l10n/app_localizations.dart';
@@ -146,7 +147,7 @@ class _ComposerOverflowSheetState
         onTap: widget.onImageAttachment == null
             ? null
             : () {
-                HapticFeedback.lightImpact();
+                PlatformUtils.lightHaptic();
                 widget.onImageAttachment!();
               },
       ),
@@ -156,7 +157,7 @@ class _ComposerOverflowSheetState
         onTap: widget.onCameraCapture == null
             ? null
             : () {
-                HapticFeedback.lightImpact();
+                PlatformUtils.lightHaptic();
                 widget.onCameraCapture!();
               },
       ),
@@ -166,7 +167,7 @@ class _ComposerOverflowSheetState
         onTap: widget.onFileAttachment == null
             ? null
             : () {
-                HapticFeedback.lightImpact();
+                PlatformUtils.lightHaptic();
                 widget.onFileAttachment!();
               },
       ),

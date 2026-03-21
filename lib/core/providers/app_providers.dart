@@ -611,7 +611,7 @@ class CurrentUser extends _$CurrentUser {
     // Next: try cached user from storage, then refresh in the background.
     final storage = ref.read(optimizedStorageServiceProvider);
     final cachedUser = await _getCachedUserWithAvatar(storage);
-    final api = ref.watch(apiServiceProvider);
+    final api = ref.read(apiServiceProvider);
     if (api == null) {
       return cachedUser;
     }
@@ -637,7 +637,7 @@ class CurrentUser extends _$CurrentUser {
 
     // Fallback: fetch fresh.
     final fresh = await _refreshCurrentUser(ref, api);
-    if (fresh != null) {
+    if (fresh != null && ref.mounted) {
       ref.read(_lastUserRefreshProvider.notifier).set(DateTime.now());
     }
     return fresh;

@@ -20,6 +20,7 @@ import '../../../core/utils/debug_logger.dart';
 import '../../../core/utils/tool_calls_parser.dart';
 import '../models/chat_context_attachment.dart';
 import '../providers/context_attachments_provider.dart';
+import '../services/file_attachment_service.dart';
 import '../../../shared/services/tasks/task_queue.dart';
 import '../../tools/providers/tools_providers.dart';
 import '../services/reviewer_mode_service.dart';
@@ -1009,6 +1010,9 @@ void startNewChat(dynamic ref) {
 
   // Clear any pending folder selection
   ref.read(pendingFolderIdProvider.notifier).clear();
+
+  // Clear attached files
+  ref.read(attachedFilesProvider.notifier).clear();
 
   // Reset to default model for new conversations (fixes #296)
   restoreDefaultModel(ref);

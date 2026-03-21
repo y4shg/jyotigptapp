@@ -9,6 +9,7 @@ part 'profile_user_settings_provider.g.dart';
 class ProfileUserSettings extends _$ProfileUserSettings {
   Future<void> _pendingWrite = Future<void>.value();
   Map<String, dynamic>? _lastConfirmedSettings;
+  int _clientGeneration = 0;
 
   @override
   Future<Map<String, dynamic>> build() async {
@@ -17,6 +18,7 @@ class ProfileUserSettings extends _$ProfileUserSettings {
       throw StateError('No API client available for user settings.');
     }
 
+    _clientGeneration++;
     final settings = await api.getUserSettings();
     _lastConfirmedSettings = Map<String, dynamic>.from(settings);
     return _lastConfirmedSettings!;
@@ -27,6 +29,8 @@ class ProfileUserSettings extends _$ProfileUserSettings {
     if (api == null) {
       throw StateError('No API client available for user settings.');
     }
+
+    final generation = _clientGeneration;
 
     final current = Map<String, dynamic>.from(
       state.maybeWhen(data: (value) => value, orElse: () => null) ??
@@ -44,10 +48,13 @@ class ProfileUserSettings extends _$ProfileUserSettings {
     final write = _pendingWrite.then((_) async {
       try {
         await api.updateUserSettings(next);
-        _lastConfirmedSettings = next;
+        if (ref.mounted && generation == _clientGeneration) {
+          _lastConfirmedSettings = next;
+        }
       } catch (error, stackTrace) {
         final currentState = state.asData?.value;
         if (ref.mounted &&
+            generation == _clientGeneration &&
             currentState != null &&
             _mapsEqual(currentState, next)) {
           if (_lastConfirmedSettings != null) {

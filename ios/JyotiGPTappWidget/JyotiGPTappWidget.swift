@@ -61,6 +61,22 @@ extension WidgetQuickAction {
         url: "jyotigptapp://photos?homeWidget=true"
     )
 
+    static let camera = WidgetQuickAction(
+        id: "widget_action_camera_id",
+        title: WidgetLocalization.string("widget_medium_open_camera"),
+        shortTitle: WidgetLocalization.string("widget_medium_open_camera"),
+        symbol: "camera",
+        url: "jyotigptapp://camera?homeWidget=true"
+    )
+
+    static let clipboard = WidgetQuickAction(
+        id: "widget_action_clipboard_id",
+        title: WidgetLocalization.string("widget_medium_paste_clipboard"),
+        shortTitle: WidgetLocalization.string("widget_medium_paste_clipboard"),
+        symbol: "doc.on.clipboard",
+        url: "jyotigptapp://clipboard?homeWidget=true"
+    )
+
     static let smallGrid: [WidgetQuickAction] = [
         .chat,
         .voice,
@@ -264,9 +280,9 @@ struct MediumActionLayout: View {
 
             HStack(spacing: 8) {
                 CircularIconButton(
-                    symbol: "camera",
-                    url: "jyotigptapp://camera?homeWidget=true",
-                    label: WidgetLocalization.string("widget_medium_open_camera"),
+                    symbol: WidgetQuickAction.camera.symbol,
+                    url: WidgetQuickAction.camera.url,
+                    label: WidgetQuickAction.camera.title,
                     accentColor: accentColor,
                     buttonBackground: buttonBackground,
                     usesTintedRendering: usesTintedRendering
@@ -288,9 +304,9 @@ struct MediumActionLayout: View {
                     usesTintedRendering: usesTintedRendering
                 )
                 CircularIconButton(
-                    symbol: "doc.on.clipboard",
-                    url: "jyotigptapp://clipboard?homeWidget=true",
-                    label: WidgetLocalization.string("widget_medium_paste_clipboard"),
+                    symbol: WidgetQuickAction.clipboard.symbol,
+                    url: WidgetQuickAction.clipboard.url,
+                    label: WidgetQuickAction.clipboard.title,
                     accentColor: accentColor,
                     buttonBackground: buttonBackground,
                     usesTintedRendering: usesTintedRendering
@@ -374,29 +390,29 @@ struct JyotiGPTAccessoryWidgetEntryView: View {
         if let url = URL(string: action.url) {
             Link(destination: url) {
                 switch family {
-            case .accessoryCircular:
-                Image(systemName: action.symbol)
-                    .font(.system(size: 18, weight: .semibold))
-                    .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
-            case .accessoryInline:
-                Label(action.shortTitle, systemImage: action.symbol)
-                    .font(.system(size: 12, weight: .semibold))
-                    .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
-            case .accessoryRectangular:
-                HStack(spacing: 6) {
+                case .accessoryCircular:
                     Image(systemName: action.symbol)
-                        .font(.system(size: 14, weight: .semibold))
-                    Text(action.title)
+                        .font(.system(size: 18, weight: .semibold))
+                        .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
+                case .accessoryInline:
+                    Label(action.shortTitle, systemImage: action.symbol)
                         .font(.system(size: 12, weight: .semibold))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
-                }
-                .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
-            default:
-                Text(action.shortTitle)
-                    .font(.system(size: 12, weight: .semibold))
+                        .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
+                case .accessoryRectangular:
+                    HStack(spacing: 6) {
+                        Image(systemName: action.symbol)
+                            .font(.system(size: 14, weight: .semibold))
+                        Text(action.title)
+                            .font(.system(size: 12, weight: .semibold))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                    }
                     .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
-            }
+                default:
+                    Text(action.shortTitle)
+                        .font(.system(size: 12, weight: .semibold))
+                        .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
+                }
             }
             .accessibilityLabel(action.title)
             .buttonStyle(.plain)

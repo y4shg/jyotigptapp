@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Pill-shaped primary button - Material 3 style with darker accent -->
+<!-- Pill-shaped primary button - Material 3 style with brighter fallback accent -->
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="#40FFFFFF">
     <item>

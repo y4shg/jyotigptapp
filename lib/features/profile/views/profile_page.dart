@@ -932,7 +932,8 @@ class ProfilePage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final settingsNotifier = ref.read(appSettingsProvider.notifier);
     if (!enabled) {
-      final previous = ref.read(appSettingsProvider).voiceCallNotificationsEnabled;
+      final previous =
+          ref.read(appSettingsProvider).voiceCallNotificationsEnabled;
       try {
         await _updateBackendSetting(
           context,
@@ -949,30 +950,25 @@ class ProfilePage extends ConsumerWidget {
       return;
     }
 
-    await VoiceCallNotificationService().initialize();
-    final granted = await VoiceCallNotificationService().requestPermissions();
-    if (!context.mounted) {
-      return;
-    }
-
-    if (!granted) {
-      await settingsNotifier.setVoiceCallNotificationsEnabled(false);
-      await _updateBackendSetting(
-        context,
-        ref,
-        settings,
-        'enableNotifications',
-        false,
-      );
-      UiUtils.showMessage(
-        context,
-        l10n.notificationsNotEnabledMessage,
-      );
-      return;
-    }
-
-    final previous = ref.read(appSettingsProvider).voiceCallNotificationsEnabled;
+    final previous =
+        ref.read(appSettingsProvider).voiceCallNotificationsEnabled;
     try {
+      final svc = VoiceCallNotificationService();
+      await svc.initialize();
+      final granted = await svc.requestPermissions();
+      if (!context.mounted) {
+        return;
+      }
+
+      if (!granted) {
+        await settingsNotifier.setVoiceCallNotificationsEnabled(false);
+        UiUtils.showMessage(
+          context,
+          l10n.notificationsNotEnabledMessage,
+        );
+        return;
+      }
+
       await _updateBackendSetting(
         context,
         ref,
@@ -985,8 +981,20 @@ class ProfilePage extends ConsumerWidget {
       if (context.mounted) {
         UiUtils.showMessage(context, l10n.notificationsEnabledMessage);
       }
-    } catch (_) {
+    } catch (error, stackTrace) {
+      DebugLogger.error(
+        'notifications-toggle-failed',
+        scope: 'profile',
+        error: error,
+        stackTrace: stackTrace,
+      );
       await settingsNotifier.setVoiceCallNotificationsEnabled(previous);
+      if (context.mounted) {
+        UiUtils.showMessage(
+          context,
+          l10n.errorMessage,
+        );
+      }
     }
   }
 
@@ -998,11 +1006,16 @@ class ProfilePage extends ConsumerWidget {
     bool value, {
     bool rethrowOnError = false,
   }) async {
-    final resolvedKey = _resolveSettingKey(settings, key);
+    final canonicalKey = switch (key) {
+      'enableNotifications' => 'enable_notifications',
+      'enableSounds' => 'enable_sounds',
+      'hapticFeedback' => 'haptic_feedback',
+      _ => key,
+    };
 
     try {
       await ref.read(profileUserSettingsProvider.notifier).updateSetting(
-            resolvedKey,
+            canonicalKey,
             value,
           );
       if (key == 'hapticFeedback') {
