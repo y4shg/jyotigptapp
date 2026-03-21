@@ -107,7 +107,7 @@ struct JyotiGPTappWidgetEntryView: View {
 
     /// Whether the widget is being rendered in a tint-driven mode.
     private var usesTintedRendering: Bool {
-        if #available(iOSApplicationExtension 18.0, *) {
+        if #available(iOS 18.0, *) {
             switch widgetRenderingMode {
             case .accented:
                 return true
@@ -341,7 +341,7 @@ private struct WidgetAccentForegroundModifier: ViewModifier {
     let isTinted: Bool
 
     func body(content: Content) -> some View {
-        if #available(iOSApplicationExtension 18.0, *), isTinted {
+        if #available(iOS 18.0, *), isTinted {
             content.foregroundStyle(.white)
         } else {
             content
@@ -351,14 +351,14 @@ private struct WidgetAccentForegroundModifier: ViewModifier {
 
 // MARK: - Accessory Widgets
 
-@available(iOSApplicationExtension 16.0, *)
+@available(iOS 16.0, *)
 struct JyotiGPTAccessoryWidgetEntryView: View {
     let action: WidgetQuickAction
     @Environment(\.widgetFamily) private var family
     @Environment(\.widgetRenderingMode) private var widgetRenderingMode
 
     private var usesTintedRendering: Bool {
-        if #available(iOSApplicationExtension 18.0, *) {
+        if #available(iOS 18.0, *) {
             return widgetRenderingMode == .accented
         }
 
