@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/providers/app_providers.dart';
@@ -6,7 +6,7 @@ import '../../../core/providers/app_providers.dart';
 part 'profile_user_settings_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-class ProfileUserSettingsController extends _$ProfileUserSettingsController {
+class ProfileUserSettings extends _$ProfileUserSettings {
   Future<void> _pendingWrite = Future<void>.value();
 
   @override
@@ -39,7 +39,7 @@ class ProfileUserSettingsController extends _$ProfileUserSettingsController {
       try {
         await api.updateUserSettings(next);
       } catch (error, stackTrace) {
-        final currentState = state.valueOrNull;
+        final currentState = state.asData?.value;
         if (currentState != null && _mapsEqual(currentState, next)) {
           state = AsyncData(previous);
         }

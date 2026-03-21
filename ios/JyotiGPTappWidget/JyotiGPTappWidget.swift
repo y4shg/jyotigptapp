@@ -351,6 +351,7 @@ private struct WidgetAccentForegroundModifier: ViewModifier {
 
 // MARK: - Accessory Widgets
 
+@available(iOSApplicationExtension 16.0, *)
 struct JyotiGPTAccessoryWidgetEntryView: View {
     let action: WidgetQuickAction
     @Environment(\.widgetFamily) private var family
@@ -419,6 +420,7 @@ struct JyotiGPTappWidget: Widget {
     }
 }
 
+@available(iOSApplicationExtension 16.0, *)
 struct JyotiGPTAccessoryWidget: Widget {
     let action: WidgetQuickAction
 
@@ -438,14 +440,17 @@ struct JyotiGPTAccessoryWidget: Widget {
 
 // MARK: - Preview
 
-#Preview(as: .systemMedium) {
-    JyotiGPTappWidget()
-} timeline: {
-    JyotiGPTappEntry(date: .now)
+struct JyotiGPTappWidget_Previews: PreviewProvider {
+    static var previews: some View {
+        JyotiGPTappWidget()
+            .previewContext(WidgetPreviewContext(family: .systemMedium))
+    }
 }
 
-#Preview(as: .accessoryRectangular) {
-    JyotiGPTAccessoryWidget(action: .chat)
-} timeline: {
-    JyotiGPTappEntry(date: .now)
+@available(iOSApplicationExtension 16.0, *)
+struct JyotiGPTAccessoryWidget_Previews: PreviewProvider {
+    static var previews: some View {
+        JyotiGPTAccessoryWidget(action: .chat)
+            .previewContext(WidgetPreviewContext(family: .accessoryRectangular))
+    }
 }

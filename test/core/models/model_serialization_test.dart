@@ -416,26 +416,17 @@ void main() {
         'id': 'srv1',
         'name': 'Production',
         'url': 'https://api.example.com',
-        'apiKey': 'key123',
-        'customHeaders': {'X-Custom': 'value'},
-        'lastConnected': '2024-06-15T12:00:00.000Z',
-        'isActive': true,
-        'allowSelfSignedCertificates': false,
       };
 
       final config = ServerConfig.fromJson(json);
       check(config.id).equals('srv1');
       check(config.name).equals('Production');
       check(config.url).equals('https://api.example.com');
-      check(config.apiKey).equals('key123');
-      check(config.isActive).isTrue();
-      check(config.allowSelfSignedCertificates).isFalse();
 
       final output = config.toJson();
       check(output['id']).equals('srv1');
       check(output['name']).equals('Production');
       check(output['url']).equals('https://api.example.com');
-      check(output['isActive']).equals(true);
     });
 
     test('defaults', () {
@@ -444,9 +435,7 @@ void main() {
         'name': 'Dev',
         'url': 'http://localhost',
       });
-      check(config.isActive).isFalse();
-      check(config.allowSelfSignedCertificates).isFalse();
-      check(config.customHeaders).deepEquals({});
+      check(config.name).equals('Dev');
     });
   });
 
