@@ -420,7 +420,7 @@ struct JyotiGPTappWidget: Widget {
     }
 }
 
-@available(iOSApplicationExtension 16.0, *)
+@available(iOS 16.0, *)
 struct JyotiGPTAccessoryWidget: Widget {
     let action: WidgetQuickAction
 
@@ -442,15 +442,15 @@ struct JyotiGPTAccessoryWidget: Widget {
 
 struct JyotiGPTappWidget_Previews: PreviewProvider {
     static var previews: some View {
-        JyotiGPTappWidget()
+        JyotiGPTappWidgetEntryView(entry: JyotiGPTappEntry(date: Date()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
     }
 }
 
-@available(iOSApplicationExtension 16.0, *)
+@available(iOS 16.0, *)
 struct JyotiGPTAccessoryWidget_Previews: PreviewProvider {
     static var previews: some View {
-        JyotiGPTAccessoryWidget(action: .chat)
+        JyotiGPTAccessoryWidgetEntryView(action: .chat)
             .previewContext(WidgetPreviewContext(family: .accessoryRectangular))
     }
 }
