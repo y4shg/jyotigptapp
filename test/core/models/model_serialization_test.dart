@@ -429,7 +429,7 @@ void main() {
       check(output['url']).equals('https://api.example.com');
     });
 
-    test('defaults', () {
+    test('fromJson preserves provided values', () {
       final config = ServerConfig.fromJson({
         'id': 's2',
         'name': 'Dev',

@@ -179,12 +179,12 @@ class AppIntentCoordinator extends _$AppIntentCoordinator {
 
     try {
       await _prepareChatWithOptions(
-        prompt: 'Please review this link: $url',
+        prompt: url,
         focusComposer: true,
         resetChat: true,
       );
 
-      return {'success': true, 'value': 'Opening JyotiGPT with URL'};
+      return {'success': true, 'value': url};
     } catch (error, stackTrace) {
       DebugLogger.error(
         'app-intents-url',

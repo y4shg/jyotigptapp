@@ -903,140 +903,140 @@
   "temporaryChatByDefault": "Temporary Chat by Default",
   "temporaryChatByDefaultDescription": "New chats won't be saved to history unless you choose to save them",
   "chatSaved": "Chat saved to history",
-  "chatSaveFailed": "Failed to save chat",
-  "profileSectionTitle": "Profile",
+  "chatSaveFailed": "聊天保存失败",
+  "profileSectionTitle": "个人资料",
   "@profileSectionTitle": {
     "description": "Section header for profile-related settings."
   },
-  "profilePictureTitle": "Profile picture",
+  "profilePictureTitle": "头像",
   "@profilePictureTitle": {
     "description": "Title for the profile photo settings tile."
   },
-  "profilePictureSubtitle": "Choose a new photo for this device.",
+  "profilePictureSubtitle": "为此设备选择新照片。",
   "@profilePictureSubtitle": {
     "description": "Subtitle describing the local profile photo picker action."
   },
-  "displayNameTitle": "Display name",
+  "displayNameTitle": "显示名称",
   "@displayNameTitle": {
     "description": "Title for the display name settings tile."
   },
-  "displayNameUnset": "Set your name",
+  "displayNameUnset": "设置名称",
   "@displayNameUnset": {
     "description": "Subtitle shown when the user has not configured a display name yet."
   },
-  "emailTitle": "Email",
+  "emailTitle": "电子邮箱",
   "@emailTitle": {
     "description": "Title for the email settings tile."
   },
-  "profileSignedInAccount": "Signed in account",
+  "profileSignedInAccount": "已登录账户",
   "@profileSignedInAccount": {
     "description": "Fallback subtitle for the signed-in account email tile when no email is available."
   },
-  "appSectionTitle": "App",
+  "appSectionTitle": "应用",
   "@appSectionTitle": {
     "description": "Section header for app-level settings."
   },
-  "themeTitle": "Theme",
+  "themeTitle": "主题",
   "@themeTitle": {
     "description": "Label above the theme mode selector on the profile page."
   },
-  "languageTitle": "Language",
+  "languageTitle": "语言",
   "@languageTitle": {
     "description": "Title for the language settings tile."
   },
-  "notificationsTitle": "Notifications",
+  "notificationsTitle": "通知",
   "@notificationsTitle": {
     "description": "Title for the notifications settings tile."
   },
-  "notificationsSubtitle": "Enable notifications and voice call controls for this device.",
+  "notificationsSubtitle": "为此设备启用通知和语音通话控制。",
   "@notificationsSubtitle": {
     "description": "Subtitle explaining the notifications toggle on the profile page."
   },
-  "accountSettingsTitle": "Account settings",
+  "accountSettingsTitle": "账户设置",
   "@accountSettingsTitle": {
     "description": "Section header for account settings synchronized with the backend."
   },
-  "accountSoundsTitle": "Sounds",
+  "accountSoundsTitle": "声音",
   "@accountSoundsTitle": {
     "description": "Title for the account sounds toggle."
   },
-  "accountSoundsSubtitle": "Play sounds for account-level interactions.",
+  "accountSoundsSubtitle": "为账户交互播放声音。",
   "@accountSoundsSubtitle": {
     "description": "Subtitle for the account sounds toggle."
   },
-  "accountSettingsLoadError": "Unable to load account settings right now.",
+  "accountSettingsLoadError": "目前无法加载账户设置。",
   "@accountSettingsLoadError": {
     "description": "Error text shown when account settings cannot be loaded."
   },
-  "accountSettingsLoading": "Loading account settings...",
+  "accountSettingsLoading": "正在加载账户设置...",
   "@accountSettingsLoading": {
     "description": "Progress text shown while account settings are loading."
   },
-  "hapticsOffTitle": "Haptics off",
+  "hapticsOffTitle": "触感反馈关闭",
   "@hapticsOffTitle": {
     "description": "Title shown when tapping the tile will disable haptics."
   },
-  "hapticsOnTitle": "Haptics on",
+  "hapticsOnTitle": "触感反馈开启",
   "@hapticsOnTitle": {
     "description": "Title shown when tapping the tile will enable haptics."
   },
-  "hapticsOffSubtitle": "Turn off tactile feedback for this device.",
+  "hapticsOffSubtitle": "在此设备上关闭触感反馈。",
   "@hapticsOffSubtitle": {
     "description": "Subtitle shown when haptics are currently enabled."
   },
-  "hapticsOnSubtitle": "Turn on tactile feedback for this device.",
+  "hapticsOnSubtitle": "在此设备上开启触感反馈。",
   "@hapticsOnSubtitle": {
     "description": "Subtitle shown when haptics are currently disabled."
   },
-  "changeDisplayNameTitle": "Change display name",
+  "changeDisplayNameTitle": "更改显示名称",
   "@changeDisplayNameTitle": {
     "description": "Dialog title for editing the local display name."
   },
-  "changeDisplayNameMessage": "Update the name shown in the app.",
+  "changeDisplayNameMessage": "更新应用中显示的名称。",
   "@changeDisplayNameMessage": {
     "description": "Dialog message for the display name editor."
   },
-  "displayNamePlaceholder": "Your name",
+  "displayNamePlaceholder": "你的名字",
   "@displayNamePlaceholder": {
     "description": "Placeholder text for the display name input."
   },
-  "profileUpdateFailed": "Unable to update your profile right now.",
+  "profileUpdateFailed": "目前无法更新你的个人资料。",
   "@profileUpdateFailed": {
     "description": "Snackbar shown when a local profile update cannot be saved."
   },
-  "displayNameUpdatedLocalOnly": "Display name updated on this device. Server profile sync is not available yet.",
+  "displayNameUpdatedLocalOnly": "显示名称已在此设备更新。服务器资料同步尚不可用。",
   "@displayNameUpdatedLocalOnly": {
     "description": "Snackbar shown after updating the display name locally."
   },
-  "profilePictureUpdatedLocalOnly": "Profile picture updated on this device. Server profile sync is not available yet.",
+  "profilePictureUpdatedLocalOnly": "头像已在此设备更新。服务器资料同步尚不可用。",
   "@profilePictureUpdatedLocalOnly": {
     "description": "Snackbar shown after updating the profile picture locally."
   },
-  "languageChangedLocalOnly": "Language changed locally, but account sync failed.",
+  "languageChangedLocalOnly": "语言已在本地更改，但账户同步失败。",
   "@languageChangedLocalOnly": {
     "description": "Snackbar shown when the language changes locally but backend sync fails."
   },
-  "languageUpdated": "Language updated.",
+  "languageUpdated": "语言已更新。",
   "@languageUpdated": {
     "description": "Snackbar shown after the language preference sync succeeds."
   },
-  "systemDefaultLanguageOption": "System default",
+  "systemDefaultLanguageOption": "系统默认",
   "@systemDefaultLanguageOption": {
     "description": "Option label for following the operating system language."
   },
-  "appLanguageTitle": "App language",
+  "appLanguageTitle": "应用语言",
   "@appLanguageTitle": {
     "description": "Title for the language picker sheet."
   },
-  "notificationsNotEnabledMessage": "Notifications were not enabled. Check system settings if needed.",
+  "notificationsNotEnabledMessage": "未启用通知。如有需要，请检查系统设置。",
   "@notificationsNotEnabledMessage": {
     "description": "Snackbar shown when the user denies notification permissions."
   },
-  "notificationsEnabledMessage": "Notifications enabled.",
+  "notificationsEnabledMessage": "已启用通知。",
   "@notificationsEnabledMessage": {
     "description": "Snackbar shown after notifications are enabled successfully."
   },
-  "settingUpdateFailed": "Unable to update {setting} right now.",
+  "settingUpdateFailed": "目前无法更新{setting}。",
   "@settingUpdateFailed": {
     "description": "Snackbar shown when a backend profile setting update fails.",
     "placeholders": {
@@ -1046,7 +1046,7 @@
       }
     }
   },
-  "systemDefaultLanguageLabel": "System default ({language})",
+  "systemDefaultLanguageLabel": "系统默认（{language}）",
   "@systemDefaultLanguageLabel": {
     "description": "Label for the current system language option in the language picker.",
     "placeholders": {

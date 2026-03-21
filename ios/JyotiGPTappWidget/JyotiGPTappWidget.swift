@@ -10,6 +10,16 @@ import SwiftUI
 
 // MARK: - Widget Actions
 
+private enum WidgetLocalization {
+    static func string(_ key: String) -> String {
+        NSLocalizedString(key, comment: "")
+    }
+
+    static func format(_ key: String, _ arguments: CVarArg...) -> String {
+        String(format: string(key), arguments: arguments)
+    }
+}
+
 struct WidgetQuickAction: Identifiable {
     let id: String
     let title: String
@@ -20,33 +30,33 @@ struct WidgetQuickAction: Identifiable {
 
 extension WidgetQuickAction {
     static let openApp = WidgetQuickAction(
-        id: "open",
-        title: "Open JyotiGPT",
-        shortTitle: "Open",
+        id: WidgetLocalization.string("widget_action_open_id"),
+        title: WidgetLocalization.string("widget_action_open_title"),
+        shortTitle: WidgetLocalization.string("widget_action_open_short_title"),
         symbol: "sparkles",
         url: "jyotigptapp://"
     )
 
     static let chat = WidgetQuickAction(
-        id: "chat",
-        title: "New Chat",
-        shortTitle: "Chat",
+        id: WidgetLocalization.string("widget_action_chat_id"),
+        title: WidgetLocalization.string("widget_action_chat_title"),
+        shortTitle: WidgetLocalization.string("widget_action_chat_short_title"),
         symbol: "bubble.left.and.bubble.right",
         url: "jyotigptapp://new_chat?homeWidget=true"
     )
 
     static let voice = WidgetQuickAction(
-        id: "voice",
-        title: "Voice",
-        shortTitle: "Voice",
+        id: WidgetLocalization.string("widget_action_voice_id"),
+        title: WidgetLocalization.string("widget_action_voice_title"),
+        shortTitle: WidgetLocalization.string("widget_action_voice_short_title"),
         symbol: "waveform",
         url: "jyotigptapp://mic?homeWidget=true"
     )
 
     static let image = WidgetQuickAction(
-        id: "image",
-        title: "Image",
-        shortTitle: "Image",
+        id: WidgetLocalization.string("widget_action_image_id"),
+        title: WidgetLocalization.string("widget_action_image_title"),
+        shortTitle: WidgetLocalization.string("widget_action_image_short_title"),
         symbol: "photo",
         url: "jyotigptapp://photos?homeWidget=true"
     )
@@ -236,7 +246,7 @@ struct MediumActionLayout: View {
             Link(destination: URL(string: WidgetQuickAction.chat.url)!) {
                 HStack(spacing: 12) {
                     widgetLogo
-                    Text("Ask JyotiGPT")
+                    Text(WidgetLocalization.string("widget_medium_prompt_title"))
                         .font(.system(size: 18, weight: .medium, design: .rounded))
                         .foregroundStyle(Color.white.opacity(0.95))
                     Spacer()
@@ -256,7 +266,7 @@ struct MediumActionLayout: View {
                 CircularIconButton(
                     symbol: "camera",
                     url: "jyotigptapp://camera?homeWidget=true",
-                    label: "Open Camera",
+                    label: WidgetLocalization.string("widget_medium_open_camera"),
                     accentColor: accentColor,
                     buttonBackground: buttonBackground,
                     usesTintedRendering: usesTintedRendering
@@ -264,7 +274,7 @@ struct MediumActionLayout: View {
                 CircularIconButton(
                     symbol: "photo.on.rectangle.angled",
                     url: WidgetQuickAction.image.url,
-                    label: "Open Photos",
+                    label: WidgetLocalization.string("widget_medium_open_photos"),
                     accentColor: accentColor,
                     buttonBackground: buttonBackground,
                     usesTintedRendering: usesTintedRendering
@@ -272,7 +282,7 @@ struct MediumActionLayout: View {
                 CircularIconButton(
                     symbol: WidgetQuickAction.voice.symbol,
                     url: WidgetQuickAction.voice.url,
-                    label: "Start Voice",
+                    label: WidgetLocalization.string("widget_medium_start_voice"),
                     accentColor: accentColor,
                     buttonBackground: buttonBackground,
                     usesTintedRendering: usesTintedRendering
@@ -280,7 +290,7 @@ struct MediumActionLayout: View {
                 CircularIconButton(
                     symbol: "doc.on.clipboard",
                     url: "jyotigptapp://clipboard?homeWidget=true",
-                    label: "Paste from Clipboard",
+                    label: WidgetLocalization.string("widget_medium_paste_clipboard"),
                     accentColor: accentColor,
                     buttonBackground: buttonBackground,
                     usesTintedRendering: usesTintedRendering
@@ -412,11 +422,9 @@ struct JyotiGPTappWidget: Widget {
                     .background(Color("WidgetBackground"))
             }
         }
-        .configurationDisplayName("JyotiGPT")
-        .description("Quick access to spiritual chat, camera, photos, and voice.")
+        .configurationDisplayName(WidgetLocalization.string("widget_display_name"))
+        .description(WidgetLocalization.string("widget_gallery_description"))
         .supportedFamilies([.systemSmall, .systemMedium])
-        .contentMarginsDisabled()
-        .containerBackgroundRemovable(false)
     }
 }
 
@@ -429,7 +437,12 @@ private func accessoryConfiguration(
         JyotiGPTAccessoryWidgetEntryView(action: action)
     }
     .configurationDisplayName(action.title)
-    .description("Open \(action.title.lowercased()) in JyotiGPT.")
+    .description(
+        WidgetLocalization.format(
+            "widget_accessory_description",
+            action.title
+        )
+    )
     .supportedFamilies([
         .accessoryCircular,
         .accessoryInline,

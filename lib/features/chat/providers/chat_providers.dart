@@ -1205,7 +1205,7 @@ Future<Map<String, dynamic>> _buildMessagePayloadWithAttachments({
           // JyotiGPT now stores just the file ID, not the full URL path
           'url': attachmentId,
           'name': fileName,
-          'size': ?fileSize,
+          if (fileSize != null) 'size': fileSize,
         });
       }
     } catch (_) {
@@ -1877,8 +1877,8 @@ Future<void> _sendMessageInternal(
           // JyotiGPT now stores just the file ID, not the full URL path
           // The frontend resolves it when displaying
           'url': fileId,
-          'size': ?fileSize,
-          'collection_name': ?collectionName,
+          if (fileSize != null) 'size': fileSize,
+          if (collectionName != null) 'collection_name': collectionName,
           if (contentType.isNotEmpty) 'content_type': contentType,
         };
       } catch (_) {

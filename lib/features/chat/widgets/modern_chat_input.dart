@@ -75,7 +75,9 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
 
   static const double _composerRadius = AppBorderRadius.card;
   static const double _compactActionSize = 36.0;
-  static const double _compactActionEdgeInset = 0.0;
+  // Small inset so the button has a hair of breathing room from the capsule
+  // border — purely visual, does NOT create the large gap the old layout had.
+  static const double _compactActionEdgeInset = Spacing.xxs;
   static const double _compactActionGap = 4.0;
 
   final TextEditingController _controller = TextEditingController();
@@ -1296,7 +1298,8 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
       ],
     ];
 
-    // For compact mode, render text field shell with floating buttons on sides
+    // For compact mode, render text field shell with action buttons overlaid
+    // flush against the trailing edge of the capsule.
     if (showCompactComposer) {
       final compactActions = _CompactComposerActions(
         hasText: _hasText,
@@ -1313,6 +1316,10 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
         buildPrimaryButton: _buildPrimaryButton,
         buildInlineMicAction: _buildInlineMicAction,
       );
+
+      // Reserve space on the right so text never slides under the buttons.
+      // The action overlay is placed in an OUTER Stack (below) so it spans
+      // the full capsule width — not the padded inner area.
       final double trailingActionInset = compactActions.trailingActionInset;
       final double expandAffordanceInset =
           (_showExpandButton && !_expandModalOpen)
@@ -1321,7 +1328,9 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
       final double contentRightInset =
           trailingActionInset + expandAffordanceInset;
 
-      final textFieldContent = Container(
+      // Inner widget: only the text field with left/right padding to keep
+      // text clear of the buttons. No Stack here — the overlay lives outside.
+      final Widget textFieldPadded = Container(
         padding: EdgeInsets.fromLTRB(
           Spacing.md,
           0,
@@ -1330,37 +1339,41 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
         ),
         constraints: const BoxConstraints(minHeight: TouchTarget.input),
         alignment: Alignment.center,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            _buildComposerTextField(
-              brightness: brightness,
-              sendOnEnter: sendOnEnter,
-              voiceAvailable: voiceAvailable,
-              isGenerating: isGenerating,
-              allUploadsComplete: allUploadsComplete,
-              placeholderBase: placeholderBase,
-              placeholderFocused: placeholderFocused,
-              contentPadding: const EdgeInsets.symmetric(
-                vertical: Spacing.xs,
-              ),
-              isActive: isActive,
-            ),
-            Positioned.fill(child: compactActions),
-            Positioned(
-              top: Spacing.xs,
-              right: trailingActionInset,
-              child: AnimatedOpacity(
-                opacity: (_showExpandButton && !_expandModalOpen) ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 160),
-                child: IgnorePointer(
-                  ignoring: !_showExpandButton || _expandModalOpen,
-                  child: _buildExpandButton(_showExpandTextModal),
-                ),
-              ),
-            ),
-          ],
+        child: _buildComposerTextField(
+          brightness: brightness,
+          sendOnEnter: sendOnEnter,
+          voiceAvailable: voiceAvailable,
+          isGenerating: isGenerating,
+          allUploadsComplete: allUploadsComplete,
+          placeholderBase: placeholderBase,
+          placeholderFocused: placeholderFocused,
+          contentPadding: const EdgeInsets.symmetric(vertical: Spacing.xs),
+          isActive: isActive,
         ),
+      );
+
+      // Outer Stack: the action overlay spans the FULL capsule width so
+      // buttons sit flush against the trailing edge of the glass capsule.
+      final Widget textFieldContent = Stack(
+        clipBehavior: Clip.none,
+        children: [
+          textFieldPadded,
+          // Buttons overlay — covers the full capsule, aligns to trailing edge.
+          Positioned.fill(child: compactActions),
+          // Expand affordance — positioned just inboard of the action cluster.
+          Positioned(
+            top: Spacing.xs,
+            right: trailingActionInset,
+            child: AnimatedOpacity(
+              opacity: (_showExpandButton && !_expandModalOpen) ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 160),
+              child: IgnorePointer(
+                ignoring: !_showExpandButton || _expandModalOpen,
+                child: _buildExpandButton(_showExpandTextModal),
+              ),
+            ),
+          ),
+        ],
       );
 
       // Use AdaptiveButton glass for single-line compact input.
@@ -2295,8 +2308,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     PlatformUtils.selectionHaptic();
   }
 
-  // When on-device STT is unavailable we rely on server transcription.
-
   void _showVoiceUnavailable(String message) {
     if (!mounted) return;
     AdaptiveSnackBar.show(
@@ -2350,6 +2361,9 @@ class _CompactComposerActions extends StatelessWidget {
   static final double expandAffordanceWidth =
       IconSize.large + (Spacing.xs * 2);
 
+  /// Total width reserved on the trailing side for the action cluster.
+  /// Used by the parent to (a) pad the text field and (b) position the
+  /// expand affordance just inboard of the buttons.
   double get trailingActionInset =>
       (compactActionSize * 2) + compactActionGap + compactActionEdgeInset;
 

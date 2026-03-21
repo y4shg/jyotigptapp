@@ -13,14 +13,14 @@ class ProfileUserSettings extends _$ProfileUserSettings {
   Future<Map<String, dynamic>> build() async {
     final api = ref.watch(apiServiceProvider);
     if (api == null) {
-      return <String, dynamic>{};
+      throw StateError('No API client available for user settings.');
     }
 
     final settings = await api.getUserSettings();
     return Map<String, dynamic>.from(settings);
   }
 
-  Future<void> updateSetting(String key, dynamic value) async {
+  Future<void> updateSetting(String key, Object? value) async {
     final api = ref.read(apiServiceProvider);
     if (api == null) {
       throw StateError('No API client available for user settings.');
@@ -31,7 +31,12 @@ class ProfileUserSettings extends _$ProfileUserSettings {
           await future,
     );
     final previous = Map<String, dynamic>.from(current);
-    final next = <String, dynamic>{...current, key: value};
+    final next = Map<String, dynamic>.from(current);
+    if (value == null) {
+      next.remove(key);
+    } else {
+      next[key] = value;
+    }
 
     state = AsyncData(next);
 
@@ -40,7 +45,9 @@ class ProfileUserSettings extends _$ProfileUserSettings {
         await api.updateUserSettings(next);
       } catch (error, stackTrace) {
         final currentState = state.asData?.value;
-        if (currentState != null && _mapsEqual(currentState, next)) {
+        if (ref.mounted &&
+            currentState != null &&
+            _mapsEqual(currentState, next)) {
           state = AsyncData(previous);
         }
         Error.throwWithStackTrace(error, stackTrace);

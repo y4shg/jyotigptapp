@@ -343,6 +343,10 @@ class ProfilePage extends ConsumerWidget {
       appSettingsProvider.select((s) => s.voiceCallNotificationsEnabled),
     );
     final backendSettings = ref.watch(profileUserSettingsProvider);
+    final settingsMap = backendSettings.maybeWhen(
+      data: (settings) => settings,
+      orElse: () => const <String, dynamic>{},
+    );
     final accountNotificationsEnabled = backendSettings.maybeWhen(
       data: (settings) => _readBoolSetting(settings, 'enableNotifications'),
       orElse: () => true,
@@ -409,10 +413,20 @@ class ProfilePage extends ConsumerWidget {
           ),
           title: l10n.notificationsTitle,
           subtitle: l10n.notificationsSubtitle,
-          onTap: () => _toggleNotifications(context, ref, !notificationsEnabled),
+          onTap: () => _toggleNotifications(
+            context,
+            ref,
+            settingsMap,
+            !notificationsEnabled,
+          ),
           trailing: AdaptiveSwitch(
             value: notificationsEnabled,
-            onChanged: (value) => _toggleNotifications(context, ref, value),
+            onChanged: (value) => _toggleNotifications(
+              context,
+              ref,
+              settingsMap,
+              value,
+            ),
           ),
           showChevron: false,
         ),
@@ -742,7 +756,7 @@ class ProfilePage extends ConsumerWidget {
         await storage.saveLocalUser(updatedUser);
         ref.read(currentUserProvider.notifier).setLocalUser(updatedUser);
       } else {
-        ref.read(currentUserProvider.notifier).setLocalUser(null);
+        ref.read(currentUserProvider.notifier).clearLocalUser();
       }
     } catch (error, stackTrace) {
       DebugLogger.error(
@@ -796,9 +810,12 @@ class ProfilePage extends ConsumerWidget {
 
     final resolvedLocale = selected.locale ?? Localizations.localeOf(context);
     try {
+      final persistedValue = selected.locale == null
+          ? null
+          : resolvedLocale.toLanguageTag();
       await ref
           .read(profileUserSettingsProvider.notifier)
-          .updateSetting('language', resolvedLocale.toLanguageTag());
+          .updateSetting('language', persistedValue);
     } catch (_) {
       if (context.mounted) {
         UiUtils.showMessage(
@@ -886,6 +903,7 @@ class ProfilePage extends ConsumerWidget {
   Future<void> _toggleNotifications(
     BuildContext context,
     WidgetRef ref,
+    Map<String, dynamic> settings,
     bool enabled,
   ) async {
     final l10n = AppLocalizations.of(context)!;
@@ -896,7 +914,7 @@ class ProfilePage extends ConsumerWidget {
         await _updateBackendSetting(
           context,
           ref,
-          const <String, dynamic>{},
+          settings,
           'enableNotifications',
           false,
           rethrowOnError: true,
@@ -919,7 +937,7 @@ class ProfilePage extends ConsumerWidget {
       await _updateBackendSetting(
         context,
         ref,
-        const <String, dynamic>{},
+        settings,
         'enableNotifications',
         false,
       );
@@ -935,7 +953,7 @@ class ProfilePage extends ConsumerWidget {
       await _updateBackendSetting(
         context,
         ref,
-        const <String, dynamic>{},
+        settings,
         'enableNotifications',
         true,
         rethrowOnError: true,

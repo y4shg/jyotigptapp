@@ -912,7 +912,7 @@
   "@profilePictureTitle": {
     "description": "Title for the profile photo settings tile."
   },
-  "profilePictureSubtitle": "Choose a new photo for this device.",
+  "profilePictureSubtitle": "Wähle ein neues Foto für dieses Gerät.",
   "@profilePictureSubtitle": {
     "description": "Subtitle describing the local profile photo picker action."
   },
@@ -948,7 +948,7 @@
   "@notificationsTitle": {
     "description": "Title for the notifications settings tile."
   },
-  "notificationsSubtitle": "Enable notifications and voice call controls for this device.",
+  "notificationsSubtitle": "Aktiviere Benachrichtigungen und Steuerungen für Sprachanrufe auf diesem Gerät.",
   "@notificationsSubtitle": {
     "description": "Subtitle explaining the notifications toggle on the profile page."
   },
@@ -960,7 +960,7 @@
   "@accountSoundsTitle": {
     "description": "Title for the account sounds toggle."
   },
-  "accountSoundsSubtitle": "Play sounds for account-level interactions.",
+  "accountSoundsSubtitle": "Spiele Sounds für kontobezogene Interaktionen ab.",
   "@accountSoundsSubtitle": {
     "description": "Subtitle for the account sounds toggle."
   },

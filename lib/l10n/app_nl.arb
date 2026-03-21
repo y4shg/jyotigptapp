@@ -903,7 +903,7 @@
   "temporaryChatByDefault": "Temporary Chat by Default",
   "temporaryChatByDefaultDescription": "New chats won't be saved to history unless you choose to save them",
   "chatSaved": "Chat saved to history",
-  "chatSaveFailed": "Failed to save chat",
+  "chatSaveFailed": "Chat opslaan mislukt",
   "profileSectionTitle": "Profiel",
   "@profileSectionTitle": {
     "description": "Section header for profile-related settings."
@@ -912,7 +912,7 @@
   "@profilePictureTitle": {
     "description": "Title for the profile photo settings tile."
   },
-  "profilePictureSubtitle": "Choose a new photo for this device.",
+  "profilePictureSubtitle": "Kies een nieuwe foto voor dit apparaat.",
   "@profilePictureSubtitle": {
     "description": "Subtitle describing the local profile photo picker action."
   },
@@ -948,7 +948,7 @@
   "@notificationsTitle": {
     "description": "Title for the notifications settings tile."
   },
-  "notificationsSubtitle": "Enable notifications and voice call controls for this device.",
+  "notificationsSubtitle": "Schakel meldingen en spraakoproepbediening in voor dit apparaat.",
   "@notificationsSubtitle": {
     "description": "Subtitle explaining the notifications toggle on the profile page."
   },
@@ -960,7 +960,7 @@
   "@accountSoundsTitle": {
     "description": "Title for the account sounds toggle."
   },
-  "accountSoundsSubtitle": "Play sounds for account-level interactions.",
+  "accountSoundsSubtitle": "Speel geluiden af voor accountinteracties.",
   "@accountSoundsSubtitle": {
     "description": "Subtitle for the account sounds toggle."
   },
