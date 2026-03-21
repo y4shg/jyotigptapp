@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +15,7 @@ import '../../../core/services/api_service.dart';
 import '../../../core/services/settings_service.dart';
 import '../../../core/utils/user_avatar_utils.dart';
 import '../../../core/utils/user_display_name.dart';
+import '../../../core/utils/debug_logger.dart';
 import '../../../core/widgets/error_boundary.dart';
 import '../../../features/auth/providers/unified_auth_providers.dart';
 import '../../../l10n/app_localizations.dart';
@@ -662,8 +664,24 @@ class ProfilePage extends ConsumerWidget {
 
     final updatedUser = editableUser.copyWith(name: nextName);
     final storage = ref.read(optimizedStorageServiceProvider);
-    await storage.saveLocalUser(updatedUser);
-    ref.invalidate(currentUserProvider);
+    try {
+      await storage.saveLocalUser(updatedUser);
+      ref.read(currentUserProvider.notifier).setLocalUser(updatedUser);
+    } catch (error, stackTrace) {
+      DebugLogger.error(
+        'profile-display-name-save-failed',
+        scope: 'profile/local',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      if (context.mounted) {
+        UiUtils.showMessage(
+          context,
+          AppLocalizations.of(context)!.profileUpdateFailed,
+        );
+      }
+      return;
+    }
 
     if (!context.mounted) {
       return;
@@ -687,9 +705,27 @@ class ProfilePage extends ConsumerWidget {
       return;
     }
 
-    final bytes = await image.readAsBytes();
-    final dataUrl = _imageDataUrl(bytes, image.path);
     final storage = ref.read(optimizedStorageServiceProvider);
+    Uint8List bytes;
+    try {
+      bytes = await image.readAsBytes();
+    } catch (error, stackTrace) {
+      DebugLogger.error(
+        'profile-avatar-read-failed',
+        scope: 'profile/local',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      if (context.mounted) {
+        UiUtils.showMessage(
+          context,
+          AppLocalizations.of(context)!.profileUpdateFailed,
+        );
+      }
+      return;
+    }
+
+    final dataUrl = _imageDataUrl(bytes, image.path);
     final asyncUser = ref.read(currentUserProvider);
     final currentUser = _resolveEditableUser(
       asyncUser.maybeWhen(
@@ -697,14 +733,43 @@ class ProfilePage extends ConsumerWidget {
         orElse: () => ref.read(currentUserProvider2),
       ),
     );
+    final previousAvatar = await storage.getLocalUserAvatar();
 
-    await storage.saveLocalUserAvatar(dataUrl);
-    if (currentUser != null) {
-      await storage.saveLocalUser(
-        currentUser.copyWith(profileImage: dataUrl),
+    try {
+      await storage.saveLocalUserAvatar(dataUrl);
+      if (currentUser != null) {
+        final updatedUser = currentUser.copyWith(profileImage: dataUrl);
+        await storage.saveLocalUser(updatedUser);
+        ref.read(currentUserProvider.notifier).setLocalUser(updatedUser);
+      } else {
+        ref.read(currentUserProvider.notifier).setLocalUser(null);
+      }
+    } catch (error, stackTrace) {
+      DebugLogger.error(
+        'profile-avatar-save-failed',
+        scope: 'profile/local',
+        error: error,
+        stackTrace: stackTrace,
       );
+      try {
+        await storage.saveLocalUserAvatar(previousAvatar);
+        await storage.saveLocalUser(currentUser);
+      } catch (rollbackError, rollbackStack) {
+        DebugLogger.error(
+          'profile-avatar-rollback-failed',
+          scope: 'profile/local',
+          error: rollbackError,
+          stackTrace: rollbackStack,
+        );
+      }
+      if (context.mounted) {
+        UiUtils.showMessage(
+          context,
+          AppLocalizations.of(context)!.profileUpdateFailed,
+        );
+      }
+      return;
     }
-    ref.invalidate(currentUserProvider);
 
     if (!context.mounted) {
       return;
@@ -904,9 +969,10 @@ class ProfilePage extends ConsumerWidget {
       }
     } catch (_) {
       if (context.mounted) {
+        final label = _settingLabel(context, settings, key);
         UiUtils.showMessage(
           context,
-          AppLocalizations.of(context)!.settingUpdateFailed(key),
+          AppLocalizations.of(context)!.settingUpdateFailed(label),
         );
       }
       if (rethrowOnError) {
@@ -922,6 +988,20 @@ class ProfilePage extends ConsumerWidget {
       }
     }
     return key;
+  }
+
+  String _settingLabel(
+    BuildContext context,
+    Map<String, dynamic> settings,
+    String key,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+    return switch (key) {
+      'enableNotifications' => l10n.notificationsTitle,
+      'enableSounds' => l10n.accountSoundsTitle,
+      'hapticFeedback' => _hapticsToggleTitle(context, settings),
+      _ => key,
+    };
   }
 
   Future<void> _showAboutDialog(BuildContext context) async {

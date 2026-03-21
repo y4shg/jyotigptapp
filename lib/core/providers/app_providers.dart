@@ -590,51 +590,58 @@ final apiTokenUpdaterProvider = Provider<void>((ref) {
 });
 
 @Riverpod(keepAlive: true)
-Future<User?> currentUser(Ref ref) async {
-  final api = ref.read(apiServiceProvider);
-  final authState = ref.watch(authStateManagerProvider);
-  final isAuthenticated = authState.maybeWhen(
-    data: (state) => state.isAuthenticated,
-    orElse: () => false,
-  );
+class CurrentUser extends _$CurrentUser {
+  @override
+  Future<User?> build() async {
+    final api = ref.read(apiServiceProvider);
+    final authState = ref.watch(authStateManagerProvider);
+    final isAuthenticated = authState.maybeWhen(
+      data: (state) => state.isAuthenticated,
+      orElse: () => false,
+    );
 
-  if (api == null || !isAuthenticated) return null;
+    if (api == null || !isAuthenticated) return null;
 
-  // Fast path: use user already in auth state.
-  final authUser = authState.maybeWhen(
-    data: (state) => state.user,
-    orElse: () => null,
-  );
-  if (authUser != null) return authUser;
+    // Fast path: use user already in auth state.
+    final authUser = authState.maybeWhen(
+      data: (state) => state.user,
+      orElse: () => null,
+    );
+    if (authUser != null) return authUser;
 
-  // Next: try cached user from storage, then refresh in the background.
-  final storage = ref.read(optimizedStorageServiceProvider);
-  final cachedUser = await _getCachedUserWithAvatar(storage);
-  if (cachedUser != null) {
-    final lastRefresh = ref.read(_lastUserRefreshProvider);
-    final now = DateTime.now();
-    final shouldRefresh =
-        lastRefresh == null ||
-        now.difference(lastRefresh) > const Duration(minutes: 5);
+    // Next: try cached user from storage, then refresh in the background.
+    final storage = ref.read(optimizedStorageServiceProvider);
+    final cachedUser = await _getCachedUserWithAvatar(storage);
+    if (cachedUser != null) {
+      final lastRefresh = ref.read(_lastUserRefreshProvider);
+      final now = DateTime.now();
+      final shouldRefresh =
+          lastRefresh == null ||
+          now.difference(lastRefresh) > const Duration(minutes: 5);
 
-    if (shouldRefresh) {
-      Future.microtask(() async {
-        final fresh = await _refreshCurrentUser(ref);
-        if (fresh != null && ref.mounted) {
-          ref.read(_lastUserRefreshProvider.notifier).set(now);
-          ref.invalidate(currentUserProvider);
-        }
-      });
+      if (shouldRefresh) {
+        Future.microtask(() async {
+          final fresh = await _refreshCurrentUser(ref);
+          if (fresh != null && ref.mounted) {
+            ref.read(_lastUserRefreshProvider.notifier).set(now);
+            ref.invalidate(currentUserProvider);
+          }
+        });
+      }
+      return cachedUser;
     }
-    return cachedUser;
+
+    // Fallback: fetch fresh.
+    final fresh = await _refreshCurrentUser(ref);
+    if (fresh != null) {
+      ref.read(_lastUserRefreshProvider.notifier).set(DateTime.now());
+    }
+    return fresh;
   }
 
-  // Fallback: fetch fresh.
-  final fresh = await _refreshCurrentUser(ref);
-  if (fresh != null) {
-    ref.read(_lastUserRefreshProvider.notifier).set(DateTime.now());
+  void setLocalUser(User? user) {
+    state = AsyncData(user);
   }
-  return fresh;
 }
 
 Future<User?> _getCachedUserWithAvatar(OptimizedStorageService storage) async {

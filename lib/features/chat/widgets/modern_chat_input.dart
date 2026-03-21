@@ -1298,41 +1298,34 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
 
     // For compact mode, render text field shell with floating buttons on sides
     if (showCompactComposer) {
-      final Widget primaryAction = _buildPrimaryButton(
-        _hasText,
-        isGenerating,
-        stopGeneration,
-        voiceAvailable,
-        allUploadsComplete,
-        hasUploadsInProgress,
+      final compactActions = _CompactComposerActions(
+        hasText: _hasText,
+        isGenerating: isGenerating,
+        stopGeneration: stopGeneration,
+        voiceAvailable: voiceAvailable,
+        allUploadsComplete: allUploadsComplete,
+        hasUploadsInProgress: hasUploadsInProgress,
         dense: true,
+        compactActionSize: _compactActionSize,
+        compactActionGap: _compactActionGap,
+        compactActionEdgeInset: _compactActionEdgeInset,
+        isMultiline: _isMultiline,
+        buildPrimaryButton: _buildPrimaryButton,
+        buildInlineMicAction: _buildInlineMicAction,
       );
-      final bool showTrailingSecondaryAction =
-          !_hasText && voiceAvailable && !isGenerating;
-      final Widget trailingSecondaryAction = SizedBox(
-        width: _compactActionSize,
-        height: _compactActionSize,
-        child: Center(
-          child: AnimatedOpacity(
-            opacity: showTrailingSecondaryAction ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 160),
-            child: IgnorePointer(
-              ignoring: !showTrailingSecondaryAction,
-              child: _buildInlineMicAction(voiceAvailable),
-            ),
-          ),
-        ),
-      );
-      final double trailingActionInset =
-          (_compactActionSize * 2) +
-          _compactActionGap +
-          _compactActionEdgeInset;
+      final double trailingActionInset = compactActions.trailingActionInset;
+      final double expandAffordanceInset =
+          (_showExpandButton && !_expandModalOpen)
+              ? _CompactComposerActions.expandAffordanceWidth
+              : 0.0;
+      final double contentRightInset =
+          trailingActionInset + expandAffordanceInset;
 
       final textFieldContent = Container(
         padding: EdgeInsets.fromLTRB(
           Spacing.md,
           0,
-          trailingActionInset,
+          contentRightInset,
           _isMultiline ? Spacing.sm : 0,
         ),
         constraints: const BoxConstraints(minHeight: TouchTarget.input),
@@ -1353,28 +1346,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
               ),
               isActive: isActive,
             ),
-            Positioned.fill(
-              child: Align(
-                alignment: _isMultiline
-                    ? Alignment.bottomRight
-                    : Alignment.centerRight,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: _compactActionEdgeInset,
-                    bottom: _isMultiline ? Spacing.xs : 0,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      trailingSecondaryAction,
-                      const SizedBox(width: _compactActionGap),
-                      primaryAction,
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            Positioned.fill(child: compactActions),
             Positioned(
               top: Spacing.xs,
               right: trailingActionInset,
@@ -1820,12 +1792,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     return AdaptiveTooltip(
       message: tooltip,
       child: _buildComposerIconButton(
-        onPressed: enabled
-            ? () {
-                PlatformUtils.selectionHaptic();
-                _showOverflowSheet();
-              }
-            : null,
+        onPressed: enabled ? _showOverflowSheet : null,
         size: buttonSize,
         isProminent: isActive,
         child: Icon(overflowIcon, size: IconSize.large, color: iconColor),
@@ -1860,12 +1827,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
       message: AppLocalizations.of(context)!.voiceInput,
       child: _buildComposerIconButton(
         key: const ValueKey('secondary-btn-mic'),
-        onPressed: enabledMic
-            ? () {
-                PlatformUtils.selectionHaptic();
-                _toggleVoice();
-              }
-            : null,
+        onPressed: enabledMic ? _toggleVoice : null,
         size: _compactActionSize,
         child: Icon(
           Platform.isIOS ? CupertinoIcons.mic : Icons.mic,
@@ -2342,6 +2304,100 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
       message: message,
       type: AdaptiveSnackBarType.warning,
       duration: const Duration(seconds: 2),
+    );
+  }
+}
+
+class _CompactComposerActions extends StatelessWidget {
+  const _CompactComposerActions({
+    required this.hasText,
+    required this.isGenerating,
+    required this.stopGeneration,
+    required this.voiceAvailable,
+    required this.allUploadsComplete,
+    required this.hasUploadsInProgress,
+    required this.dense,
+    required this.compactActionSize,
+    required this.compactActionGap,
+    required this.compactActionEdgeInset,
+    required this.isMultiline,
+    required this.buildPrimaryButton,
+    required this.buildInlineMicAction,
+  });
+
+  final bool hasText;
+  final bool isGenerating;
+  final VoidCallback stopGeneration;
+  final bool voiceAvailable;
+  final bool allUploadsComplete;
+  final bool hasUploadsInProgress;
+  final bool dense;
+  final double compactActionSize;
+  final double compactActionGap;
+  final double compactActionEdgeInset;
+  final bool isMultiline;
+  final Widget Function(
+    bool hasText,
+    bool isGenerating,
+    void Function() stopGeneration,
+    bool voiceAvailable,
+    bool allUploadsComplete,
+    bool hasUploadsInProgress, {
+    bool dense,
+  }) buildPrimaryButton;
+  final Widget Function(bool voiceAvailable) buildInlineMicAction;
+
+  static final double expandAffordanceWidth =
+      IconSize.large + (Spacing.xs * 2);
+
+  double get trailingActionInset =>
+      (compactActionSize * 2) + compactActionGap + compactActionEdgeInset;
+
+  @override
+  Widget build(BuildContext context) {
+    final Widget primaryAction = buildPrimaryButton(
+      hasText,
+      isGenerating,
+      stopGeneration,
+      voiceAvailable,
+      allUploadsComplete,
+      hasUploadsInProgress,
+      dense: dense,
+    );
+    final bool showTrailingSecondaryAction =
+        !hasText && voiceAvailable && !isGenerating;
+    final Widget trailingSecondaryAction = SizedBox(
+      width: compactActionSize,
+      height: compactActionSize,
+      child: Center(
+        child: AnimatedOpacity(
+          opacity: showTrailingSecondaryAction ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 160),
+          child: IgnorePointer(
+            ignoring: !showTrailingSecondaryAction,
+            child: buildInlineMicAction(voiceAvailable),
+          ),
+        ),
+      ),
+    );
+
+    return Align(
+      alignment: isMultiline ? Alignment.bottomRight : Alignment.centerRight,
+      child: Padding(
+        padding: EdgeInsets.only(
+          right: compactActionEdgeInset,
+          bottom: isMultiline ? Spacing.xs : 0,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            trailingSecondaryAction,
+            SizedBox(width: compactActionGap),
+            primaryAction,
+          ],
+        ),
+      ),
     );
   }
 }

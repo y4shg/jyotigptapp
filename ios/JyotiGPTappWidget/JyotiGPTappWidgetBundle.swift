@@ -12,5 +12,9 @@ import SwiftUI
 struct JyotiGPTappWidgetBundle: WidgetBundle {
     var body: some Widget {
         JyotiGPTappWidget()
+        JyotiGPTAccessoryWidget(action: .openApp)
+        JyotiGPTAccessoryWidget(action: .chat)
+        JyotiGPTAccessoryWidget(action: .voice)
+        JyotiGPTAccessoryWidget(action: .image)
     }
 }
