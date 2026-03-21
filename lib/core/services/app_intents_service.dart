@@ -177,6 +177,16 @@ class AppIntentCoordinator extends _$AppIntentCoordinator {
       return {'success': false, 'error': 'No URL provided.'};
     }
 
+    final parsedUri = Uri.tryParse(url);
+    final isValid = parsedUri != null &&
+        parsedUri.hasScheme &&
+        parsedUri.host.isNotEmpty &&
+        (parsedUri.scheme == 'http' || parsedUri.scheme == 'https');
+
+    if (!isValid) {
+      return {'success': false, 'error': 'Invalid URL provided.'};
+    }
+
     try {
       await _prepareChatWithOptions(
         prompt: url,
@@ -184,7 +194,7 @@ class AppIntentCoordinator extends _$AppIntentCoordinator {
         resetChat: true,
       );
 
-      return {'success': true, 'value': url};
+      return {'success': true, 'value': 'Link opened'};
     } catch (error, stackTrace) {
       DebugLogger.error(
         'app-intents-url',

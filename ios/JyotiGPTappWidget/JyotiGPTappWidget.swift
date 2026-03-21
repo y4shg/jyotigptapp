@@ -30,7 +30,7 @@ struct WidgetQuickAction: Identifiable {
 
 extension WidgetQuickAction {
     static let openApp = WidgetQuickAction(
-        id: WidgetLocalization.string("widget_action_open_id"),
+        id: "widget_action_open_id",
         title: WidgetLocalization.string("widget_action_open_title"),
         shortTitle: WidgetLocalization.string("widget_action_open_short_title"),
         symbol: "sparkles",
@@ -38,7 +38,7 @@ extension WidgetQuickAction {
     )
 
     static let chat = WidgetQuickAction(
-        id: WidgetLocalization.string("widget_action_chat_id"),
+        id: "widget_action_chat_id",
         title: WidgetLocalization.string("widget_action_chat_title"),
         shortTitle: WidgetLocalization.string("widget_action_chat_short_title"),
         symbol: "bubble.left.and.bubble.right",
@@ -46,7 +46,7 @@ extension WidgetQuickAction {
     )
 
     static let voice = WidgetQuickAction(
-        id: WidgetLocalization.string("widget_action_voice_id"),
+        id: "widget_action_voice_id",
         title: WidgetLocalization.string("widget_action_voice_title"),
         shortTitle: WidgetLocalization.string("widget_action_voice_short_title"),
         symbol: "waveform",
@@ -54,7 +54,7 @@ extension WidgetQuickAction {
     )
 
     static let image = WidgetQuickAction(
-        id: WidgetLocalization.string("widget_action_image_id"),
+        id: "widget_action_image_id",
         title: WidgetLocalization.string("widget_action_image_title"),
         shortTitle: WidgetLocalization.string("widget_action_image_short_title"),
         symbol: "photo",
@@ -103,11 +103,21 @@ struct JyotiGPTappProvider: TimelineProvider {
 
 // MARK: - Widget View
 
+private struct WidgetLogo: View {
+    var body: some View {
+        Image(decorative: "WiconIcon")
+            .renderingMode(.original)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 28, height: 28)
+    }
+}
+
 struct JyotiGPTappWidgetEntryView: View {
     var entry: JyotiGPTappProvider.Entry
     @Environment(\.widgetFamily) var family
     @Environment(\.colorScheme) var colorScheme
-    @Environment(\.widgetRenderingMode) private var widgetRenderingMode
+    @Environment(\.self) private var environment
 
     /// Widget accent color aligned with the app's red theme.
     private var accentColor: Color { Color("AccentColor") }
@@ -118,14 +128,7 @@ struct JyotiGPTappWidgetEntryView: View {
     /// Whether the widget is being rendered in a tint-driven mode.
     private var usesTintedRendering: Bool {
         if #available(iOS 18.0, *) {
-            switch widgetRenderingMode {
-            case .accented:
-                return true
-            case .vibrant:
-                return false
-            default:
-                return false
-            }
+            return environment.widgetRenderingMode == .accented
         }
 
         return false
@@ -168,13 +171,6 @@ struct JyotiGPTappWidgetEntryView: View {
         .padding(16)
     }
 
-    private var widgetLogo: some View {
-        Image(decorative: "WiconIcon")
-            .renderingMode(.original)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 28, height: 28)
-    }
 }
 
 // MARK: - Small Widget Layout
@@ -210,27 +206,29 @@ struct SquareActionButton: View {
     let usesTintedRendering: Bool
 
     var body: some View {
-        Link(destination: URL(string: action.url)!) {
-            VStack(spacing: 6) {
-                Image(systemName: action.symbol)
-                    .font(.system(size: 20, weight: .semibold))
-                Text(action.shortTitle)
-                    .font(.system(size: 11, weight: .medium))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+        if let url = URL(string: action.url) {
+            Link(destination: url) {
+                VStack(spacing: 6) {
+                    Image(systemName: action.symbol)
+                        .font(.system(size: 20, weight: .semibold))
+                    Text(action.shortTitle)
+                        .font(.system(size: 11, weight: .medium))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                }
+                .foregroundStyle(accentColor.opacity(0.95))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding(6)
+                .background(
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .fill(buttonBackground)
+                        .modifier(WidgetAccentBackgroundModifier())
+                )
+                .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
             }
-            .foregroundStyle(accentColor.opacity(0.95))
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding(6)
-            .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(buttonBackground)
-                    .modifier(WidgetAccentBackgroundModifier())
-            )
-            .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
+            .accessibilityLabel(action.title)
+            .buttonStyle(.plain)
         }
-        .accessibilityLabel(action.title)
-        .buttonStyle(.plain)
     }
 }
 
@@ -243,24 +241,26 @@ struct MediumActionLayout: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            Link(destination: URL(string: WidgetQuickAction.chat.url)!) {
-                HStack(spacing: 12) {
-                    widgetLogo
-                    Text(WidgetLocalization.string("widget_medium_prompt_title"))
-                        .font(.system(size: 18, weight: .medium, design: .rounded))
-                        .foregroundStyle(Color.white.opacity(0.95))
-                    Spacer()
+            if let chatUrl = URL(string: WidgetQuickAction.chat.url) {
+                Link(destination: chatUrl) {
+                    HStack(spacing: 12) {
+                        WidgetLogo()
+                        Text(WidgetLocalization.string("widget_medium_prompt_title"))
+                            .font(.system(size: 18, weight: .medium, design: .rounded))
+                            .foregroundStyle(Color.white.opacity(0.95))
+                        Spacer()
+                    }
+                    .padding(.horizontal, 20)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
+                    .background(
+                        Capsule()
+                            .fill(accentColor)
+                            .modifier(WidgetAccentBackgroundModifier())
+                    )
                 }
-                .padding(.horizontal, 20)
-                .frame(maxWidth: .infinity)
-                .frame(height: 56)
-                .background(
-                    Capsule()
-                        .fill(accentColor)
-                        .modifier(WidgetAccentBackgroundModifier())
-                )
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
 
             HStack(spacing: 8) {
                 CircularIconButton(
@@ -299,13 +299,6 @@ struct MediumActionLayout: View {
         }
     }
 
-    private var widgetLogo: some View {
-        Image(decorative: "WiconIcon")
-            .renderingMode(.original)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 28, height: 28)
-    }
 }
 
 // MARK: - Circular Icon Button (ChatGPT Style)
@@ -319,20 +312,22 @@ struct CircularIconButton: View {
     let usesTintedRendering: Bool
 
     var body: some View {
-        Link(destination: URL(string: url)!) {
-            Image(systemName: symbol)
-                .font(.system(size: 24, weight: .medium))
-                .foregroundStyle(accentColor.opacity(0.95))
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .fill(buttonBackground)
-                        .modifier(WidgetAccentBackgroundModifier())
-                )
-                .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
+        if let linkUrl = URL(string: url) {
+            Link(destination: linkUrl) {
+                Image(systemName: symbol)
+                    .font(.system(size: 24, weight: .medium))
+                    .foregroundStyle(accentColor.opacity(0.95))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .fill(buttonBackground)
+                            .modifier(WidgetAccentBackgroundModifier())
+                    )
+                    .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
+            }
+            .accessibilityLabel(label)
+            .buttonStyle(.plain)
         }
-        .accessibilityLabel(label)
-        .buttonStyle(.plain)
     }
 }
 
@@ -365,19 +360,20 @@ private struct WidgetAccentForegroundModifier: ViewModifier {
 struct JyotiGPTAccessoryWidgetEntryView: View {
     let action: WidgetQuickAction
     @Environment(\.widgetFamily) private var family
-    @Environment(\.widgetRenderingMode) private var widgetRenderingMode
+    @Environment(\.self) private var environment
 
     private var usesTintedRendering: Bool {
         if #available(iOS 18.0, *) {
-            return widgetRenderingMode == .accented
+            return environment.widgetRenderingMode == .accented
         }
 
         return false
     }
 
     var body: some View {
-        Link(destination: URL(string: action.url)!) {
-            switch family {
+        if let url = URL(string: action.url) {
+            Link(destination: url) {
+                switch family {
             case .accessoryCircular:
                 Image(systemName: action.symbol)
                     .font(.system(size: 18, weight: .semibold))
@@ -401,9 +397,10 @@ struct JyotiGPTAccessoryWidgetEntryView: View {
                     .font(.system(size: 12, weight: .semibold))
                     .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
             }
+            }
+            .accessibilityLabel(action.title)
+            .buttonStyle(.plain)
         }
-        .accessibilityLabel(action.title)
-        .buttonStyle(.plain)
     }
 }
 
