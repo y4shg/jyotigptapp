@@ -96,7 +96,7 @@ struct JyotiGPTappProvider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<JyotiGPTappEntry>) -> Void) {
         let entry = JyotiGPTappEntry(date: Date())
-        let timeline = Timeline(entries: [entry], policy: .never)
+        let timeline = Timeline(entries: [entry], policy: .atEnd)
         completion(timeline)
     }
 }
@@ -174,6 +174,7 @@ struct JyotiGPTappWidgetEntryView: View {
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 28, height: 28)
+            .widgetAccentedRenderingMode(.accentedDesaturated)
     }
 }
 
@@ -214,6 +215,7 @@ struct SquareActionButton: View {
             VStack(spacing: 6) {
                 Image(systemName: action.symbol)
                     .font(.system(size: 20, weight: .semibold))
+                    .widgetAccentedRenderingMode(.accentedDesaturated)
                 Text(action.shortTitle)
                     .font(.system(size: 11, weight: .medium))
                     .lineLimit(1)
@@ -227,7 +229,6 @@ struct SquareActionButton: View {
                     .fill(buttonBackground)
                     .modifier(WidgetAccentBackgroundModifier())
             )
-            .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
         }
         .accessibilityLabel(action.title)
         .buttonStyle(.plain)
@@ -305,6 +306,7 @@ struct MediumActionLayout: View {
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 28, height: 28)
+            .widgetAccentedRenderingMode(.accentedDesaturated)
     }
 }
 
@@ -322,6 +324,7 @@ struct CircularIconButton: View {
         Link(destination: URL(string: url)!) {
             Image(systemName: symbol)
                 .font(.system(size: 24, weight: .medium))
+                .widgetAccentedRenderingMode(.accentedDesaturated)
                 .foregroundStyle(accentColor.opacity(0.95))
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(
@@ -329,7 +332,6 @@ struct CircularIconButton: View {
                         .fill(buttonBackground)
                         .modifier(WidgetAccentBackgroundModifier())
                 )
-                .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
         }
         .accessibilityLabel(label)
         .buttonStyle(.plain)
@@ -376,34 +378,33 @@ struct JyotiGPTAccessoryWidgetEntryView: View {
     }
 
     var body: some View {
-        Link(destination: URL(string: action.url)!) {
+        Group {
             switch family {
             case .accessoryCircular:
                 Image(systemName: action.symbol)
                     .font(.system(size: 18, weight: .semibold))
-                    .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
+                    .widgetAccentedRenderingMode(.accentedDesaturated)
             case .accessoryInline:
                 Label(action.shortTitle, systemImage: action.symbol)
                     .font(.system(size: 12, weight: .semibold))
-                    .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
+                    .widgetAccentedRenderingMode(.accentedDesaturated)
             case .accessoryRectangular:
                 HStack(spacing: 6) {
                     Image(systemName: action.symbol)
                         .font(.system(size: 14, weight: .semibold))
+                        .widgetAccentedRenderingMode(.accentedDesaturated)
                     Text(action.title)
                         .font(.system(size: 12, weight: .semibold))
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
                 }
-                .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
             default:
                 Text(action.shortTitle)
                     .font(.system(size: 12, weight: .semibold))
-                    .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
             }
         }
+        .widgetURL(URL(string: action.url)!)
         .accessibilityLabel(action.title)
-        .buttonStyle(.plain)
     }
 }
 
@@ -414,13 +415,8 @@ struct JyotiGPTappWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: JyotiGPTappProvider()) { entry in
-            if #available(iOS 17.0, *) {
-                JyotiGPTappWidgetEntryView(entry: entry)
-                    .containerBackground(Color("WidgetBackground"), for: .widget)
-            } else {
-                JyotiGPTappWidgetEntryView(entry: entry)
-                    .background(Color("WidgetBackground"))
-            }
+            JyotiGPTappWidgetEntryView(entry: entry)
+                .containerBackground(.fill.tertiary, for: .widget)
         }
         .configurationDisplayName(WidgetLocalization.string("widget_display_name"))
         .description(WidgetLocalization.string("widget_gallery_description"))
@@ -435,6 +431,7 @@ private func accessoryConfiguration(
 ) -> some WidgetConfiguration {
     StaticConfiguration(kind: kind, provider: JyotiGPTappProvider()) { entry in
         JyotiGPTAccessoryWidgetEntryView(action: action)
+            .containerBackground(.fill.tertiary, for: .widget)
     }
     .configurationDisplayName(action.title)
     .description(

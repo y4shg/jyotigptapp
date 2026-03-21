@@ -12,11 +12,9 @@ import SwiftUI
 struct JyotiGPTappWidgetBundle: WidgetBundle {
     var body: some Widget {
         JyotiGPTappWidget()
-        if #available(iOS 16.0, *) {
-            JyotiGPTAccessoryOpenWidget()
-            JyotiGPTAccessoryChatWidget()
-            JyotiGPTAccessoryVoiceWidget()
-            JyotiGPTAccessoryImageWidget()
-        }
+        JyotiGPTAccessoryOpenWidget()
+        JyotiGPTAccessoryChatWidget()
+        JyotiGPTAccessoryVoiceWidget()
+        JyotiGPTAccessoryImageWidget()
     }
 }
