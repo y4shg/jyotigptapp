@@ -13,10 +13,10 @@ struct JyotiGPTappWidgetBundle: WidgetBundle {
     var body: some Widget {
         JyotiGPTappWidget()
         if #available(iOS 16.0, *) {
-            JyotiGPTAccessoryWidget(action: .openApp)
-            JyotiGPTAccessoryWidget(action: .chat)
-            JyotiGPTAccessoryWidget(action: .voice)
-            JyotiGPTAccessoryWidget(action: .image)
+            JyotiGPTAccessoryOpenWidget()
+            JyotiGPTAccessoryChatWidget()
+            JyotiGPTAccessoryVoiceWidget()
+            JyotiGPTAccessoryImageWidget()
         }
     }
 }

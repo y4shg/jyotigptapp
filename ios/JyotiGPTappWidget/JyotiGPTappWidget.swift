@@ -421,20 +421,55 @@ struct JyotiGPTappWidget: Widget {
 }
 
 @available(iOS 16.0, *)
-struct JyotiGPTAccessoryWidget: Widget {
-    let action: WidgetQuickAction
+private func accessoryConfiguration(
+    action: WidgetQuickAction,
+    kind: String
+) -> some WidgetConfiguration {
+    StaticConfiguration(kind: kind, provider: JyotiGPTappProvider()) { entry in
+        JyotiGPTAccessoryWidgetEntryView(action: action)
+    }
+    .configurationDisplayName(action.title)
+    .description("Open \(action.title.lowercased()) in JyotiGPT.")
+    .supportedFamilies([
+        .accessoryCircular,
+        .accessoryInline,
+        .accessoryRectangular,
+    ])
+}
+
+@available(iOS 16.0, *)
+struct JyotiGPTAccessoryOpenWidget: Widget {
+    private let action = WidgetQuickAction.openApp
 
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "JyotiGPTAccessory\(action.id)", provider: JyotiGPTappProvider()) { entry in
-            JyotiGPTAccessoryWidgetEntryView(action: action)
-        }
-        .configurationDisplayName(action.title)
-        .description("Open \(action.title.lowercased()) in JyotiGPT.")
-        .supportedFamilies([
-            .accessoryCircular,
-            .accessoryInline,
-            .accessoryRectangular,
-        ])
+        accessoryConfiguration(action: action, kind: "JyotiGPTAccessoryOpen")
+    }
+}
+
+@available(iOS 16.0, *)
+struct JyotiGPTAccessoryChatWidget: Widget {
+    private let action = WidgetQuickAction.chat
+
+    var body: some WidgetConfiguration {
+        accessoryConfiguration(action: action, kind: "JyotiGPTAccessoryChat")
+    }
+}
+
+@available(iOS 16.0, *)
+struct JyotiGPTAccessoryVoiceWidget: Widget {
+    private let action = WidgetQuickAction.voice
+
+    var body: some WidgetConfiguration {
+        accessoryConfiguration(action: action, kind: "JyotiGPTAccessoryVoice")
+    }
+}
+
+@available(iOS 16.0, *)
+struct JyotiGPTAccessoryImageWidget: Widget {
+    private let action = WidgetQuickAction.image
+
+    var body: some WidgetConfiguration {
+        accessoryConfiguration(action: action, kind: "JyotiGPTAccessoryImage")
     }
 }
 
