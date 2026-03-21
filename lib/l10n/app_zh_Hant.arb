@@ -903,5 +903,157 @@
   "temporaryChatByDefault": "Temporary Chat by Default",
   "temporaryChatByDefaultDescription": "New chats won't be saved to history unless you choose to save them",
   "chatSaved": "Chat saved to history",
-  "chatSaveFailed": "Failed to save chat"
+  "chatSaveFailed": "聊天儲存失敗",
+  "profileSectionTitle": "個人資料",
+  "@profileSectionTitle": {
+    "description": "Section header for profile-related settings."
+  },
+  "profilePictureTitle": "個人頭像",
+  "@profilePictureTitle": {
+    "description": "Title for the profile photo settings tile."
+  },
+  "profilePictureSubtitle": "為此裝置選擇新照片。",
+  "@profilePictureSubtitle": {
+    "description": "Subtitle describing the local profile photo picker action."
+  },
+  "displayNameTitle": "顯示名稱",
+  "@displayNameTitle": {
+    "description": "Title for the display name settings tile."
+  },
+  "displayNameUnset": "設定名稱",
+  "@displayNameUnset": {
+    "description": "Subtitle shown when the user has not configured a display name yet."
+  },
+  "emailTitle": "電子郵件",
+  "@emailTitle": {
+    "description": "Title for the email settings tile."
+  },
+  "profileSignedInAccount": "已登入帳戶",
+  "@profileSignedInAccount": {
+    "description": "Fallback subtitle for the signed-in account email tile when no email is available."
+  },
+  "appSectionTitle": "應用程式",
+  "@appSectionTitle": {
+    "description": "Section header for app-level settings."
+  },
+  "themeTitle": "主題",
+  "@themeTitle": {
+    "description": "Label above the theme mode selector on the profile page."
+  },
+  "languageTitle": "語言",
+  "@languageTitle": {
+    "description": "Title for the language settings tile."
+  },
+  "notificationsTitle": "通知",
+  "@notificationsTitle": {
+    "description": "Title for the notifications settings tile."
+  },
+  "notificationsSubtitle": "為此裝置啟用通知與語音通話控制。",
+  "@notificationsSubtitle": {
+    "description": "Subtitle explaining the notifications toggle on the profile page."
+  },
+  "accountSettingsTitle": "帳戶設定",
+  "@accountSettingsTitle": {
+    "description": "Section header for account settings synchronized with the backend."
+  },
+  "accountSoundsTitle": "聲音",
+  "@accountSoundsTitle": {
+    "description": "Title for the account sounds toggle."
+  },
+  "accountSoundsSubtitle": "播放帳戶互動的聲音。",
+  "@accountSoundsSubtitle": {
+    "description": "Subtitle for the account sounds toggle."
+  },
+  "accountSettingsLoadError": "目前無法載入帳戶設定。",
+  "@accountSettingsLoadError": {
+    "description": "Error text shown when account settings cannot be loaded."
+  },
+  "accountSettingsLoading": "正在載入帳戶設定...",
+  "@accountSettingsLoading": {
+    "description": "Progress text shown while account settings are loading."
+  },
+  "hapticsOffTitle": "觸覺回饋關閉",
+  "@hapticsOffTitle": {
+    "description": "Title shown when tapping the tile will disable haptics."
+  },
+  "hapticsOnTitle": "觸覺回饋開啟",
+  "@hapticsOnTitle": {
+    "description": "Title shown when tapping the tile will enable haptics."
+  },
+  "hapticsOffSubtitle": "在此裝置上關閉觸覺回饋。",
+  "@hapticsOffSubtitle": {
+    "description": "Subtitle shown when haptics are currently enabled."
+  },
+  "hapticsOnSubtitle": "在此裝置上開啟觸覺回饋。",
+  "@hapticsOnSubtitle": {
+    "description": "Subtitle shown when haptics are currently disabled."
+  },
+  "changeDisplayNameTitle": "變更顯示名稱",
+  "@changeDisplayNameTitle": {
+    "description": "Dialog title for editing the local display name."
+  },
+  "changeDisplayNameMessage": "更新應用程式中顯示的名稱。",
+  "@changeDisplayNameMessage": {
+    "description": "Dialog message for the display name editor."
+  },
+  "displayNamePlaceholder": "你的名字",
+  "@displayNamePlaceholder": {
+    "description": "Placeholder text for the display name input."
+  },
+  "profileUpdateFailed": "目前無法更新你的個人資料。",
+  "@profileUpdateFailed": {
+    "description": "Snackbar shown when a local profile update cannot be saved."
+  },
+  "displayNameUpdatedLocalOnly": "顯示名稱已在此裝置更新。伺服器個人資料同步尚不可用。",
+  "@displayNameUpdatedLocalOnly": {
+    "description": "Snackbar shown after updating the display name locally."
+  },
+  "profilePictureUpdatedLocalOnly": "個人頭像已在此裝置更新。伺服器個人資料同步尚不可用。",
+  "@profilePictureUpdatedLocalOnly": {
+    "description": "Snackbar shown after updating the profile picture locally."
+  },
+  "languageChangedLocalOnly": "語言已在本機變更，但帳戶同步失敗。",
+  "@languageChangedLocalOnly": {
+    "description": "Snackbar shown when the language changes locally but backend sync fails."
+  },
+  "languageUpdated": "語言已更新。",
+  "@languageUpdated": {
+    "description": "Snackbar shown after the language preference sync succeeds."
+  },
+  "systemDefaultLanguageOption": "系統預設",
+  "@systemDefaultLanguageOption": {
+    "description": "Option label for following the operating system language."
+  },
+  "appLanguageTitle": "應用程式語言",
+  "@appLanguageTitle": {
+    "description": "Title for the language picker sheet."
+  },
+  "notificationsNotEnabledMessage": "未啟用通知。如有需要，請檢查系統設定。",
+  "@notificationsNotEnabledMessage": {
+    "description": "Snackbar shown when the user denies notification permissions."
+  },
+  "notificationsEnabledMessage": "通知已啟用。",
+  "@notificationsEnabledMessage": {
+    "description": "Snackbar shown after notifications are enabled successfully."
+  },
+  "settingUpdateFailed": "目前無法更新{setting}。",
+  "@settingUpdateFailed": {
+    "description": "Snackbar shown when a backend profile setting update fails.",
+    "placeholders": {
+      "setting": {
+        "type": "String",
+        "example": "notifications"
+      }
+    }
+  },
+  "systemDefaultLanguageLabel": "系統預設（{language}）",
+  "@systemDefaultLanguageLabel": {
+    "description": "Label for the current system language option in the language picker.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  }
 }

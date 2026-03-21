@@ -4,12 +4,11 @@
     android:color="#40FFFFFF">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/widget_primary_dark_fallback" />
+            <solid android:color="@color/widget_primary_fallback" />
             <corners android:radius="24dp" />
         </shape>
     </item>
 </ripple>
-
 
 
 

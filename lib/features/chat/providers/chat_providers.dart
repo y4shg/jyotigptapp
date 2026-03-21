@@ -1004,7 +1004,7 @@ void startNewChat(dynamic ref) {
   // Clear messages
   ref.read(chatMessagesProvider.notifier).clearMessages();
 
-  // Clear context attachments (web pages, YouTube, knowledge base docs)
+  // Clear context attachments (knowledge base docs)
   ref.read(contextAttachmentsProvider.notifier).clear();
 
   // Clear any pending folder selection
@@ -1205,7 +1205,7 @@ Future<Map<String, dynamic>> _buildMessagePayloadWithAttachments({
           // JyotiGPT now stores just the file ID, not the full URL path
           'url': attachmentId,
           'name': fileName,
-          'size': ?fileSize,
+          if (fileSize != null) 'size': fileSize,
         });
       }
     } catch (_) {
@@ -1241,39 +1241,6 @@ List<Map<String, dynamic>> _contextAttachmentsToFiles(
 ) {
   return attachments.map((attachment) {
     switch (attachment.type) {
-      case ChatContextAttachmentType.web:
-        // Web pages use type 'text' with file data nested under 'file' key
-        return {
-          'type': 'text',
-          'name': attachment.url ?? attachment.displayName,
-          if (attachment.url != null) 'url': attachment.url,
-          if (attachment.collectionName != null)
-            'collection_name': attachment.collectionName,
-          'file': {
-            'data': {'content': attachment.content ?? ''},
-            'meta': {
-              'name': attachment.displayName,
-              if (attachment.url != null) 'source': attachment.url,
-            },
-          },
-        };
-      case ChatContextAttachmentType.youtube:
-        // YouTube uses type 'text' with context 'full' for full transcript
-        return {
-          'type': 'text',
-          'name': attachment.url ?? attachment.displayName,
-          if (attachment.url != null) 'url': attachment.url,
-          'context': 'full',
-          if (attachment.collectionName != null)
-            'collection_name': attachment.collectionName,
-          'file': {
-            'data': {'content': attachment.content ?? ''},
-            'meta': {
-              'name': attachment.displayName,
-              if (attachment.url != null) 'source': attachment.url,
-            },
-          },
-        };
       case ChatContextAttachmentType.knowledge:
         // Knowledge base files use type 'file' with id for lookup
         final map = <String, dynamic>{
@@ -1910,8 +1877,8 @@ Future<void> _sendMessageInternal(
           // JyotiGPT now stores just the file ID, not the full URL path
           // The frontend resolves it when displaying
           'url': fileId,
-          'size': ?fileSize,
-          'collection_name': ?collectionName,
+          if (fileSize != null) 'size': fileSize,
+          if (collectionName != null) 'collection_name': collectionName,
           if (contentType.isNotEmpty) 'content_type': contentType,
         };
       } catch (_) {

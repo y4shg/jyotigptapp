@@ -3,7 +3,6 @@ import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:jyotigptapp/l10n/app_localizations.dart';
 import '../../../core/widgets/error_boundary.dart';
 import '../../../shared/widgets/optimized_list.dart';
-import '../../../shared/theme/jyotigptapp_input_styles.dart';
 import '../../../shared/theme/theme_extensions.dart';
 import '../../../shared/utils/glass_colors.dart';
 import 'package:flutter/services.dart';
@@ -81,19 +80,8 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     return fileSize <= (maxSizeMB * 1024 * 1024);
   }
 
-  void startNewChat() {
-    // Clear current conversation
-    ref.read(chatMessagesProvider.notifier).clearMessages();
-    ref.read(activeConversationProvider.notifier).clear();
-
-    // Clear context attachments (web pages, YouTube, knowledge base docs)
-    ref.read(contextAttachmentsProvider.notifier).clear();
-
-    // Clear any pending folder selection
-    ref.read(pendingFolderIdProvider.notifier).clear();
-
-    // Reset to default model for new conversations (fixes #296)
-    restoreDefaultModel(ref);
+  void _startNewChat() {
+    startNewChat(ref);
 
     // Scroll to top
     if (_scrollController.hasClients) {
@@ -554,171 +542,9 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     );
   }
 
-  /// Checks if a URL is a YouTube URL.
-  bool _isYoutubeUrl(String url) {
-    return url.startsWith('https://www.youtube.com') ||
-        url.startsWith('https://youtu.be') ||
-        url.startsWith('https://youtube.com') ||
-        url.startsWith('https://m.youtube.com');
-  }
-
-  Future<void> _promptAttachWebpage() async {
-    final api = ref.read(apiServiceProvider);
-    if (api == null) return;
-    final l10n = AppLocalizations.of(context)!;
-    String url = '';
-    bool submitting = false;
-    await showDialog<void>(
-      context: context,
-      builder: (dialogContext) {
-        String? errorText;
-        return StatefulBuilder(
-          builder: (innerContext, setState) {
-            void setError(String? msg) {
-              setState(() {
-                errorText = msg;
-              });
-            }
-
-            return ThemedDialogs.buildBase(
-              context: innerContext,
-              title: l10n.webPage,
-              content: SizedBox(
-                width: 400,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Paste a URL to ingest its content into the chat.',
-                      style: Theme.of(innerContext).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 12),
-                    AdaptiveTextField(
-                      placeholder: 'https://example.com/article',
-                      decoration: innerContext.jyotigptappInputStyles
-                          .standard(
-                            hint: 'https://example.com/article',
-                            error: errorText,
-                          )
-                          .copyWith(labelText: 'Webpage URL'),
-                      onChanged: (value) {
-                        url = value;
-                        if (errorText != null) setError(null);
-                      },
-                      autofocus: true,
-                      keyboardType: TextInputType.url,
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                AdaptiveButton(
-                  onPressed: submitting
-                      ? null
-                      : () {
-                          Navigator.of(dialogContext).pop();
-                        },
-                  label: l10n.cancel,
-                  style: AdaptiveButtonStyle.plain,
-                ),
-                AdaptiveButton.child(
-                  style: AdaptiveButtonStyle.filled,
-                  onPressed: submitting
-                      ? null
-                      : () async {
-                          final parsed = Uri.tryParse(url.trim());
-                          if (parsed == null ||
-                              !(parsed.isScheme('http') ||
-                                  parsed.isScheme('https'))) {
-                            setError('Enter a valid http(s) URL.');
-                            return;
-                          }
-                          setState(() {
-                            submitting = true;
-                            errorText = null;
-                          });
-                          try {
-                            final trimmedUrl = url.trim();
-                            final isYoutube = _isYoutubeUrl(trimmedUrl);
-
-                            // Use appropriate API based on URL type
-                            final result = isYoutube
-                                ? await api.processYoutube(url: trimmedUrl)
-                                : await api.processWebpage(url: trimmedUrl);
-
-                            final file = (result?['file'] as Map?)
-                                ?.cast<String, dynamic>();
-                            final fileData = (file?['data'] as Map?)
-                                ?.cast<String, dynamic>();
-                            final content =
-                                fileData?['content']?.toString() ?? '';
-                            if (content.isEmpty) {
-                              setError(
-                                isYoutube
-                                    ? 'Could not fetch YouTube transcript.'
-                                    : 'The page had no readable content.',
-                              );
-                              return;
-                            }
-                            final meta = (file?['meta'] as Map?)
-                                ?.cast<String, dynamic>();
-                            final name =
-                                meta?['name']?.toString() ?? parsed.host;
-                            final collectionName = result?['collection_name']
-                                ?.toString();
-
-                            // Add as appropriate type
-                            final notifier = ref.read(
-                              contextAttachmentsProvider.notifier,
-                            );
-                            if (isYoutube) {
-                              notifier.addYoutube(
-                                displayName: name,
-                                content: content,
-                                url: trimmedUrl,
-                                collectionName: collectionName,
-                              );
-                            } else {
-                              notifier.addWeb(
-                                displayName: name,
-                                content: content,
-                                url: trimmedUrl,
-                                collectionName: collectionName,
-                              );
-                            }
-
-                            if (!mounted || !dialogContext.mounted) {
-                              return;
-                            }
-                            Navigator.of(dialogContext).pop();
-                          } catch (_) {
-                            setError('Failed to attach content.');
-                          } finally {
-                            if (mounted) {
-                              setState(() => submitting = false);
-                            }
-                          }
-                        },
-                  child: submitting
-                      ? const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text('Attach'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
   void _handleNewChat() {
     // Start a new chat using the existing function
-    startNewChat();
+    _startNewChat();
 
     // Hide scroll-to-bottom button for a fresh chat
     if (mounted) {
@@ -2248,7 +2074,6 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                                           _handleImageAttachment(
                                             fromCamera: true,
                                           ),
-                                      onWebAttachment: _promptAttachWebpage,
                                       onPastedAttachments:
                                           _handlePastedAttachments,
                                     ),

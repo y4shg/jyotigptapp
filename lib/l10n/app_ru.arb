@@ -903,5 +903,157 @@
   "temporaryChatByDefault": "Temporary Chat by Default",
   "temporaryChatByDefaultDescription": "New chats won't be saved to history unless you choose to save them",
   "chatSaved": "Chat saved to history",
-  "chatSaveFailed": "Failed to save chat"
+  "chatSaveFailed": "Не удалось сохранить чат",
+  "profileSectionTitle": "Профиль",
+  "@profileSectionTitle": {
+    "description": "Section header for profile-related settings."
+  },
+  "profilePictureTitle": "Фото профиля",
+  "@profilePictureTitle": {
+    "description": "Title for the profile photo settings tile."
+  },
+  "profilePictureSubtitle": "Выберите новую фотографию для этого устройства.",
+  "@profilePictureSubtitle": {
+    "description": "Subtitle describing the local profile photo picker action."
+  },
+  "displayNameTitle": "Отображаемое имя",
+  "@displayNameTitle": {
+    "description": "Title for the display name settings tile."
+  },
+  "displayNameUnset": "Укажите имя",
+  "@displayNameUnset": {
+    "description": "Subtitle shown when the user has not configured a display name yet."
+  },
+  "emailTitle": "Электронная почта",
+  "@emailTitle": {
+    "description": "Title for the email settings tile."
+  },
+  "profileSignedInAccount": "Выполнен вход",
+  "@profileSignedInAccount": {
+    "description": "Fallback subtitle for the signed-in account email tile when no email is available."
+  },
+  "appSectionTitle": "Приложение",
+  "@appSectionTitle": {
+    "description": "Section header for app-level settings."
+  },
+  "themeTitle": "Тема",
+  "@themeTitle": {
+    "description": "Label above the theme mode selector on the profile page."
+  },
+  "languageTitle": "Язык",
+  "@languageTitle": {
+    "description": "Title for the language settings tile."
+  },
+  "notificationsTitle": "Уведомления",
+  "@notificationsTitle": {
+    "description": "Title for the notifications settings tile."
+  },
+  "notificationsSubtitle": "Включите уведомления и управление голосовыми вызовами на этом устройстве.",
+  "@notificationsSubtitle": {
+    "description": "Subtitle explaining the notifications toggle on the profile page."
+  },
+  "accountSettingsTitle": "Настройки аккаунта",
+  "@accountSettingsTitle": {
+    "description": "Section header for account settings synchronized with the backend."
+  },
+  "accountSoundsTitle": "Звуки",
+  "@accountSoundsTitle": {
+    "description": "Title for the account sounds toggle."
+  },
+  "accountSoundsSubtitle": "Воспроизводить звуки для действий аккаунта.",
+  "@accountSoundsSubtitle": {
+    "description": "Subtitle for the account sounds toggle."
+  },
+  "accountSettingsLoadError": "Не удалось загрузить настройки аккаунта.",
+  "@accountSettingsLoadError": {
+    "description": "Error text shown when account settings cannot be loaded."
+  },
+  "accountSettingsLoading": "Загрузка настроек аккаунта...",
+  "@accountSettingsLoading": {
+    "description": "Progress text shown while account settings are loading."
+  },
+  "hapticsOffTitle": "Тактильная отдача выключена",
+  "@hapticsOffTitle": {
+    "description": "Title shown when tapping the tile will disable haptics."
+  },
+  "hapticsOnTitle": "Тактильная отдача включена",
+  "@hapticsOnTitle": {
+    "description": "Title shown when tapping the tile will enable haptics."
+  },
+  "hapticsOffSubtitle": "Выключить тактильную отдачу на этом устройстве.",
+  "@hapticsOffSubtitle": {
+    "description": "Subtitle shown when haptics are currently enabled."
+  },
+  "hapticsOnSubtitle": "Включить тактильную отдачу на этом устройстве.",
+  "@hapticsOnSubtitle": {
+    "description": "Subtitle shown when haptics are currently disabled."
+  },
+  "changeDisplayNameTitle": "Изменить отображаемое имя",
+  "@changeDisplayNameTitle": {
+    "description": "Dialog title for editing the local display name."
+  },
+  "changeDisplayNameMessage": "Обновите имя, отображаемое в приложении.",
+  "@changeDisplayNameMessage": {
+    "description": "Dialog message for the display name editor."
+  },
+  "displayNamePlaceholder": "Ваше имя",
+  "@displayNamePlaceholder": {
+    "description": "Placeholder text for the display name input."
+  },
+  "profileUpdateFailed": "Не удалось обновить профиль.",
+  "@profileUpdateFailed": {
+    "description": "Snackbar shown when a local profile update cannot be saved."
+  },
+  "displayNameUpdatedLocalOnly": "Отображаемое имя обновлено на этом устройстве. Синхронизация с сервером пока недоступна.",
+  "@displayNameUpdatedLocalOnly": {
+    "description": "Snackbar shown after updating the display name locally."
+  },
+  "profilePictureUpdatedLocalOnly": "Фото профиля обновлено на этом устройстве. Синхронизация с сервером пока недоступна.",
+  "@profilePictureUpdatedLocalOnly": {
+    "description": "Snackbar shown after updating the profile picture locally."
+  },
+  "languageChangedLocalOnly": "Язык изменен локально, но синхронизация аккаунта не удалась.",
+  "@languageChangedLocalOnly": {
+    "description": "Snackbar shown when the language changes locally but backend sync fails."
+  },
+  "languageUpdated": "Язык обновлен.",
+  "@languageUpdated": {
+    "description": "Snackbar shown after the language preference sync succeeds."
+  },
+  "systemDefaultLanguageOption": "Системный по умолчанию",
+  "@systemDefaultLanguageOption": {
+    "description": "Option label for following the operating system language."
+  },
+  "appLanguageTitle": "Язык приложения",
+  "@appLanguageTitle": {
+    "description": "Title for the language picker sheet."
+  },
+  "notificationsNotEnabledMessage": "Уведомления не включены. При необходимости проверьте настройки системы.",
+  "@notificationsNotEnabledMessage": {
+    "description": "Snackbar shown when the user denies notification permissions."
+  },
+  "notificationsEnabledMessage": "Уведомления включены.",
+  "@notificationsEnabledMessage": {
+    "description": "Snackbar shown after notifications are enabled successfully."
+  },
+  "settingUpdateFailed": "Не удалось обновить {setting}.",
+  "@settingUpdateFailed": {
+    "description": "Snackbar shown when a backend profile setting update fails.",
+    "placeholders": {
+      "setting": {
+        "type": "String",
+        "example": "notifications"
+      }
+    }
+  },
+  "systemDefaultLanguageLabel": "Системный по умолчанию ({language})",
+  "@systemDefaultLanguageLabel": {
+    "description": "Label for the current system language option in the language picker.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  }
 }
