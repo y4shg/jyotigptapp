@@ -104,7 +104,7 @@ jobs:
     # Pin `runs-on` to macos-15 so the workflow keeps using the Xcode 26 image
     # for reproducible builds; update this runner manually when GitHub deprecates
     # it, and re-evaluate the pin periodically alongside Xcode support changes.
-    runs-on: macos-15
+    runs-on: macos-26
     permissions:
       contents: write
 
