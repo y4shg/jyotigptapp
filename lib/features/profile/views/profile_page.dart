@@ -949,29 +949,42 @@ class ProfilePage extends ConsumerWidget {
       return;
     }
 
-    await VoiceCallNotificationService().initialize();
-    final granted = await VoiceCallNotificationService().requestPermissions();
+    final previous =
+        ref.read(appSettingsProvider).voiceCallNotificationsEnabled;
+    final VoiceCallNotificationService service =
+        VoiceCallNotificationService();
+    bool granted;
+    try {
+      await service.initialize();
+      granted = await service.requestPermissions();
+    } catch (error, stackTrace) {
+      DebugLogger.error(
+        'voice-call-notifications-init-failed',
+        scope: 'notifications',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      await settingsNotifier.setVoiceCallNotificationsEnabled(previous);
+      if (context.mounted) {
+        UiUtils.showMessage(
+          context,
+          l10n.notificationsNotEnabledMessage,
+        );
+      }
+      return;
+    }
     if (!context.mounted) {
       return;
     }
 
     if (!granted) {
       await settingsNotifier.setVoiceCallNotificationsEnabled(false);
-      await _updateBackendSetting(
-        context,
-        ref,
-        settings,
-        'enableNotifications',
-        false,
-      );
       UiUtils.showMessage(
         context,
         l10n.notificationsNotEnabledMessage,
       );
       return;
     }
-
-    final previous = ref.read(appSettingsProvider).voiceCallNotificationsEnabled;
     try {
       await _updateBackendSetting(
         context,
@@ -998,7 +1011,7 @@ class ProfilePage extends ConsumerWidget {
     bool value, {
     bool rethrowOnError = false,
   }) async {
-    final resolvedKey = _resolveSettingKey(settings, key);
+    final resolvedKey = _canonicalSettingKey(key);
 
     try {
       await ref.read(profileUserSettingsProvider.notifier).updateSetting(
@@ -1022,13 +1035,13 @@ class ProfilePage extends ConsumerWidget {
     }
   }
 
-  String _resolveSettingKey(Map<String, dynamic> settings, String key) {
-    for (final candidate in _settingKeyCandidates(key)) {
-      if (settings.containsKey(candidate)) {
-        return candidate;
-      }
-    }
-    return key;
+  String _canonicalSettingKey(String key) {
+    return switch (key) {
+      'enableNotifications' => 'enable_notifications',
+      'enableSounds' => 'enable_sounds',
+      'hapticFeedback' => 'haptic_feedback',
+      _ => key,
+    };
   }
 
   String _settingLabel(

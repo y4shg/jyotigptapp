@@ -14,6 +14,14 @@
 "widget_action_image_title" = "Image";
 "widget_action_image_short_title" = "Image";
 
+"widget_action_camera_id" = "camera";
+"widget_action_camera_title" = "Camera";
+"widget_action_camera_short_title" = "Camera";
+
+"widget_action_clipboard_id" = "clipboard";
+"widget_action_clipboard_title" = "Clipboard";
+"widget_action_clipboard_short_title" = "Clipboard";
+
 "widget_medium_prompt_title" = "Ask JyotiGPT";
 "widget_medium_open_camera" = "Open Camera";
 "widget_medium_open_photos" = "Open Photos";

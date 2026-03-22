@@ -5,6 +5,7 @@ part 'user_settings.g.dart';
 
 @freezed
 sealed class UserSettings with _$UserSettings {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory UserSettings({
     // Chat preferences
     @Default(true) bool showReadReceipts,

@@ -1,2 +1,2 @@
 Rollback: reverted commit 9f118da that reset pubspec versioning.
-https://github.com/y4shg/jyotigptapp/releases/tag/v26.4.15
+https://github.com/y4shg/jyotigptapp/releases/tag/v26.3.21

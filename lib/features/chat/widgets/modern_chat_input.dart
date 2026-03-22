@@ -75,10 +75,12 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
 
   static const double _composerRadius = AppBorderRadius.card;
   static const double _compactActionSize = 36.0;
-  // Small inset so the button has a hair of breathing room from the capsule
-  // border — purely visual, does NOT create the large gap the old layout had.
-  static const double _compactActionEdgeInset = Spacing.xxs;
+  // Inset keeps buttons from touching the capsule border radius.
+  static const double _compactActionEdgeInset = Spacing.sm;
   static const double _compactActionGap = 4.0;
+  // Pill button dimensions for send / voice-call in compact mode.
+  static const double _pillButtonHeight = 36.0;
+  static const double _pillButtonMinWidth = 56.0;
 
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
@@ -154,12 +156,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
           ref.read(composerHasFocusProvider.notifier).set(hasFocus);
         } catch (_) {}
 
-        // If focus was lost within 500ms of the last text edit, the user was
-        // actively typing and the loss was likely caused by a widget tree
-        // restructure (shell swap, parent rebuild from MeasureSize, etc.).
-        // Only restore when text is non-empty (excludes post-send clear),
-        // the widget is enabled, and autofocus hasn't been explicitly
-        // suppressed (excludes body tap / scroll dismiss).
         if (!hasFocus &&
             widget.enabled &&
             !_expandModalOpen &&
@@ -179,7 +175,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
   @override
   void dispose() {
     // Note: Avoid using ref in dispose as per Riverpod best practices
-    // The focus state will be naturally cleared when the widget is disposed
     _controller.removeListener(_handleComposerChanged);
     _controller.dispose();
     _focusNode.dispose();
@@ -200,11 +195,8 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     }
 
     _pendingFocus = true;
-    // Request focus synchronously if we're already in a safe context,
-    // otherwise defer to next frame
     if (WidgetsBinding.instance.schedulerPhase ==
         SchedulerPhase.persistentCallbacks) {
-      // We're in a build/layout phase, defer to next frame
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         _pendingFocus = false;
@@ -214,7 +206,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
         }
       });
     } else {
-      // Safe to request focus immediately
       _pendingFocus = false;
       _focusNode.requestFocus();
     }
@@ -235,7 +226,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
   @override
   void didUpdateWidget(covariant ModernChatInput oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Avoid auto-focusing when becoming enabled; wait for user intent
     if (!widget.enabled && oldWidget.enabled) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted || _isDeactivated) return;
@@ -261,33 +251,25 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     }
   }
 
-  /// Handles content insertion from keyboard/clipboard (images, files).
-  ///
-  /// This is called when the user pastes rich content into the text field
-  /// on iOS and Android.
   Future<void> _handleContentInserted(KeyboardInsertedContent content) async {
     if (!widget.enabled) return;
 
-    // Check if we have a callback to handle pasted attachments
     final onPasted = widget.onPastedAttachments;
     if (onPasted == null) return;
 
     final mimeType = content.mimeType;
     final data = content.data;
 
-    // Only process image content
     if (!_clipboardService.isSupportedImageType(mimeType)) {
       return;
     }
 
-    // Check if we have actual data
     if (data == null || data.isEmpty) {
       return;
     }
 
     PlatformUtils.lightHaptic();
 
-    // Create attachment from pasted image data
     String? suggestedName;
     final uriString = content.uri;
     if (uriString.isNotEmpty) {
@@ -311,10 +293,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     }
   }
 
-  /// Handles pasting images/files from clipboard with pre-loaded image data.
-  ///
-  /// This avoids a second clipboard read by using data already fetched when
-  /// building the context menu.
   Future<void> _handleClipboardPasteWithData(Uint8List imageData) async {
     if (!widget.enabled) return;
 
@@ -419,7 +397,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
       editableTextState.contextMenuButtonItems,
     );
 
-    // Only add "Paste Image" if we have a callback for pasted attachments
     if (widget.onPastedAttachments == null) {
       return AdaptiveTextSelectionToolbar.buttonItems(
         anchors: editableTextState.contextMenuAnchors,
@@ -434,8 +411,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
         final hasImage = imageData != null && imageData.isNotEmpty;
 
         if (hasImage) {
-          // Avoid duplicating any platform or framework-provided image paste
-          // action that is already present in the button list.
           final pasteImageLabel =
               AppLocalizations.of(context)?.pasteImage ?? 'Paste Image';
           final alreadyHasPasteImage = buttonItems.any(
@@ -445,23 +420,18 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
           );
 
           if (!alreadyHasPasteImage) {
-            // Find the index of the standard Paste button to insert after it
             final pasteIndex = buttonItems.indexWhere(
               (item) => item.type == ContextMenuButtonType.paste,
             );
 
-            // Capture imageData in closure to avoid re-reading clipboard
             final pasteImageItem = ContextMenuButtonItem(
               label: pasteImageLabel,
               onPressed: () {
-                // Close the context menu first
                 ContextMenuController.removeAny();
-                // Use the captured imageData directly
                 _handleClipboardPasteWithData(imageData);
               },
             );
 
-            // Insert after Paste if found, otherwise add at the end
             if (pasteIndex >= 0) {
               buttonItems.insert(pasteIndex + 1, pasteImageItem);
             } else {
@@ -800,8 +770,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
       isScrollControlled: true,
       builder: (modalContext) {
         return ModalSheetSafeArea(
-          // Use StatefulBuilder to manage selectedBaseId locally so that
-          // selecting a knowledge base triggers a proper rebuild.
           child: StatefulBuilder(
             builder: (statefulContext, setModalState) {
               return Consumer(
@@ -1298,8 +1266,10 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
       ],
     ];
 
-    // For compact mode, render text field shell with action buttons overlaid
-    // flush against the trailing edge of the capsule.
+    // ── COMPACT MODE ──────────────────────────────────────────────────────────
+    // The action overlay is placed in an OUTER Stack so it spans the full
+    // capsule width. The text field sits in a padded Container inside that
+    // Stack, reserving space on the right so text never slides under the buttons.
     if (showCompactComposer) {
       final compactActions = _CompactComposerActions(
         hasText: _hasText,
@@ -1317,9 +1287,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
         buildInlineMicAction: _buildInlineMicAction,
       );
 
-      // Reserve space on the right so text never slides under the buttons.
-      // The action overlay is placed in an OUTER Stack (below) so it spans
-      // the full capsule width — not the padded inner area.
       final double trailingActionInset = compactActions.trailingActionInset;
       final double expandAffordanceInset =
           (_showExpandButton && !_expandModalOpen)
@@ -1328,8 +1295,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
       final double contentRightInset =
           trailingActionInset + expandAffordanceInset;
 
-      // Inner widget: only the text field with left/right padding to keep
-      // text clear of the buttons. No Stack here — the overlay lives outside.
+      // Text field only — padded so text stays clear of the button overlay.
       final Widget textFieldPadded = Container(
         padding: EdgeInsets.fromLTRB(
           Spacing.md,
@@ -1352,8 +1318,8 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
         ),
       );
 
-      // Outer Stack: the action overlay spans the FULL capsule width so
-      // buttons sit flush against the trailing edge of the glass capsule.
+      // Outer Stack: action overlay covers the full capsule width so buttons
+      // sit flush against the trailing edge of the glass capsule.
       final Widget textFieldContent = Stack(
         clipBehavior: Clip.none,
         children: [
@@ -1475,7 +1441,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
       );
     }
 
-    // For expanded mode with quick pills, use the full shell.
+    // ── EXPANDED MODE (quick pills visible) ───────────────────────────────────
     final shellContent = ConstrainedBox(
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.4,
@@ -1544,12 +1510,9 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     return GestureDetector(
       key: _textFieldKey,
       behavior: HitTestBehavior.opaque,
-      // Exclude from semantics so screen readers interact directly with the
-      // TextField, which provides its own accessibility via hintText.
       excludeFromSemantics: true,
       onTap: () {
         if (!widget.enabled) return;
-        // Explicit user intent to focus: re-enable autofocus and focus
         try {
           ref.read(composerAutofocusEnabledProvider.notifier).set(true);
         } catch (_) {}
@@ -1860,13 +1823,13 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     bool hasUploadsInProgress, {
     bool dense = false,
   }) {
-    final double buttonSize = dense ? 36.0 : TouchTarget.minimum;
+    final double buttonSize = dense ? _pillButtonHeight : TouchTarget.minimum;
 
     // Don't allow sending until all uploads are complete
     final enabled =
         !isGenerating && hasText && widget.enabled && allUploadsComplete;
 
-    // Generating -> STOP variant
+    // Generating -> STOP variant (circle, not pill — it's a momentary action)
     if (isGenerating) {
       return AdaptiveTooltip(
         message: AppLocalizations.of(context)!.stopGenerating,
@@ -1887,7 +1850,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
       );
     }
 
-    // If there's text, render SEND variant; otherwise render VOICE CALL variant
+    // SEND variant — pill shape in dense/compact mode via minWidth
     if (hasText) {
       final onPressed = enabled
           ? () {
@@ -1921,13 +1884,14 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
           key: const ValueKey('primary-btn-send'),
           onPressed: onPressed,
           size: buttonSize,
+          minWidth: dense ? _pillButtonMinWidth : null,
           isProminent: true,
           child: sendChild,
         ),
       );
     }
 
-    // VOICE CALL variant when no text is present
+    // VOICE CALL variant — pill shape in dense/compact mode via minWidth
     final bool enabledVoiceCall = widget.enabled && widget.onVoiceCall != null;
     return AdaptiveTooltip(
       message: 'Voice Call',
@@ -1940,6 +1904,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
               }
             : null,
         size: buttonSize,
+        minWidth: dense ? _pillButtonMinWidth : null,
         isProminent: true,
         child: Icon(
           Platform.isIOS ? CupertinoIcons.waveform : Icons.graphic_eq,
@@ -2053,21 +2018,25 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     );
   }
 
-  /// Builds a circular icon button for the composer.
+  /// Builds a composer icon button. Pass [minWidth] > [size] to get a
+  /// pill/capsule shape instead of a circle.
   ///
-  /// On iOS, uses [AdaptiveButton] with glass style for native appearance.
-  /// On Android/web/desktop, uses a Material-styled circular button with
-  /// theme-consistent colors matching the composer shell.
+  /// On iOS this maps directly to [AdaptiveButton.child] — native glass +
+  /// spring animations, no custom painting needed. Passing a wider [minWidth]
+  /// with [borderRadius] = size/2 gives a true capsule shape.
   Widget _buildComposerIconButton({
     Key? key,
     required VoidCallback? onPressed,
     required Widget child,
     required double size,
+    double? minWidth,
     bool isProminent = false,
     Color? color,
   }) {
     final theme = context.jyotigptappTheme;
     final effectiveColor = color ?? theme.buttonPrimary;
+    final double width = minWidth ?? size;
+    final bool isPill = width > size;
 
     if (!kIsWeb && Platform.isIOS) {
       return AdaptiveButton.child(
@@ -2079,9 +2048,12 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
             : AdaptiveButtonStyle.glass,
         color: effectiveColor,
         size: size > 40 ? AdaptiveButtonSize.large : AdaptiveButtonSize.medium,
-        minSize: Size(size, size),
-        padding: EdgeInsets.zero,
-        borderRadius: BorderRadius.circular(size),
+        minSize: Size(width, size),
+        padding: isPill
+            ? const EdgeInsets.symmetric(horizontal: Spacing.sm)
+            : EdgeInsets.zero,
+        // Fully-rounded radius = capsule/pill when width > height
+        borderRadius: BorderRadius.circular(size / 2),
         useSmoothRectangleBorder: false,
         child: child,
       );
@@ -2091,6 +2063,31 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
         ? effectiveColor
         : theme.surfaceContainerHighest;
     final borderColor = isProminent ? effectiveColor : theme.cardBorder;
+
+    if (isPill) {
+      return SizedBox(
+        key: key,
+        height: size,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minWidth: width),
+          child: Material(
+            color: bgColor,
+            shape: StadiumBorder(
+              side: BorderSide(color: borderColor, width: BorderWidth.thin),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: onPressed,
+              customBorder: const StadiumBorder(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: Spacing.sm),
+                child: Center(child: child),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
 
     return SizedBox(
       key: key,
@@ -2308,6 +2305,8 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     PlatformUtils.selectionHaptic();
   }
 
+  // When on-device STT is unavailable we rely on server transcription.
+
   void _showVoiceUnavailable(String message) {
     if (!mounted) return;
     AdaptiveSnackBar.show(
@@ -2362,10 +2361,12 @@ class _CompactComposerActions extends StatelessWidget {
       IconSize.large + (Spacing.xs * 2);
 
   /// Total width reserved on the trailing side for the action cluster.
-  /// Used by the parent to (a) pad the text field and (b) position the
-  /// expand affordance just inboard of the buttons.
+  /// Primary button is a pill (min 56px), secondary mic is a circle (36px).
   double get trailingActionInset =>
-      (compactActionSize * 2) + compactActionGap + compactActionEdgeInset;
+      _ModernChatInputState._pillButtonMinWidth +
+      compactActionSize +
+      compactActionGap +
+      compactActionEdgeInset;
 
   @override
   Widget build(BuildContext context) {

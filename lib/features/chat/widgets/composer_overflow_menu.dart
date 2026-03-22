@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:io' show Platform;
 
 import '../../../shared/theme/theme_extensions.dart';
+import '../../../shared/utils/platform_utils.dart';
 import '../../../shared/widgets/sheet_handle.dart';
 import '../../../shared/widgets/jyotigptapp_components.dart';
 import '../../../shared/widgets/modal_safe_area.dart';
@@ -166,7 +167,7 @@ class _ComposerOverflowSheetState
         onTap: widget.onFileAttachment == null
             ? null
             : () {
-                HapticFeedback.lightImpact();
+                PlatformUtils.lightHaptic();
                 widget.onFileAttachment!();
               },
       ),
