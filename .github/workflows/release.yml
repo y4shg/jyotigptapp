@@ -133,11 +133,11 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.4'
+          xcode-version: 'latest-stable'
 
         #5 Install a stable xcodeproj gem version that supports Xcode 16 projects
-      - name: Install xcodeproj gem v1.27.0 (supports up to Xcode 16)
-        run: sudo gem install xcodeproj -v '1.27.0'
+      - name: Install xcodeproj
+        run: sudo gem install xcodeproj
 
         #6 Cache CocoaPods
       - name: Cache CocoaPods
