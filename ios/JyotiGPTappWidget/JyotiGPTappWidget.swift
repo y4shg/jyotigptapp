@@ -30,7 +30,7 @@ struct WidgetQuickAction: Identifiable {
 
 extension WidgetQuickAction {
     static let openApp = WidgetQuickAction(
-        id: "widget_action_open_id",
+        id: "open",
         title: WidgetLocalization.string("widget_action_open_title"),
         shortTitle: WidgetLocalization.string("widget_action_open_short_title"),
         symbol: "sparkles",
@@ -38,7 +38,7 @@ extension WidgetQuickAction {
     )
 
     static let chat = WidgetQuickAction(
-        id: "widget_action_chat_id",
+        id: "chat",
         title: WidgetLocalization.string("widget_action_chat_title"),
         shortTitle: WidgetLocalization.string("widget_action_chat_short_title"),
         symbol: "bubble.left.and.bubble.right",
@@ -46,7 +46,7 @@ extension WidgetQuickAction {
     )
 
     static let voice = WidgetQuickAction(
-        id: "widget_action_voice_id",
+        id: "voice",
         title: WidgetLocalization.string("widget_action_voice_title"),
         shortTitle: WidgetLocalization.string("widget_action_voice_short_title"),
         symbol: "waveform",
@@ -54,7 +54,7 @@ extension WidgetQuickAction {
     )
 
     static let image = WidgetQuickAction(
-        id: "widget_action_image_id",
+        id: "image",
         title: WidgetLocalization.string("widget_action_image_title"),
         shortTitle: WidgetLocalization.string("widget_action_image_short_title"),
         symbol: "photo",
@@ -154,12 +154,21 @@ struct JyotiGPTappWidgetEntryView: View {
         Group {
             switch family {
             case .systemSmall:
-                if let url = URL(string: WidgetQuickAction.chat.url) {
+                if #available(iOS 17.0, *) {
                     SmallActionGrid(
                         actions: WidgetQuickAction.smallGrid,
                         accentColor: primaryFillColor,
                         buttonBackground: buttonBackground,
-                        usesTintedRendering: usesTintedRendering
+                        usesTintedRendering: usesTintedRendering,
+                        allowsPerActionLinks: true
+                    )
+                } else if let url = URL(string: WidgetQuickAction.chat.url) {
+                    SmallActionGrid(
+                        actions: WidgetQuickAction.smallGrid,
+                        accentColor: primaryFillColor,
+                        buttonBackground: buttonBackground,
+                        usesTintedRendering: usesTintedRendering,
+                        allowsPerActionLinks: false
                     )
                     .widgetURL(url)
                 } else {
@@ -167,7 +176,8 @@ struct JyotiGPTappWidgetEntryView: View {
                         actions: WidgetQuickAction.smallGrid,
                         accentColor: primaryFillColor,
                         buttonBackground: buttonBackground,
-                        usesTintedRendering: usesTintedRendering
+                        usesTintedRendering: usesTintedRendering,
+                        allowsPerActionLinks: false
                     )
                 }
             default:
@@ -190,6 +200,7 @@ struct SmallActionGrid: View {
     let accentColor: Color
     let buttonBackground: Color
     let usesTintedRendering: Bool
+    let allowsPerActionLinks: Bool
 
     private var columns: [GridItem] {
         [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)]
@@ -198,12 +209,23 @@ struct SmallActionGrid: View {
     var body: some View {
         LazyVGrid(columns: columns, spacing: 8) {
             ForEach(actions) { action in
-                SquareActionButton(
-                    action: action,
-                    accentColor: accentColor,
-                    buttonBackground: buttonBackground,
-                    usesTintedRendering: usesTintedRendering
-                )
+                if allowsPerActionLinks, let url = URL(string: action.url) {
+                    Link(destination: url) {
+                        SquareActionButton(
+                            action: action,
+                            accentColor: accentColor,
+                            buttonBackground: buttonBackground,
+                            usesTintedRendering: usesTintedRendering
+                        )
+                    }
+                } else {
+                    SquareActionButton(
+                        action: action,
+                        accentColor: accentColor,
+                        buttonBackground: buttonBackground,
+                        usesTintedRendering: usesTintedRendering
+                    )
+                }
             }
         }
     }
@@ -417,10 +439,11 @@ struct JyotiGPTappWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: JyotiGPTappProvider()) { entry in
             if #available(iOS 17.0, *) {
-                Text("JyotiGPT")
+                JyotiGPTappWidgetEntryView(entry: entry)
                     .containerBackground(Color("WidgetBackground"), for: .widget)
             } else {
-                Text("JyotiGPT")
+                JyotiGPTappWidgetEntryView(entry: entry)
+                    .padding()
                     .background(Color("WidgetBackground"))
             }
         }
@@ -492,15 +515,25 @@ struct JyotiGPTAccessoryImageWidget: Widget {
 
 struct JyotiGPTappWidget_Previews: PreviewProvider {
     static var previews: some View {
-        JyotiGPTappWidgetEntryView(entry: JyotiGPTappEntry(date: Date()))
-            .previewContext(WidgetPreviewContext(family: .systemMedium))
+        Group {
+            JyotiGPTappWidgetEntryView(entry: JyotiGPTappEntry(date: Date()))
+                .previewContext(WidgetPreviewContext(family: .systemSmall))
+            JyotiGPTappWidgetEntryView(entry: JyotiGPTappEntry(date: Date()))
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+        }
     }
 }
 
 @available(iOS 16.0, *)
 struct JyotiGPTAccessoryWidget_Previews: PreviewProvider {
     static var previews: some View {
-        JyotiGPTAccessoryWidgetEntryView(action: .chat)
-            .previewContext(WidgetPreviewContext(family: .accessoryRectangular))
+        Group {
+            JyotiGPTAccessoryWidgetEntryView(action: .chat)
+                .previewContext(WidgetPreviewContext(family: .systemSmall))
+            JyotiGPTAccessoryWidgetEntryView(action: .chat)
+                .previewContext(
+                    WidgetPreviewContext(family: .accessoryRectangular)
+                )
+        }
     }
 }

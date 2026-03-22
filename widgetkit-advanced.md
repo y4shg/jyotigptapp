@@ -3,7 +3,7 @@
 ## Contents
 
 - [Timeline Strategies](#timeline-strategies)
-- [Push-Based Timeline Reloads (iOS 26+)](#push-based-timeline-reloads-ios-26)
+- [Push-Based Timeline Reloads (iOS 18+)](#push-based-timeline-reloads-ios-18)
 - [Widget URL Handling and Deep Links](#widget-url-handling-and-deep-links)
 - [Intent-Driven Widget Configuration](#intent-driven-widget-configuration)
 - [Multiple Widget Support in WidgetBundle](#multiple-widget-support-in-widgetbundle)
@@ -78,7 +78,9 @@ Each configured widget has a daily refresh limit. Exemptions apply for:
 
 WidgetKit does not impose refresh limits when debugging in Xcode.
 
-## Push-Based Timeline Reloads (iOS 26+)
+## Push-Based Timeline Reloads (iOS 18+)
+
+These APIs are available starting in iOS 18.
 
 ### WidgetPushHandler
 
@@ -129,11 +131,12 @@ struct SmallWidgetView: View {
     let entry: OrderEntry
 
     var body: some View {
+        let url = URL(string: "myapp://orders/\(entry.orderID)")
         VStack {
             Text(entry.orderName)
             Text(entry.status)
         }
-        .widgetURL(URL(string: "myapp://orders/\(entry.orderID)")!)
+        .widgetURL(url)
     }
 }
 ```
@@ -149,7 +152,15 @@ struct MediumWidgetView: View {
     var body: some View {
         VStack {
             ForEach(entry.orders) { order in
-                Link(destination: URL(string: "myapp://orders/\(order.id)")!) {
+                if let url = URL(string: "myapp://orders/\(order.id)") {
+                    Link(destination: url) {
+                        HStack {
+                            Text(order.name)
+                            Spacer()
+                            Text(order.status)
+                        }
+                    }
+                } else {
                     HStack {
                         Text(order.name)
                         Spacer()
@@ -524,7 +535,7 @@ Task {
 }
 ```
 
-### Channel-Based Push (iOS 26+)
+### Channel-Based Push (iOS 18+)
 
 ```swift
 let activity = try Activity.request(
@@ -766,7 +777,7 @@ Task {
             // Activity is running and visible
             break
         case .pending:
-            // Requested but not yet displayed (iOS 26+)
+            // Requested but not yet displayed (iOS 18+)
             break
         case .stale:
             // Content is outdated; update or end
@@ -857,15 +868,15 @@ Task {
 
 ## Apple Documentation Links
 
-- [WidgetKit](https://sosumi.ai/documentation/widgetkit)
-- [ActivityKit](https://sosumi.ai/documentation/activitykit)
-- [TimelineProvider](https://sosumi.ai/documentation/widgetkit/timelineprovider)
-- [AppIntentTimelineProvider](https://sosumi.ai/documentation/widgetkit/appintenttimelineprovider)
-- [ActivityAttributes](https://sosumi.ai/documentation/activitykit/activityattributes)
-- [ActivityConfiguration](https://sosumi.ai/documentation/widgetkit/activityconfiguration)
-- [DynamicIsland](https://sosumi.ai/documentation/widgetkit/dynamicisland)
-- [ControlWidgetButton](https://sosumi.ai/documentation/widgetkit/controlwidgetbutton)
-- [ControlWidgetToggle](https://sosumi.ai/documentation/widgetkit/controlwidgettoggle)
-- [Keeping a widget up to date](https://sosumi.ai/documentation/widgetkit/keeping-a-widget-up-to-date)
-- [Adding StandBy and CarPlay support](https://sosumi.ai/documentation/widgetkit/adding-standby-and-carplay-support-to-your-widget)
-- [Optimizing for accented rendering and Liquid Glass](https://sosumi.ai/documentation/widgetkit/optimizing-your-widget-for-accented-rendering-mode-and-liquid-glass)
+- [WidgetKit](https://developer.apple.com/documentation/widgetkit)
+- [ActivityKit](https://developer.apple.com/documentation/activitykit)
+- [TimelineProvider](https://developer.apple.com/documentation/widgetkit/timelineprovider)
+- [AppIntentTimelineProvider](https://developer.apple.com/documentation/widgetkit/appintenttimelineprovider)
+- [ActivityAttributes](https://developer.apple.com/documentation/activitykit/activityattributes)
+- [ActivityConfiguration](https://developer.apple.com/documentation/widgetkit/activityconfiguration)
+- [DynamicIsland](https://developer.apple.com/documentation/widgetkit/dynamicisland)
+- [ControlWidgetButton](https://developer.apple.com/documentation/widgetkit/creating-controls-to-perform-actions-across-the-system)
+- [ControlWidgetToggle](https://developer.apple.com/documentation/widgetkit/creating-controls-to-perform-actions-across-the-system)
+- [Keeping a widget up to date](https://developer.apple.com/documentation/widgetkit/keeping-a-widget-up-to-date)
+- [Adding StandBy and CarPlay support](https://developer.apple.com/design/human-interface-guidelines/components/widgets/standby) ([CarPlay/Live Activities](https://developer.apple.com/documentation/activitykit/displaying-live-data-with-live-activities))
+- [Optimizing for accented rendering and Liquid Glass](https://developer.apple.com/documentation/widgetkit/optimizing-your-widget-for-accented-rendering-mode-and-liquid-glass)

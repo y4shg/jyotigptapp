@@ -18,7 +18,9 @@ class ProfileUserSettings extends _$ProfileUserSettings {
     }
 
     final settings = await api.getUserSettings();
-    _lastConfirmedSettings = Map<String, dynamic>.from(settings);
+    _lastConfirmedSettings = Map.unmodifiable(
+      Map<String, dynamic>.from(settings),
+    );
     return _lastConfirmedSettings!;
   }
 
@@ -32,6 +34,8 @@ class ProfileUserSettings extends _$ProfileUserSettings {
       state.maybeWhen(data: (value) => value, orElse: () => null) ??
           await future,
     );
+    if (!ref.mounted) return;
+
     final next = Map<String, dynamic>.from(current);
     if (value == null) {
       next.remove(key);
@@ -39,12 +43,14 @@ class ProfileUserSettings extends _$ProfileUserSettings {
       next[key] = value;
     }
 
-    state = AsyncData(next);
+    state = AsyncData(Map.unmodifiable(next));
 
     final write = _pendingWrite.then((_) async {
       try {
         await api.updateUserSettings(next);
-        _lastConfirmedSettings = next;
+        _lastConfirmedSettings = Map.unmodifiable(
+          Map<String, dynamic>.from(next),
+        );
       } catch (error, stackTrace) {
         final currentState = state.asData?.value;
         if (ref.mounted &&

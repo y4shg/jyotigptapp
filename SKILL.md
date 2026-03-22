@@ -147,7 +147,9 @@ struct WeatherProvider: TimelineProvider {
         Task {
             let weather = await WeatherService.shared.fetch()
             let entry = WeatherEntry(date: .now, temperature: weather.temp, condition: weather.condition)
-            let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: .now)!
+            let nextUpdate =
+                Calendar.current.date(byAdding: .hour, value: 1, to: .now) ??
+                .now.addingTimeInterval(3600)
             completion(Timeline(entries: [entry], policy: .after(nextUpdate)))
         }
     }
@@ -494,4 +496,4 @@ are legible at a glance for driver safety.
 ## References
 
 - Advanced guide: `references/widgetkit-advanced.md`
-- Apple docs: [WidgetKit](https://sosumi.ai/documentation/widgetkit) | [ActivityKit](https://sosumi.ai/documentation/activitykit) | [Keeping a widget up to date](https://sosumi.ai/documentation/widgetkit/keeping-a-widget-up-to-date)
+- Apple docs: [WidgetKit](https://developer.apple.com/documentation/widgetkit) | [ActivityKit](https://developer.apple.com/documentation/activitykit) | [Keeping a widget up to date](https://developer.apple.com/documentation/widgetkit/keeping-a-widget-up-to-date)

@@ -15,6 +15,7 @@ import '../../auth/providers/unified_auth_providers.dart';
 import '../../../shared/theme/theme_extensions.dart';
 import '../../chat/providers/chat_providers.dart' as chat;
 import '../../chat/providers/context_attachments_provider.dart';
+import '../../chat/services/file_attachment_service.dart';
 import '../../../core/utils/debug_logger.dart';
 import '../../../core/services/navigation_service.dart';
 import '../../../shared/widgets/jyotigptapp_loading.dart';
@@ -1255,6 +1256,9 @@ class _ChatsDrawerState extends ConsumerState<ChatsDrawer> {
 
     // Clear context attachments (knowledge base docs)
     ref.read(contextAttachmentsProvider.notifier).clear();
+
+    // Clear staged file uploads
+    ref.read(attachedFilesProvider.notifier).clearAll();
 
     // Reset to default model for new conversations (fixes #296)
     chat.restoreDefaultModel(ref);

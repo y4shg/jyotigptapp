@@ -1,24 +1,18 @@
-"widget_action_open_id" = "open";
 "widget_action_open_title" = "Open JyotiGPT";
 "widget_action_open_short_title" = "Open";
 
-"widget_action_chat_id" = "chat";
 "widget_action_chat_title" = "New Chat";
 "widget_action_chat_short_title" = "Chat";
 
-"widget_action_voice_id" = "voice";
 "widget_action_voice_title" = "Voice";
 "widget_action_voice_short_title" = "Voice";
 
-"widget_action_image_id" = "image";
 "widget_action_image_title" = "Image";
 "widget_action_image_short_title" = "Image";
 
-"widget_action_camera_id" = "camera";
 "widget_action_camera_title" = "Camera";
 "widget_action_camera_short_title" = "Camera";
 
-"widget_action_clipboard_id" = "clipboard";
 "widget_action_clipboard_title" = "Clipboard";
 "widget_action_clipboard_short_title" = "Clipboard";
 

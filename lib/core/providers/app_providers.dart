@@ -601,22 +601,21 @@ class CurrentUser extends _$CurrentUser {
 
     if (!isAuthenticated) return null;
 
-    // Fast path: use user already in auth state.
+    final api = ref.watch(apiServiceProvider);
+    final storage = ref.read(optimizedStorageServiceProvider);
+    final cachedUser = await _getCachedUserWithAvatar(storage);
+
+    // Use user already in auth state, but merge cached overrides.
     final authUser = authState.maybeWhen(
       data: (state) => state.user,
       orElse: () => null,
     );
-    if (authUser != null) return authUser;
-
-    // Next: try cached user from storage, then refresh in the background.
-    final api = ref.watch(apiServiceProvider);
-    final storage = ref.read(optimizedStorageServiceProvider);
-    final cachedUser = await _getCachedUserWithAvatar(storage);
+    final mergedUser = _mergeUserWithLocalOverrides(authUser, cachedUser);
     if (api == null) {
-      return cachedUser;
+      return mergedUser;
     }
 
-    if (cachedUser != null) {
+    if (mergedUser != null) {
       final lastRefresh = ref.read(_lastUserRefreshProvider);
       final now = DateTime.now();
       final shouldRefresh =
@@ -625,20 +624,25 @@ class CurrentUser extends _$CurrentUser {
 
       if (shouldRefresh) {
         Future.microtask(() async {
-          final fresh = await _refreshCurrentUser(ref, api);
+          final fresh = await _refreshCurrentUser(
+            ref,
+            api,
+            cachedUser: cachedUser,
+          );
           if (fresh != null && ref.mounted) {
             ref.read(_lastUserRefreshProvider.notifier).set(now);
-            ref.invalidate(currentUserProvider);
+            state = AsyncData(fresh);
           }
         });
       }
-      return cachedUser;
+      return mergedUser;
     }
 
     // Fallback: fetch fresh.
-    final fresh = await _refreshCurrentUser(ref, api);
+    final fresh = await _refreshCurrentUser(ref, api, cachedUser: cachedUser);
     if (fresh != null && ref.mounted) {
       ref.read(_lastUserRefreshProvider.notifier).set(DateTime.now());
+      state = AsyncData(fresh);
     }
     return fresh;
   }
@@ -664,15 +668,41 @@ Future<User?> _getCachedUserWithAvatar(OptimizedStorageService storage) async {
   return cachedUser.copyWith(profileImage: cachedAvatar);
 }
 
-Future<User?> _refreshCurrentUser(Ref ref, ApiService api) async {
+User? _mergeUserWithLocalOverrides(User? baseUser, User? cachedUser) {
+  if (baseUser == null) return cachedUser;
+  if (cachedUser == null) return baseUser;
+
+  final cachedName = cachedUser.name;
+  final cachedAvatar = cachedUser.profileImage;
+  final mergedName =
+      cachedName != null && cachedName.trim().isNotEmpty
+          ? cachedName
+          : baseUser.name;
+  final mergedAvatar =
+      cachedAvatar != null && cachedAvatar.trim().isNotEmpty
+          ? cachedAvatar
+          : baseUser.profileImage;
+
+  return baseUser.copyWith(name: mergedName, profileImage: mergedAvatar);
+}
+
+Future<User?> _refreshCurrentUser(
+  Ref ref,
+  ApiService api, {
+  User? cachedUser,
+}) async {
   try {
     final user = await api.getCurrentUser();
+    final mergedUser = _mergeUserWithLocalOverrides(user, cachedUser);
     final storage = ref.read(optimizedStorageServiceProvider);
-    await storage.saveLocalUser(user);
-    if (user.profileImage != null && user.profileImage!.isNotEmpty) {
-      await storage.saveLocalUserAvatar(user.profileImage);
+    if (mergedUser != null) {
+      await storage.saveLocalUser(mergedUser);
+      final profileImage = mergedUser.profileImage;
+      if (profileImage != null && profileImage.isNotEmpty) {
+        await storage.saveLocalUserAvatar(profileImage);
+      }
     }
-    return user;
+    return mergedUser;
   } catch (_) {
     return null;
   }

@@ -348,7 +348,11 @@ class ProfilePage extends ConsumerWidget {
       orElse: () => const <String, dynamic>{},
     );
     final accountNotificationsEnabled = backendSettings.maybeWhen(
-      data: (settings) => _readBoolSetting(settings, 'enableNotifications'),
+      data: (settings) => _readBoolSetting(
+        settings,
+        'enableNotifications',
+        defaultValue: true,
+      ),
       orElse: () => true,
     );
     final notificationsEnabled =
@@ -1154,8 +1158,15 @@ class ProfilePage extends ConsumerWidget {
       return source;
     }
     if (source is Map) {
+      final sourceMap = Map<String, dynamic>.from(source);
+      final nested = sourceMap['user'];
+      if (nested is Map) {
+        try {
+          return User.fromJson(Map<String, dynamic>.from(nested));
+        } catch (_) {}
+      }
       try {
-        return User.fromJson(Map<String, dynamic>.from(source));
+        return User.fromJson(sourceMap);
       } catch (_) {
         return null;
       }
@@ -1204,7 +1215,17 @@ class ProfilePage extends ConsumerWidget {
 
   String _languageName(Locale locale) {
     final tag = locale.toLanguageTag();
-    return switch (tag) {
+    final languageCode = locale.languageCode;
+    if (languageCode == 'zh') {
+      final scriptCode = locale.scriptCode ?? '';
+      final countryCode = locale.countryCode ?? '';
+      final isTraditional = tag.contains('Hant') ||
+          scriptCode.contains('Hant') ||
+          countryCode == 'TW' ||
+          countryCode == 'HK';
+      return isTraditional ? '繁體中文' : '简体中文';
+    }
+    return switch (languageCode) {
       'de' => 'Deutsch',
       'en' => 'English',
       'es' => 'Español',
@@ -1213,9 +1234,7 @@ class ProfilePage extends ConsumerWidget {
       'ko' => '한국어',
       'nl' => 'Nederlands',
       'ru' => 'Русский',
-      'zh' => '简体中文',
-      'zh-Hant' => '繁體中文',
-      _ => locale.languageCode,
+      _ => languageCode,
     };
   }
 

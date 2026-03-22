@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'dart:io' show Platform;
@@ -46,7 +45,7 @@ class ToggleTile extends StatelessWidget {
       child: JyotiGPTappCard(
         padding: const EdgeInsets.all(Spacing.md),
         onTap: () {
-          HapticFeedback.selectionClick();
+          PlatformUtils.selectionHaptic();
           onToggle();
         },
         child: Row(
@@ -147,7 +146,7 @@ class _ComposerOverflowSheetState
         onTap: widget.onImageAttachment == null
             ? null
             : () {
-                HapticFeedback.lightImpact();
+                PlatformUtils.lightHaptic();
                 widget.onImageAttachment!();
               },
       ),
@@ -157,7 +156,7 @@ class _ComposerOverflowSheetState
         onTap: widget.onCameraCapture == null
             ? null
             : () {
-                HapticFeedback.lightImpact();
+                PlatformUtils.lightHaptic();
                 widget.onCameraCapture!();
               },
       ),
