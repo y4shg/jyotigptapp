@@ -417,10 +417,10 @@ struct JyotiGPTappWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: JyotiGPTappProvider()) { entry in
             if #available(iOS 17.0, *) {
-                JyotiGPTappWidgetEntryView(entry: entry)
+                Text("JyotiGPT")
                     .containerBackground(Color("WidgetBackground"), for: .widget)
             } else {
-                JyotiGPTappWidgetEntryView(entry: entry)
+                Text("JyotiGPT")
                     .background(Color("WidgetBackground"))
             }
         }
