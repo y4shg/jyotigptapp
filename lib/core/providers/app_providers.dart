@@ -671,6 +671,9 @@ Future<User?> _getCachedUserWithAvatar(OptimizedStorageService storage) async {
 User? _mergeUserWithLocalOverrides(User? baseUser, User? cachedUser) {
   if (baseUser == null) return cachedUser;
   if (cachedUser == null) return baseUser;
+  if (!_isSameUserIdentity(baseUser, cachedUser)) {
+    return baseUser;
+  }
 
   final cachedName = cachedUser.name;
   final cachedAvatar = cachedUser.profileImage;
@@ -684,6 +687,18 @@ User? _mergeUserWithLocalOverrides(User? baseUser, User? cachedUser) {
           : baseUser.profileImage;
 
   return baseUser.copyWith(name: mergedName, profileImage: mergedAvatar);
+}
+
+bool _isSameUserIdentity(User baseUser, User cachedUser) {
+  if (baseUser.id.isNotEmpty && cachedUser.id.isNotEmpty) {
+    return baseUser.id == cachedUser.id;
+  }
+  final baseEmail = baseUser.email.trim().toLowerCase();
+  final cachedEmail = cachedUser.email.trim().toLowerCase();
+  if (baseEmail.isNotEmpty && cachedEmail.isNotEmpty) {
+    return baseEmail == cachedEmail;
+  }
+  return false;
 }
 
 Future<User?> _refreshCurrentUser(

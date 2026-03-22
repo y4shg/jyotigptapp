@@ -999,6 +999,17 @@ String? _extractSystemPromptFromSettings(Map<String, dynamic>? settings) {
 
 // Start a new chat (unified function for both "New Chat" button and home screen)
 void startNewChat(dynamic ref) {
+  // Capture current conversation id to cancel any queued work.
+  final activeConversation = ref.read(activeConversationProvider);
+  final conversationId = activeConversation?.id;
+  if (conversationId != null) {
+    try {
+      ref
+          .read(taskQueueProvider.notifier)
+          .cancelByConversation(conversationId);
+    } catch (_) {}
+  }
+
   // Clear active conversation
   ref.read(activeConversationProvider.notifier).clear();
 

@@ -115,6 +115,9 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
   final ClipboardAttachmentService _clipboardService =
       ClipboardAttachmentService();
 
+  bool get _hapticsEnabled =>
+      ref.read(appSettingsProvider).hapticFeedback;
+
   @override
   void initState() {
     super.initState();
@@ -240,7 +243,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     final text = _controller.text.trim();
     if (text.isEmpty || !widget.enabled) return;
 
-    PlatformUtils.lightHaptic();
+    PlatformUtils.lightHaptic(enabled: _hapticsEnabled);
     widget.onSendMessage(text);
     _controller.clear();
     _focusNode.unfocus();
@@ -268,7 +271,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
       return;
     }
 
-    PlatformUtils.lightHaptic();
+    PlatformUtils.lightHaptic(enabled: _hapticsEnabled);
 
     String? suggestedName;
     final uriString = content.uri;
@@ -299,7 +302,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     final onPasted = widget.onPastedAttachments;
     if (onPasted == null) return;
 
-    PlatformUtils.lightHaptic();
+    PlatformUtils.lightHaptic(enabled: _hapticsEnabled);
 
     final attachment = await _clipboardService.createAttachmentFromImageData(
       imageData: imageData,
@@ -1361,15 +1364,18 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
                     child: Stack(
                       children: [
                         Positioned.fill(
-                          child: IgnorePointer(
-                            child: AdaptiveButton.child(
-                              onPressed: () {},
-                              enabled: true,
-                              style: AdaptiveButtonStyle.glass,
-                              size: AdaptiveButtonSize.large,
-                              minSize: Size(width, TouchTarget.input),
-                              useSmoothRectangleBorder: false,
-                              child: const SizedBox.shrink(),
+                          child: Semantics(
+                            excludeSemantics: true,
+                            child: IgnorePointer(
+                              child: AdaptiveButton.child(
+                                onPressed: () {},
+                                enabled: true,
+                                style: AdaptiveButtonStyle.glass,
+                                size: AdaptiveButtonSize.large,
+                                minSize: Size(width, TouchTarget.input),
+                                useSmoothRectangleBorder: false,
+                                child: const SizedBox.shrink(),
+                              ),
                             ),
                           ),
                         ),
@@ -1836,7 +1842,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
         child: _buildComposerIconButton(
           key: const ValueKey('primary-btn-stop'),
           onPressed: () {
-            PlatformUtils.lightHaptic();
+            PlatformUtils.lightHaptic(enabled: _hapticsEnabled);
             stopGeneration();
           },
           size: buttonSize,
@@ -1854,7 +1860,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     if (hasText) {
       final onPressed = enabled
           ? () {
-              PlatformUtils.lightHaptic();
+              PlatformUtils.lightHaptic(enabled: _hapticsEnabled);
               _sendMessage();
             }
           : null;
@@ -1899,7 +1905,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
         key: const ValueKey('primary-btn-voice-call'),
         onPressed: enabledVoiceCall
             ? () {
-                PlatformUtils.lightHaptic();
+                PlatformUtils.lightHaptic(enabled: _hapticsEnabled);
                 widget.onVoiceCall!();
               }
             : null,
@@ -1954,7 +1960,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
           onTap: onTap == null
               ? null
               : () {
-                  PlatformUtils.mediumHaptic();
+                  PlatformUtils.mediumHaptic(enabled: _hapticsEnabled);
                   onTap();
                 },
           child: AnimatedContainer(
@@ -2169,7 +2175,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
   }
 
   void _showOverflowSheet() {
-    PlatformUtils.selectionHaptic();
+    PlatformUtils.selectionHaptic(enabled: _hapticsEnabled);
     final prevCanRequest = _focusNode.canRequestFocus;
     final wasFocused = _focusNode.hasFocus;
     _focusNode.canRequestFocus = false;
@@ -2302,7 +2308,7 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
     await _voiceService.stopListening();
     if (!mounted) return;
     setState(() => _isRecording = false);
-    PlatformUtils.selectionHaptic();
+    PlatformUtils.selectionHaptic(enabled: _hapticsEnabled);
   }
 
   // When on-device STT is unavailable we rely on server transcription.
@@ -2364,9 +2370,11 @@ class _CompactComposerActions extends StatelessWidget {
   /// Primary button is a pill (min 56px), secondary mic is a circle (36px).
   double get trailingActionInset =>
       _ModernChatInputState._pillButtonMinWidth +
-      compactActionSize +
-      compactActionGap +
-      compactActionEdgeInset;
+      (voiceAvailable
+          ? compactActionSize +
+              compactActionGap +
+              compactActionEdgeInset
+          : 0);
 
   @override
   Widget build(BuildContext context) {

@@ -898,7 +898,7 @@
   "webPage": "Pagina Web",
   "greetingTitle": "Ciao, {username}",
   "temporaryChat": "Chat temporanea",
-  "temporaryChatTooltip": "Questa chat non verrà mostrata nella cronologia",
+  "temporaryChatTooltip": "Questa chat non verrà salvata nella cronologia",
   "saveChat": "Salva chat",
   "temporaryChatByDefault": "Chat temporanea per impostazione predefinita",
   "temporaryChatByDefaultDescription": "Le nuove chat non verranno salvate nella cronologia a meno che tu non scelga di salvarle",
@@ -972,11 +972,11 @@
   "@accountSettingsLoading": {
     "description": "Progress text shown while account settings are loading."
   },
-  "hapticsOffTitle": "Feedback aptico disattivato",
+  "hapticsOffTitle": "Disattiva feedback aptico",
   "@hapticsOffTitle": {
     "description": "Title shown when tapping the tile will disable haptics."
   },
-  "hapticsOnTitle": "Feedback aptico attivato",
+  "hapticsOnTitle": "Attiva feedback aptico",
   "@hapticsOnTitle": {
     "description": "Title shown when tapping the tile will enable haptics."
   },

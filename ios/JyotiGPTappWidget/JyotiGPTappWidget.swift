@@ -163,21 +163,19 @@ struct JyotiGPTappWidgetEntryView: View {
                         allowsPerActionLinks: true
                     )
                 } else if let url = URL(string: WidgetQuickAction.chat.url) {
-                    SmallActionGrid(
-                        actions: WidgetQuickAction.smallGrid,
+                    SmallSingleAction(
+                        action: WidgetQuickAction.chat,
                         accentColor: primaryFillColor,
                         buttonBackground: buttonBackground,
-                        usesTintedRendering: usesTintedRendering,
-                        allowsPerActionLinks: false
+                        usesTintedRendering: usesTintedRendering
                     )
                     .widgetURL(url)
                 } else {
-                    SmallActionGrid(
-                        actions: WidgetQuickAction.smallGrid,
+                    SmallSingleAction(
+                        action: WidgetQuickAction.chat,
                         accentColor: primaryFillColor,
                         buttonBackground: buttonBackground,
-                        usesTintedRendering: usesTintedRendering,
-                        allowsPerActionLinks: false
+                        usesTintedRendering: usesTintedRendering
                     )
                 }
             default:
@@ -196,11 +194,11 @@ struct JyotiGPTappWidgetEntryView: View {
 // MARK: - Small Widget Layout
 
 struct SmallActionGrid: View {
-    let actions: [WidgetQuickAction]
-    let accentColor: Color
-    let buttonBackground: Color
-    let usesTintedRendering: Bool
-    let allowsPerActionLinks: Bool
+  let actions: [WidgetQuickAction]
+  let accentColor: Color
+  let buttonBackground: Color
+  let usesTintedRendering: Bool
+  let allowsPerActionLinks: Bool
 
     private var columns: [GridItem] {
         [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)]
@@ -228,6 +226,22 @@ struct SmallActionGrid: View {
                 }
             }
         }
+  }
+}
+
+struct SmallSingleAction: View {
+    let action: WidgetQuickAction
+    let accentColor: Color
+    let buttonBackground: Color
+    let usesTintedRendering: Bool
+
+    var body: some View {
+        SquareActionButton(
+            action: action,
+            accentColor: accentColor,
+            buttonBackground: buttonBackground,
+            usesTintedRendering: usesTintedRendering
+        )
     }
 }
 

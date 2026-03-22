@@ -194,7 +194,7 @@ class AppIntentCoordinator extends _$AppIntentCoordinator {
         resetChat: true,
       );
 
-      return {'success': true, 'value': 'Link opened'};
+      return {'success': true, 'value': 'Prefilled chat opened'};
     } catch (error, stackTrace) {
       DebugLogger.error(
         'app-intents-url',

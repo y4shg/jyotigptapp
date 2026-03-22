@@ -6,13 +6,21 @@ import '../../../l10n/app_localizations.dart';
 /// Segmented control specifically for ThemeMode selection with
 /// light/dark/system options.
 class ThemeModeSegmentedControl extends StatelessWidget {
+  /// Creates a segmented control for selecting a [ThemeMode].
+  ///
+  /// The [value] must be one of `ThemeMode.system`, `ThemeMode.light`, or
+  /// `ThemeMode.dark`, and indicates the currently selected mode. The
+  /// [onChanged] callback is invoked with the newly selected mode.
   const ThemeModeSegmentedControl({
     super.key,
     required this.value,
     required this.onChanged,
   });
 
+  /// The currently selected theme mode.
   final ThemeMode value;
+
+  /// Called when the user selects a different [ThemeMode].
   final ValueChanged<ThemeMode> onChanged;
 
   static const List<ThemeMode> _themeModes = <ThemeMode>[

@@ -8,7 +8,7 @@ description: "Implement, review, or improve widgets, Live Activities, and contro
 Build home screen widgets, Lock Screen widgets, Live Activities, Dynamic Island
 presentations, Control Center controls, and StandBy surfaces for iOS 26+.
 
-See `references/widgetkit-advanced.md` for timeline strategies, push-based
+See `widgetkit-advanced.md` for timeline strategies, push-based
 updates, Xcode setup, and advanced patterns.
 
 ## Contents
@@ -495,5 +495,5 @@ are legible at a glance for driver safety.
 
 ## References
 
-- Advanced guide: `references/widgetkit-advanced.md`
+- Advanced guide: `widgetkit-advanced.md`
 - Apple docs: [WidgetKit](https://developer.apple.com/documentation/widgetkit) | [ActivityKit](https://developer.apple.com/documentation/activitykit) | [Keeping a widget up to date](https://developer.apple.com/documentation/widgetkit/keeping-a-widget-up-to-date)

@@ -141,9 +141,12 @@ struct SmallWidgetView: View {
 }
 ```
 
-### Link (Medium and Larger Widgets)
+### Link (iOS 17+ on Small, Medium and Larger Widgets)
 
-Use `Link` for multiple tap targets in `.systemMedium` and larger widgets.
+Use `Link` for multiple tap targets in `.systemMedium` and larger widgets. On
+`.systemSmall`, `Link` is supported on iOS 17+ when you gate it with
+`if #available(iOS 17.0, *)`; on iOS 16 and earlier, keep using
+`widgetURL(_:)` as the fallback for a single tap target.
 
 ```swift
 struct MediumWidgetView: View {

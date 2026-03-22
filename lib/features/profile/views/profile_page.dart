@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path/path.dart' as path;
 
 import '../../../core/models/user.dart';
 import '../../../core/providers/app_providers.dart';
@@ -26,9 +26,18 @@ import '../../../shared/widgets/jyotigptapp_loading.dart';
 import '../../../shared/widgets/themed_dialogs.dart';
 import '../../../shared/widgets/user_avatar.dart';
 import '../../chat/services/voice_call_notification_service.dart';
+import '../../chat/services/file_attachment_service.dart';
 import '../providers/profile_user_settings_provider.dart';
 import '../widgets/adaptive_segmented_selector.dart';
 import '../widgets/profile_setting_tile.dart';
+
+final imagePickerProvider = Provider<ImagePicker>(
+  (ref) => ImagePicker(),
+);
+final voiceCallNotificationServiceProvider =
+    Provider<VoiceCallNotificationService>(
+  (ref) => VoiceCallNotificationService(),
+);
 
 /// Profile page (You tab) showing account information and basic preferences.
 class ProfilePage extends ConsumerWidget {
@@ -718,7 +727,7 @@ class ProfilePage extends ConsumerWidget {
   }
 
   Future<void> _changeProfilePhoto(BuildContext context, WidgetRef ref) async {
-    final picker = ImagePicker();
+    final picker = ref.read(imagePickerProvider);
     XFile? image;
     try {
       image = await picker.pickImage(
@@ -766,7 +775,7 @@ class ProfilePage extends ConsumerWidget {
       return;
     }
 
-    final dataUrl = _imageDataUrl(bytes, image.path);
+    final dataUrl = await _imageDataUrl(bytes, image.path);
     final asyncUser = ref.read(currentUserProvider);
     final currentUser = _resolveEditableUser(
       asyncUser.maybeWhen(
@@ -956,7 +965,7 @@ class ProfilePage extends ConsumerWidget {
     final previous =
         ref.read(appSettingsProvider).voiceCallNotificationsEnabled;
     final VoiceCallNotificationService service =
-        VoiceCallNotificationService();
+        ref.read(voiceCallNotificationServiceProvider);
     bool granted;
     try {
       await service.initialize();
@@ -1238,15 +1247,85 @@ class ProfilePage extends ConsumerWidget {
     };
   }
 
-  String _imageDataUrl(List<int> bytes, String filePath) {
-    final extension = path.extension(filePath).toLowerCase();
-    final format = switch (extension) {
-      '.png' => 'png',
-      '.webp' => 'webp',
-      '.gif' => 'gif',
-      _ => 'jpeg',
+  Future<String> _imageDataUrl(List<int> bytes, String filePath) async {
+    final mimeType = _detectImageMimeType(bytes);
+    if (mimeType == 'image/heic' || mimeType == 'image/heif') {
+      final converted = await convertImageFileToDataUrl(File(filePath));
+      if (converted != null) {
+        return converted;
+      }
+    }
+
+    final resolvedMimeType = mimeType ?? 'image/jpeg';
+    return 'data:$resolvedMimeType;base64,${base64Encode(bytes)}';
+  }
+
+  String? _detectImageMimeType(List<int> bytes) {
+    if (bytes.length >= 8 &&
+        bytes[0] == 0x89 &&
+        bytes[1] == 0x50 &&
+        bytes[2] == 0x4E &&
+        bytes[3] == 0x47 &&
+        bytes[4] == 0x0D &&
+        bytes[5] == 0x0A &&
+        bytes[6] == 0x1A &&
+        bytes[7] == 0x0A) {
+      return 'image/png';
+    }
+    if (bytes.length >= 4 &&
+        bytes[0] == 0x47 &&
+        bytes[1] == 0x49 &&
+        bytes[2] == 0x46 &&
+        bytes[3] == 0x38) {
+      return 'image/gif';
+    }
+    if (bytes.length >= 12 &&
+        bytes[0] == 0x52 &&
+        bytes[1] == 0x49 &&
+        bytes[2] == 0x46 &&
+        bytes[3] == 0x46 &&
+        bytes[8] == 0x57 &&
+        bytes[9] == 0x45 &&
+        bytes[10] == 0x42 &&
+        bytes[11] == 0x50) {
+      return 'image/webp';
+    }
+    if (bytes.length >= 3 &&
+        bytes[0] == 0xFF &&
+        bytes[1] == 0xD8 &&
+        bytes[2] == 0xFF) {
+      return 'image/jpeg';
+    }
+    final heifBrand = _detectHeifBrand(bytes);
+    if (heifBrand != null) {
+      return heifBrand == 'heif' || heifBrand == 'mif1' || heifBrand == 'msf1'
+          ? 'image/heif'
+          : 'image/heic';
+    }
+    return null;
+  }
+
+  String? _detectHeifBrand(List<int> bytes) {
+    if (bytes.length < 12) {
+      return null;
+    }
+    if (bytes[4] != 0x66 ||
+        bytes[5] != 0x74 ||
+        bytes[6] != 0x79 ||
+        bytes[7] != 0x70) {
+      return null;
+    }
+    final brand = String.fromCharCodes(bytes.sublist(8, 12));
+    const heifBrands = <String>{
+      'heic',
+      'heix',
+      'heif',
+      'hevc',
+      'hevx',
+      'mif1',
+      'msf1',
     };
-    return 'data:image/$format;base64,${base64Encode(bytes)}';
+    return heifBrands.contains(brand) ? brand : null;
   }
 }
 
