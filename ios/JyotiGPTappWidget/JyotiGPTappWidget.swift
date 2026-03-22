@@ -154,12 +154,22 @@ struct JyotiGPTappWidgetEntryView: View {
         Group {
             switch family {
             case .systemSmall:
-                SmallActionGrid(
-                    actions: WidgetQuickAction.smallGrid,
-                    accentColor: primaryFillColor,
-                    buttonBackground: buttonBackground,
-                    usesTintedRendering: usesTintedRendering
-                )
+                if let url = URL(string: WidgetQuickAction.chat.url) {
+                    SmallActionGrid(
+                        actions: WidgetQuickAction.smallGrid,
+                        accentColor: primaryFillColor,
+                        buttonBackground: buttonBackground,
+                        usesTintedRendering: usesTintedRendering
+                    )
+                    .widgetURL(url)
+                } else {
+                    SmallActionGrid(
+                        actions: WidgetQuickAction.smallGrid,
+                        accentColor: primaryFillColor,
+                        buttonBackground: buttonBackground,
+                        usesTintedRendering: usesTintedRendering
+                    )
+                }
             default:
                 MediumActionLayout(
                     accentColor: primaryFillColor,
@@ -206,29 +216,24 @@ struct SquareActionButton: View {
     let usesTintedRendering: Bool
 
     var body: some View {
-        if let url = URL(string: action.url) {
-            Link(destination: url) {
-                VStack(spacing: 6) {
-                    Image(systemName: action.symbol)
-                        .font(.system(size: 20, weight: .semibold))
-                    Text(action.shortTitle)
-                        .font(.system(size: 11, weight: .medium))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
-                }
-                .foregroundStyle(accentColor.opacity(0.95))
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(6)
-                .background(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .fill(buttonBackground)
-                        .modifier(WidgetAccentBackgroundModifier())
-                )
-                .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
-            }
-            .accessibilityLabel(action.title)
-            .buttonStyle(.plain)
+        VStack(spacing: 6) {
+            Image(systemName: action.symbol)
+                .font(.system(size: 20, weight: .semibold))
+            Text(action.shortTitle)
+                .font(.system(size: 11, weight: .medium))
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
         }
+        .foregroundStyle(accentColor.opacity(0.95))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(6)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(buttonBackground)
+                .modifier(WidgetAccentBackgroundModifier())
+        )
+        .modifier(WidgetAccentForegroundModifier(isTinted: usesTintedRendering))
+        .accessibilityLabel(action.title)
     }
 }
 
