@@ -12,6 +12,7 @@ import '../../../shared/widgets/modal_safe_area.dart';
 import '../../../core/models/tool.dart';
 import '../../../core/models/toggle_filter.dart';
 import '../../../core/providers/app_providers.dart';
+import '../../../core/services/settings_service.dart';
 import '../../tools/providers/tools_providers.dart';
 import '../providers/chat_providers.dart';
 import 'package:jyotigptapp/l10n/app_localizations.dart';
