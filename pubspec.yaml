@@ -77,7 +77,6 @@ dependencies:
   quick_actions: 1.1.0
   flutter_svg: ^2.2.3
   html_unescape: ^2.0.0
-  universal_web: ^2.2.2
   home_widget: ^0.8.1
   flutter_highlight: ^0.7.0
   super_context_menu: ^0.9.1
