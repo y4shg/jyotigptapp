@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -40,11 +40,49 @@ final _voiceCallNotificationServiceProvider =
 final ImageFileProvider _imageFileProvider = createImageFileProvider();
 
 /// Profile page (You tab) showing account information and basic preferences.
-class ProfilePage extends ConsumerWidget {
+class ProfilePage extends HookConsumerWidget {
   const ProfilePage({super.key});
+
+  void _syncAppSettingsFromBackend(
+    WidgetRef ref,
+    Map<String, dynamic> settings,
+  ) {
+    final settingsNotifier = ref.read(appSettingsProvider.notifier);
+    final currentSettings = ref.read(appSettingsProvider);
+    final hapticsEnabled = _readBoolSetting(
+      settings,
+      'hapticFeedback',
+      defaultValue: true,
+    );
+    if (currentSettings.hapticFeedback != hapticsEnabled) {
+      settingsNotifier.setHapticFeedback(hapticsEnabled);
+    }
+
+    final accountNotificationsEnabled = _readBoolSetting(
+      settings,
+      'enableNotifications',
+      defaultValue: true,
+    );
+    if (!accountNotificationsEnabled &&
+        currentSettings.voiceCallNotificationsEnabled) {
+      settingsNotifier.setVoiceCallNotificationsEnabled(false);
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    useEffect(
+      () {
+        final settingsAsync = ref.read(profileUserSettingsProvider);
+        settingsAsync.whenData((settings) {
+          _hydrateBackendSettings(ref, settings);
+          _syncAppSettingsFromBackend(ref, settings);
+        });
+        return null;
+      },
+      const [],
+    );
+
     ref.listen<AsyncValue<Map<String, dynamic>>>(
       profileUserSettingsProvider,
       (previous, next) {
@@ -359,26 +397,7 @@ class ProfilePage extends ConsumerWidget {
       profileUserSettingsProvider,
       (previous, next) {
         next.whenData((settings) {
-          final settingsNotifier = ref.read(appSettingsProvider.notifier);
-          final currentSettings = ref.read(appSettingsProvider);
-          final hapticsEnabled = _readBoolSetting(
-            settings,
-            'hapticFeedback',
-            defaultValue: true,
-          );
-          if (currentSettings.hapticFeedback != hapticsEnabled) {
-            settingsNotifier.setHapticFeedback(hapticsEnabled);
-          }
-
-          final accountNotificationsEnabled = _readBoolSetting(
-            settings,
-            'enableNotifications',
-            defaultValue: true,
-          );
-          if (!accountNotificationsEnabled &&
-              currentSettings.voiceCallNotificationsEnabled) {
-            settingsNotifier.setVoiceCallNotificationsEnabled(false);
-          }
+          _syncAppSettingsFromBackend(ref, settings);
         });
       },
     );

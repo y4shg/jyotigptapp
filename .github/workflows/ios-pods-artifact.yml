@@ -1,0 +1,42 @@
+name: iOS Pods Artifact
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "ios/Podfile"
+      - "ios/Runner.xcodeproj/project.pbxproj"
+      - "ios/Runner/Info.plist"
+      - "pubspec.yaml"
+      - "pubspec.lock"
+
+jobs:
+  pod-install-and-build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Flutter Pub Get
+        run: flutter pub get
+
+      - name: Install CocoaPods
+        run: sudo gem install cocoapods
+
+      - name: Pod Install
+        working-directory: ios
+        run: pod install
+
+      - name: Build iOS (No Codesign)
+        run: flutter build ios --release --no-codesign
+
+      - name: Upload Podfile.lock Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-podfile-lock
+          path: ios/Podfile.lock

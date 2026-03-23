@@ -68,7 +68,7 @@ final class VoiceBackgroundAudioManager {
                     .playAndRecord,
                     mode: .voiceChat,
                     options: [
-                        .allowBluetooth,
+                        .allowBluetoothHFP,
                         .allowBluetoothA2DP,
                         .mixWithOthers,
                         .defaultToSpeaker,
@@ -437,7 +437,7 @@ class BackgroundStreamingHandler: NSObject {
 
 /// Manages the method channel for App Intent invocations to Flutter.
 /// Native Swift intents call this to invoke Flutter-side business logic.
-final class AppIntentMethodChannel {
+@MainActor final class AppIntentMethodChannel {
     static var shared: AppIntentMethodChannel?
 
     private let channel: FlutterMethodChannel
@@ -664,9 +664,9 @@ struct JyotiGPTappSendImageIntent: AppIntent {
             )
         }
 
-        let data = try image.data
+        let data = image.data
         let base64 = data.base64EncodedString()
-        let name = image.filename ?? "shared_image.jpg"
+        let name = image.filename
 
         let result = await channel.invokeIntent(
             identifier: "app.y4shg.jyotigptapp.send_image",
@@ -748,6 +748,19 @@ struct AppShortcuts: AppShortcutsProvider {
 
     // Exact match or subdomain match
     return host == cleanDomain || host.hasSuffix(".\(cleanDomain)")
+  }
+
+  override func application(
+    _ application: UIApplication,
+    configurationForConnecting connectingSceneSession: UISceneSession,
+    options: UIScene.ConnectionOptions
+  ) -> UISceneConfiguration {
+    let configuration = UISceneConfiguration(
+      name: "Default Configuration",
+      sessionRole: connectingSceneSession.role
+    )
+    configuration.delegateClass = FlutterSceneDelegate.self
+    return configuration
   }
 
   override func application(
