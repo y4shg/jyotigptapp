@@ -114,6 +114,10 @@ final class VoiceBackgroundAudioManager {
 }
 
 // Background streaming handler class
+// @MainActor ensures all UIApplication.shared accesses occur on the main thread,
+// which is required by Swift 5.10+ (Xcode 16+) strict concurrency enforcement.
+// Flutter method channels already deliver calls on the main thread, so this is safe.
+@MainActor
 class BackgroundStreamingHandler: NSObject {
     private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     private var bgProcessingTask: BGTask?
@@ -427,12 +431,18 @@ class BackgroundStreamingHandler: NSObject {
         }
     }
 
-
     deinit {
         NotificationCenter.default.removeObserver(self)
-        endBackgroundTask()
-        VoiceBackgroundAudioManager.shared.deactivate()
-  }
+        // deinit cannot be @MainActor, so capture state and dispatch cleanup to main actor.
+        // This ensures UIApplication.shared and the audio manager are accessed safely.
+        let taskToEnd = backgroundTask
+        Task { @MainActor in
+            if taskToEnd != .invalid {
+                UIApplication.shared.endBackgroundTask(taskToEnd)
+            }
+            VoiceBackgroundAudioManager.shared.deactivate()
+        }
+    }
 }
 
 /// Manages the method channel for App Intent invocations to Flutter.
