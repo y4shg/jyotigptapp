@@ -457,7 +457,6 @@ struct JyotiGPTappWidget: Widget {
                     .containerBackground(Color("WidgetBackground"), for: .widget)
             } else {
                 JyotiGPTappWidgetEntryView(entry: entry)
-                    .padding()
                     .background(Color("WidgetBackground"))
             }
         }
@@ -477,10 +476,12 @@ private func accessoryConfiguration(
     }
     .configurationDisplayName(action.title)
     .description(
-        WidgetLocalization.format(
-            "widget_accessory_description",
-            action.title
-        )
+        action.id == WidgetQuickAction.openApp.id
+            ? WidgetLocalization.string("widget_accessory_open_description")
+            : WidgetLocalization.format(
+                "widget_accessory_description",
+                action.title
+            )
     )
     .supportedFamilies([
         .accessoryCircular,

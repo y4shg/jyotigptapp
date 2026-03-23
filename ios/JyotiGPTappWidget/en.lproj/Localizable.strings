@@ -25,3 +25,4 @@
 "widget_display_name" = "JyotiGPT";
 "widget_gallery_description" = "Quick access to spiritual chat, camera, photos, and voice.";
 "widget_accessory_description" = "Open %@ in JyotiGPT.";
+"widget_accessory_open_description" = "Open JyotiGPT.";

@@ -10,7 +10,7 @@ import '../../../shared/utils/glass_colors.dart';
 // app_theme not required here; using theme extension tokens
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'dart:io' show Platform;
+import 'package:jyotigptapp/shared/utils/platform_io.dart' show Platform;
 import 'dart:async';
 import '../providers/chat_providers.dart';
 import '../services/clipboard_attachment_service.dart';
@@ -1856,11 +1856,10 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
       );
     }
 
-    // SEND variant — pill shape in dense/compact mode via minWidth
+    // SEND variant — circle shape (no minWidth)
     if (hasText) {
       final onPressed = enabled
           ? () {
-              PlatformUtils.lightHaptic(enabled: _hapticsEnabled);
               _sendMessage();
             }
           : null;
@@ -1890,14 +1889,13 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
           key: const ValueKey('primary-btn-send'),
           onPressed: onPressed,
           size: buttonSize,
-          minWidth: dense ? _pillButtonMinWidth : null,
           isProminent: true,
           child: sendChild,
         ),
       );
     }
 
-    // VOICE CALL variant — pill shape in dense/compact mode via minWidth
+    // VOICE CALL variant — circle shape (no minWidth)
     final bool enabledVoiceCall = widget.enabled && widget.onVoiceCall != null;
     return AdaptiveTooltip(
       message: 'Voice Call',
@@ -1910,7 +1908,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
               }
             : null,
         size: buttonSize,
-        minWidth: dense ? _pillButtonMinWidth : null,
         isProminent: true,
         child: Icon(
           Platform.isIOS ? CupertinoIcons.waveform : Icons.graphic_eq,
@@ -2367,9 +2364,9 @@ class _CompactComposerActions extends StatelessWidget {
       IconSize.large + (Spacing.xs * 2);
 
   /// Total width reserved on the trailing side for the action cluster.
-  /// Primary button is a pill (min 56px), secondary mic is a circle (36px).
+  /// Primary button is now a circle (compactActionSize), secondary mic is also a circle (compactActionSize).
   double get trailingActionInset =>
-      _ModernChatInputState._pillButtonMinWidth +
+      compactActionSize +
       (voiceAvailable
           ? compactActionSize +
               compactActionGap +

@@ -1,7 +1,7 @@
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:io' show Platform;
+import 'package:jyotigptapp/shared/utils/platform_io.dart' show Platform;
 import 'package:jyotigptapp/l10n/app_localizations.dart';
 
 /// Utility functions for common UI patterns and helpers

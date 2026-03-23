@@ -18,10 +18,6 @@
 		A66B6643C89B7BB44E2B9471 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FA90454A654BE3B4EA8A89 /* Pods_RunnerTests.framework */; };
 		CA4A256DAFB6E4374BC67B91 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E952EFF81F1FEABA348FE2CC /* Pods_Runner.framework */; };
 		D2A0B1C42F5E4D6C7B8A9012 /* NativePasteBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A0B1C32F5E4D6C7B8A9012 /* NativePasteBridge.swift */; };
-		F15B00012EE6000000000001 /* JyotiGPTappWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15B00112EE6000000000011 /* JyotiGPTappWidget.swift */; };
-		F15B00022EE6000000000002 /* JyotiGPTappWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15B00122EE6000000000012 /* JyotiGPTappWidgetBundle.swift */; };
-		F15B00032EE6000000000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F15B00132EE6000000000013 /* Assets.xcassets */; };
-		F15B00042EE6000000000004 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F15B00152EE6000000000015 /* Localizable.strings */; };
 		F15AFEC42EE5499D00A1FABB /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F15AFEC32EE5499D00A1FABB /* WidgetKit.framework */; };
 		F15AFEC62EE5499D00A1FABB /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F15AFEC52EE5499D00A1FABB /* SwiftUI.framework */; };
 		F15AFED12EE5499E00A1FABB /* JyotiGPTappWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F15AFEC22EE5499D00A1FABB /* JyotiGPTappWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -451,8 +447,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F15B00032EE6000000000003 /* Assets.xcassets in Resources */,
-				F15B00042EE6000000000004 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,8 +620,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F15B00012EE6000000000001 /* JyotiGPTappWidget.swift in Sources */,
-				F15B00022EE6000000000002 /* JyotiGPTappWidgetBundle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

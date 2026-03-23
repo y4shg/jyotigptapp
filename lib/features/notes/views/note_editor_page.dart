@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io' show File, Platform;
+import 'package:jyotigptapp/shared/utils/platform_io.dart' show File, Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 

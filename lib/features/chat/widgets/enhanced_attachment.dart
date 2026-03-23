@@ -7,7 +7,7 @@ import '../../../core/services/api_service.dart';
 import 'enhanced_image_attachment.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:io';
+import 'package:jyotigptapp/shared/utils/platform_io.dart';
 import 'dart:convert';
 import '../../../core/services/worker_manager.dart';
 

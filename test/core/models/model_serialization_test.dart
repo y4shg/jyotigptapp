@@ -481,15 +481,31 @@ void main() {
       };
 
       final settings = UserSettings.fromJson(json);
+      check(settings.showReadReceipts).isFalse();
+      check(settings.enableNotifications).isFalse();
       check(settings.theme).equals('dark');
       check(settings.temperature).equals(0.9);
       check(settings.maxTokens).equals(4096);
+      check(settings.streamResponses).isTrue();
+      check(settings.webSearchEnabled).isTrue();
+      check(settings.saveConversations).isFalse();
+      check(settings.shareUsageData).isTrue();
+      check(settings.reduceMotion).isTrue();
+      check(settings.hapticFeedback).isFalse();
       check(settings.defaultModelId).equals('gpt-4');
 
       final output = settings.toJson();
+      check(output['show_read_receipts']).equals(false);
+      check(output['enable_notifications']).equals(false);
       check(output['theme']).equals('dark');
       check(output['temperature']).equals(0.9);
       check(output['max_tokens']).equals(4096);
+      check(output['stream_responses']).equals(true);
+      check(output['web_search_enabled']).equals(true);
+      check(output['save_conversations']).equals(false);
+      check(output['share_usage_data']).equals(true);
+      check(output['reduce_motion']).equals(true);
+      check(output['haptic_feedback']).equals(false);
       check(output['default_model_id']).equals('gpt-4');
       check(output['custom_settings'] as Map)
           .deepEquals({'key': 'val'});

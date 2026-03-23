@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../shared/theme/theme_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:io' show File, Platform;
+import 'package:jyotigptapp/shared/utils/platform_io.dart' show File, Platform;
 import 'package:jyotigptapp/l10n/app_localizations.dart';
 import '../services/file_attachment_service.dart';
 import '../../../shared/services/tasks/task_queue.dart';

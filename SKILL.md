@@ -424,6 +424,31 @@ Adapt widgets to the Liquid Glass visual style using `WidgetAccentedRenderingMod
 | `.desaturated` | Fully desaturated |
 | `.fullColor` | Full-color rendering |
 
+```swift
+@Environment(\.widgetAccentedRenderingMode) var accentedMode
+
+@ViewBuilder
+private var accentedContent: some View {
+    switch accentedMode {
+    case .accented:
+        AccentedView()
+    case .accentedDesaturated:
+        AccentedDesaturatedView()
+    case .desaturated:
+        DesaturatedView()
+    case .fullColor:
+        FullColorView()
+    @unknown default:
+        FullColorView()
+    }
+}
+
+private var accentAwareTitle: some View {
+    Text(entry.title)
+        .foregroundStyle(accentedMode == .fullColor ? .blue : .primary)
+}
+```
+
 ### WidgetPushHandler
 
 Enable push-based timeline reloads without scheduled polling.

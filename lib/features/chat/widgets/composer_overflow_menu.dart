@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'dart:io' show Platform;
+import 'package:jyotigptapp/shared/utils/platform_io.dart' show Platform;
 
 import '../../../shared/theme/theme_extensions.dart';
 import '../../../shared/utils/platform_utils.dart';

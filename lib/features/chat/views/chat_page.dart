@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'dart:io' show Platform;
+import 'package:jyotigptapp/shared/utils/platform_io.dart' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../../../shared/widgets/responsive_drawer_layout.dart';
@@ -92,12 +92,6 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     _pendingConversationScrollReset = false;
     _userPausedAutoScroll = false;
     _scheduleAutoScrollToBottom();
-
-    // Reset temporary chat state based on user preference
-    final settings = ref.read(appSettingsProvider);
-    ref
-        .read(temporaryChatEnabledProvider.notifier)
-        .set(settings.temporaryChatByDefault);
   }
 
   bool _isSavingTemporary = false;

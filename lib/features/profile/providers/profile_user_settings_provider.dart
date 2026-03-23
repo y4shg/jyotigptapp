@@ -7,6 +7,13 @@ import '../../auth/providers/unified_auth_providers.dart';
 
 part 'profile_user_settings_provider.g.dart';
 
+/// Coordinates user-level settings stored on the backend.
+///
+/// Settings keys are string identifiers (snake_case or camelCase) and values
+/// are JSON-serializable primitives (`bool`, `num`, `String`) or null to unset.
+/// Updates are applied optimistically to local state and then persisted to the
+/// server in order; failures roll back to the last confirmed snapshot or force
+/// a refresh, so callers should handle exceptions from [updateSetting].
 @Riverpod(keepAlive: true)
 class ProfileUserSettings extends _$ProfileUserSettings {
   Future<void> _pendingWrite = Future<void>.value();
@@ -27,24 +34,39 @@ class ProfileUserSettings extends _$ProfileUserSettings {
       throw StateError('No API client available for user settings.');
     }
 
+    final startGeneration = _sessionGeneration;
     final settings = await api.getUserSettings();
+    if (!ref.mounted || startGeneration != _sessionGeneration) {
+      return _lastConfirmedSettings ?? const <String, dynamic>{};
+    }
     _lastConfirmedSettings = Map.unmodifiable(
       Map<String, dynamic>.from(settings),
     );
     return _lastConfirmedSettings!;
   }
 
+  /// Updates a single backend user setting.
+  ///
+  /// The [key] should match a supported setting identifier (for example,
+  /// `enableNotifications`, `enableSounds`, `hapticFeedback`). The [value] must
+  /// be JSON-serializable; pass null to remove the key. The update is applied
+  /// optimistically and then persisted to the server. Returns a future that
+  /// completes when the server write finishes. Throws if the API client is
+  /// unavailable or if the server rejects the update.
   Future<void> updateSetting(String key, Object? value) async {
-    final api = ref.read(apiServiceProvider);
-    if (api == null) {
-      throw StateError('No API client available for user settings.');
-    }
-
+    final startGeneration = _sessionGeneration;
     final current = Map<String, dynamic>.from(
       state.maybeWhen(data: (value) => value, orElse: () => null) ??
           await future,
     );
-    if (!ref.mounted) return;
+    if (!ref.mounted || startGeneration != _sessionGeneration) {
+      return;
+    }
+
+    final api = ref.read(apiServiceProvider);
+    if (api == null) {
+      throw StateError('No API client available for user settings.');
+    }
 
     final next = Map<String, dynamic>.from(current);
     if (value == null) {
@@ -61,7 +83,14 @@ class ProfileUserSettings extends _$ProfileUserSettings {
         return;
       }
       try {
-        await api.updateUserSettings(next);
+        final latestApi = ref.read(apiServiceProvider);
+        if (latestApi == null) {
+          throw StateError('No API client available for user settings.');
+        }
+        if (generation != _sessionGeneration) {
+          return;
+        }
+        await latestApi.updateUserSettings(next);
         if (generation != _sessionGeneration) {
           return;
         }

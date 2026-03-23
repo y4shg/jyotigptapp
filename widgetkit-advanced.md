@@ -192,7 +192,9 @@ struct MyApp: App {
 }
 ```
 
-**Important:** `.systemSmall` widgets support only `widgetURL`, not `Link`.
+**Important:** `.systemSmall` widgets support `Link` on iOS 17+ when gated with
+`if #available(iOS 17.0, *)`; keep `widgetURL(_:)` as the fallback on earlier
+OS versions.
 
 ## Intent-Driven Widget Configuration
 

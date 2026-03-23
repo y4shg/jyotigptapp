@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io' show Platform;
+import 'package:jyotigptapp/shared/utils/platform_io.dart' show Platform;
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart';

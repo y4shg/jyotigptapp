@@ -1027,6 +1027,12 @@ void startNewChat(dynamic ref) {
 
   // Reset to default model for new conversations (fixes #296)
   restoreDefaultModel(ref);
+
+  // Reset temporary chat state based on user preference
+  final settings = ref.read(appSettingsProvider);
+  ref
+      .read(temporaryChatEnabledProvider.notifier)
+      .set(settings.temporaryChatByDefault);
 }
 
 /// Restores the selected model to the user's configured default model.

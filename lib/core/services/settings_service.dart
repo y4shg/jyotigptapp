@@ -94,10 +94,10 @@ class SettingsService {
   /// Whether haptic feedback is currently enabled.
   static bool get isHapticFeedbackEnabled {
     if (!_isPreferencesBoxOpen()) {
-      return false;
+      return true;
     }
 
-    return (_preferencesBox().get(_hapticFeedbackKey) as bool?) ?? false;
+    return (_preferencesBox().get(_hapticFeedbackKey) as bool?) ?? true;
   }
 
   /// Get haptic feedback preference

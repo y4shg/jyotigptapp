@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
@@ -26,18 +25,19 @@ import '../../../shared/widgets/jyotigptapp_loading.dart';
 import '../../../shared/widgets/themed_dialogs.dart';
 import '../../../shared/widgets/user_avatar.dart';
 import '../../chat/services/voice_call_notification_service.dart';
-import '../../chat/services/file_attachment_service.dart';
+import '../services/image_file_provider.dart';
 import '../providers/profile_user_settings_provider.dart';
 import '../widgets/adaptive_segmented_selector.dart';
 import '../widgets/profile_setting_tile.dart';
 
-final imagePickerProvider = Provider<ImagePicker>(
+final _imagePickerProvider = Provider<ImagePicker>(
   (ref) => ImagePicker(),
 );
-final voiceCallNotificationServiceProvider =
+final _voiceCallNotificationServiceProvider =
     Provider<VoiceCallNotificationService>(
   (ref) => VoiceCallNotificationService(),
 );
+final ImageFileProvider _imageFileProvider = createImageFileProvider();
 
 /// Profile page (You tab) showing account information and basic preferences.
 class ProfilePage extends ConsumerWidget {
@@ -45,6 +45,16 @@ class ProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue<Map<String, dynamic>>>(
+      profileUserSettingsProvider,
+      (previous, next) {
+        next.whenData((settings) {
+          _hydrateBackendSettings(ref, settings);
+        });
+      },
+      fireImmediately: true,
+    );
+
     final useAdaptivePlatformChrome = PlatformInfo.isIOS;
     final useNativeToolbar = PlatformInfo.isIOS26OrHigher();
     final authUser = ref.watch(currentUserProvider2);
@@ -346,6 +356,34 @@ class ProfilePage extends ConsumerWidget {
 
   Widget _buildPreferencesSection(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    ref.listen<AsyncValue<Map<String, dynamic>>>(
+      profileUserSettingsProvider,
+      (previous, next) {
+        next.whenData((settings) {
+          final settingsNotifier = ref.read(appSettingsProvider.notifier);
+          final currentSettings = ref.read(appSettingsProvider);
+          final hapticsEnabled = _readBoolSetting(
+            settings,
+            'hapticFeedback',
+            defaultValue: true,
+          );
+          if (currentSettings.hapticFeedback != hapticsEnabled) {
+            settingsNotifier.setHapticFeedback(hapticsEnabled);
+          }
+
+          final accountNotificationsEnabled = _readBoolSetting(
+            settings,
+            'enableNotifications',
+            defaultValue: true,
+          );
+          if (!accountNotificationsEnabled &&
+              currentSettings.voiceCallNotificationsEnabled) {
+            settingsNotifier.setVoiceCallNotificationsEnabled(false);
+          }
+        });
+      },
+      fireImmediately: true,
+    );
     final themeMode = ref.watch(appThemeModeProvider);
     final themeModeNotifier = ref.read(appThemeModeProvider.notifier);
     final voiceCallNotificationsEnabled = ref.watch(
@@ -451,6 +489,50 @@ class ProfilePage extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  void _hydrateBackendSettings(WidgetRef ref, Map<String, dynamic> settings) {
+    final settingsNotifier = ref.read(appSettingsProvider.notifier);
+    final currentSettings = ref.read(appSettingsProvider);
+
+    if (_hasSetting(settings, 'hapticFeedback')) {
+      final hapticsEnabled = _readBoolSetting(
+        settings,
+        'hapticFeedback',
+        defaultValue: true,
+      );
+      if (currentSettings.hapticFeedback != hapticsEnabled) {
+        settingsNotifier.setHapticFeedback(hapticsEnabled);
+      }
+    }
+
+    if (_hasSetting(settings, 'enableNotifications')) {
+      final notificationsEnabled = _readBoolSetting(
+        settings,
+        'enableNotifications',
+        defaultValue: true,
+      );
+      if (currentSettings.voiceCallNotificationsEnabled !=
+          notificationsEnabled) {
+        settingsNotifier.setVoiceCallNotificationsEnabled(
+          notificationsEnabled,
+        );
+      }
+    }
+
+    if (_hasSetting(settings, 'darkMode')) {
+      final darkModeEnabled = _readBoolSetting(
+        settings,
+        'darkMode',
+        defaultValue: true,
+      );
+      final themeModeNotifier = ref.read(appThemeModeProvider.notifier);
+      final currentMode = ref.read(appThemeModeProvider);
+      final nextMode = darkModeEnabled ? ThemeMode.dark : ThemeMode.light;
+      if (currentMode != nextMode) {
+        themeModeNotifier.setTheme(nextMode);
+      }
+    }
   }
 
   Widget _buildBackendSettingsSection(BuildContext context, WidgetRef ref) {
@@ -727,7 +809,7 @@ class ProfilePage extends ConsumerWidget {
   }
 
   Future<void> _changeProfilePhoto(BuildContext context, WidgetRef ref) async {
-    final picker = ref.read(imagePickerProvider);
+    final picker = ref.read(_imagePickerProvider);
     XFile? image;
     try {
       image = await picker.pickImage(
@@ -758,7 +840,9 @@ class ProfilePage extends ConsumerWidget {
     final storage = ref.read(optimizedStorageServiceProvider);
     Uint8List bytes;
     try {
-      bytes = await image.readAsBytes();
+      bytes = image.path.isEmpty
+          ? await image.readAsBytes()
+          : await _imageFileProvider.readAsBytes(image.path);
     } catch (error, stackTrace) {
       DebugLogger.error(
         'profile-avatar-read-failed',
@@ -791,8 +875,6 @@ class ProfilePage extends ConsumerWidget {
         final updatedUser = currentUser.copyWith(profileImage: dataUrl);
         await storage.saveLocalUser(updatedUser);
         ref.read(currentUserProvider.notifier).setLocalUser(updatedUser);
-      } else {
-        ref.read(currentUserProvider.notifier).clearLocalUser();
       }
     } catch (error, stackTrace) {
       DebugLogger.error(
@@ -965,7 +1047,7 @@ class ProfilePage extends ConsumerWidget {
     final previous =
         ref.read(appSettingsProvider).voiceCallNotificationsEnabled;
     final VoiceCallNotificationService service =
-        ref.read(voiceCallNotificationServiceProvider);
+        ref.read(_voiceCallNotificationServiceProvider);
     bool granted;
     try {
       await service.initialize();
@@ -1212,6 +1294,10 @@ class ProfilePage extends ConsumerWidget {
     return <String>{key, snakeCase}.toList(growable: false);
   }
 
+  bool _hasSetting(Map<String, dynamic> settings, String key) {
+    return _settingKeyCandidates(key).any(settings.containsKey);
+  }
+
   String _languageLabel(BuildContext context, Locale? locale) {
     if (locale == null) {
       final systemLocale = Localizations.localeOf(context);
@@ -1250,7 +1336,10 @@ class ProfilePage extends ConsumerWidget {
   Future<String> _imageDataUrl(List<int> bytes, String filePath) async {
     final mimeType = _detectImageMimeType(bytes);
     if (mimeType == 'image/heic' || mimeType == 'image/heif') {
-      final converted = await convertImageFileToDataUrl(File(filePath));
+      final converted = await _imageFileProvider.convertImageToDataUrlIfNeeded(
+        bytes: bytes,
+        filePath: filePath,
+      );
       if (converted != null) {
         return converted;
       }

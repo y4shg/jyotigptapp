@@ -610,49 +610,51 @@ class CurrentUser extends _$CurrentUser {
       data: (state) => state.user,
       orElse: () => null,
     );
-    final mergedUser = _mergeUserWithLocalOverrides(authUser, cachedUser);
+    final mergedUser =
+        authUser == null
+            ? null
+            : _mergeUserWithLocalOverrides(authUser, cachedUser);
     if (api == null) {
       return mergedUser;
     }
 
-    if (mergedUser != null) {
-      final lastRefresh = ref.read(_lastUserRefreshProvider);
-      final now = DateTime.now();
-      final shouldRefresh =
-          lastRefresh == null ||
-          now.difference(lastRefresh) > const Duration(minutes: 5);
+    final lastRefresh = ref.read(_lastUserRefreshProvider);
+    final now = DateTime.now();
+    final shouldRefresh =
+        authUser == null ||
+        lastRefresh == null ||
+        now.difference(lastRefresh) > const Duration(minutes: 5);
 
-      if (shouldRefresh) {
-        Future.microtask(() async {
-          final fresh = await _refreshCurrentUser(
-            ref,
-            api,
-            cachedUser: cachedUser,
-          );
-          if (fresh != null && ref.mounted) {
-            ref.read(_lastUserRefreshProvider.notifier).set(now);
-            state = AsyncData(fresh);
-          }
-        });
-      }
-      return mergedUser;
+    if (shouldRefresh) {
+      Future.microtask(() async {
+        final fresh = await _refreshCurrentUser(
+          ref,
+          api,
+          cachedUser: cachedUser,
+        );
+        if (fresh != null && ref.mounted) {
+          ref.read(_lastUserRefreshProvider.notifier).set(now);
+          state = AsyncData(fresh);
+        }
+      });
     }
 
-    // Fallback: fetch fresh.
-    final fresh = await _refreshCurrentUser(ref, api, cachedUser: cachedUser);
-    if (fresh != null && ref.mounted) {
-      ref.read(_lastUserRefreshProvider.notifier).set(DateTime.now());
-      state = AsyncData(fresh);
-    }
-    return fresh;
+    return mergedUser;
   }
 
   void setLocalUser(User user) {
     state = AsyncData(user);
+    final storage = ref.read(optimizedStorageServiceProvider);
+    unawaited(() async {
+      await storage.saveLocalUser(user);
+      await storage.saveLocalUserAvatar(user.profileImage);
+    }());
   }
 
   void clearLocalUser() {
     state = const AsyncData(null);
+    final storage = ref.read(optimizedStorageServiceProvider);
+    unawaited(storage.saveLocalUser(null));
   }
 }
 
@@ -712,10 +714,7 @@ Future<User?> _refreshCurrentUser(
     final storage = ref.read(optimizedStorageServiceProvider);
     if (mergedUser != null) {
       await storage.saveLocalUser(mergedUser);
-      final profileImage = mergedUser.profileImage;
-      if (profileImage != null && profileImage.isNotEmpty) {
-        await storage.saveLocalUserAvatar(profileImage);
-      }
+      await storage.saveLocalUserAvatar(mergedUser.profileImage);
     }
     return mergedUser;
   } catch (_) {
