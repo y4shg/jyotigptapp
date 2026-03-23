@@ -129,7 +129,7 @@ SharedPayload _toPayload(dynamic media) {
     // Common field in share_handler: `content` (String?)
     text = (media as dynamic).content as String?;
   } catch (e, stackTrace) {
-    DebugLogger.log(
+    DebugLogger.error(
       'ShareReceiver: failed to read content field',
       scope: 'share',
       error: e,
