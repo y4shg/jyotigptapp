@@ -516,7 +516,8 @@ struct AskJyotiGPTappIntent: AppIntent {
     func perform() async throws
         -> some IntentResult & ReturnsValue<String> & OpensIntent
     {
-        guard let channel = AppIntentMethodChannel.shared else {
+        let channel = await MainActor.run { AppIntentMethodChannel.shared }
+        guard let channel else {
             throw AppIntentError.executionFailed("App not ready")
         }
 
@@ -551,7 +552,8 @@ struct StartVoiceCallIntent: AppIntent {
     func perform() async throws
         -> some IntentResult & ReturnsValue<String> & OpensIntent
     {
-        guard let channel = AppIntentMethodChannel.shared else {
+        let channel = await MainActor.run { AppIntentMethodChannel.shared }
+        guard let channel else {
             throw AppIntentError.executionFailed("App not ready")
         }
 
@@ -589,7 +591,8 @@ struct JyotiGPTappSendTextIntent: AppIntent {
     func perform() async throws
         -> some IntentResult & ReturnsValue<String> & OpensIntent
     {
-        guard let channel = AppIntentMethodChannel.shared else {
+        let channel = await MainActor.run { AppIntentMethodChannel.shared }
+        guard let channel else {
             throw AppIntentError.executionFailed("App not ready")
         }
 
@@ -627,7 +630,8 @@ struct JyotiGPTappSendUrlIntent: AppIntent {
     func perform() async throws
         -> some IntentResult & ReturnsValue<String> & OpensIntent
     {
-        guard let channel = AppIntentMethodChannel.shared else {
+        let channel = await MainActor.run { AppIntentMethodChannel.shared }
+        guard let channel else {
             throw AppIntentError.executionFailed("App not ready")
         }
 
@@ -664,7 +668,8 @@ struct JyotiGPTappSendImageIntent: AppIntent {
     func perform() async throws
         -> some IntentResult & ReturnsValue<String> & OpensIntent
     {
-        guard let channel = AppIntentMethodChannel.shared else {
+        let channel = await MainActor.run { AppIntentMethodChannel.shared }
+        guard let channel else {
             throw AppIntentError.executionFailed("App not ready")
         }
 
