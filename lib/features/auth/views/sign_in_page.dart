@@ -68,10 +68,11 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         _error = _formatError(e.toString(), l10n);
       });
     } finally {
-      if (!mounted) return;
-      setState(() {
-        _isSigningIn = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isSigningIn = false;
+        });
+      }
     }
   }
 

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 class Platform {
   static bool get isAndroid => false;
   static bool get isFuchsia => false;
@@ -17,16 +19,20 @@ class File {
 
   final String path;
 
+  File get absolute => this;
+
   Future<bool> exists() => Future<bool>.error(_unsupported());
 
   bool existsSync() => throw _unsupported();
 
   Future<int> length() => Future<int>.error(_unsupported());
 
+  int lengthSync() => throw _unsupported();
+
   Directory get parent => Directory(path);
 
-  Future<List<int>> readAsBytes() =>
-      Future<List<int>>.error(_unsupported());
+  Future<Uint8List> readAsBytes() =>
+      Future<Uint8List>.error(_unsupported());
 
   Future<File> delete({bool recursive = false}) =>
       Future<File>.error(_unsupported());

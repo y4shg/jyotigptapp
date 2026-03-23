@@ -338,7 +338,7 @@ class ConnectivityService with WidgetsBindingObserver {
             return requestPort == port;
           };
 
-      return client;
+      return client as dynamic;
     };
   }
 

@@ -52,7 +52,6 @@ class ProfilePage extends ConsumerWidget {
           _hydrateBackendSettings(ref, settings);
         });
       },
-      fireImmediately: true,
     );
 
     final useAdaptivePlatformChrome = PlatformInfo.isIOS;
@@ -382,7 +381,6 @@ class ProfilePage extends ConsumerWidget {
           }
         });
       },
-      fireImmediately: true,
     );
     final themeMode = ref.watch(appThemeModeProvider);
     final themeModeNotifier = ref.read(appThemeModeProvider.notifier);
@@ -577,7 +575,7 @@ class ProfilePage extends ConsumerWidget {
               ),
             ],
           ),
-          error: (_, __) => JyotiGPTappCard(
+          error: (_, _) => JyotiGPTappCard(
             padding: const EdgeInsets.all(Spacing.md),
             child: Text(
               l10n.accountSettingsLoadError,
@@ -925,6 +923,9 @@ class ProfilePage extends ConsumerWidget {
 
     final notifier = ref.read(appLocaleProvider.notifier);
     await notifier.setLocale(selected.locale);
+    if (!context.mounted) {
+      return;
+    }
 
     final resolvedLocale = selected.locale ?? Localizations.localeOf(context);
     try {
@@ -998,7 +999,7 @@ class ProfilePage extends ConsumerWidget {
           child: ListView.separated(
             shrinkWrap: true,
             itemCount: options.length,
-            separatorBuilder: (_, __) => const Divider(height: 1),
+            separatorBuilder: (_, _) => const Divider(height: 1),
             itemBuilder: (context, index) {
               final option = options[index];
               return ListTile(
@@ -1074,6 +1075,9 @@ class ProfilePage extends ConsumerWidget {
 
     if (!granted) {
       await settingsNotifier.setVoiceCallNotificationsEnabled(false);
+      if (!context.mounted) {
+        return;
+      }
       UiUtils.showMessage(
         context,
         l10n.notificationsNotEnabledMessage,

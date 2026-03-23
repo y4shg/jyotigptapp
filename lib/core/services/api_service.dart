@@ -295,22 +295,6 @@ class ApiService {
     }
   }
 
-  Uri? _parseBaseUri(String baseUrl) {
-    final trimmed = baseUrl.trim();
-    if (trimmed.isEmpty) {
-      return null;
-    }
-    Uri? parsed = Uri.tryParse(trimmed);
-    if (parsed == null) {
-      return null;
-    }
-    if (!parsed.hasScheme) {
-      parsed =
-          Uri.tryParse('https://$trimmed') ?? Uri.tryParse('http://$trimmed');
-    }
-    return parsed;
-  }
-
   /// Basic health check - just verifies the server is reachable.
   Future<bool> checkHealth() async {
     try {
@@ -1679,7 +1663,7 @@ class ApiService {
 
     // Try to determine the mime type from response headers; fallback to text/plain
     final contentType =
-        response.headers.value(HttpHeaders.contentTypeHeader) ?? '';
+        response.headers.value(Headers.contentTypeHeader) ?? '';
     String mimeType = 'text/plain';
     if (contentType.isNotEmpty) {
       // Strip charset if present

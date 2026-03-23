@@ -80,7 +80,6 @@ class _ModernChatInputState extends ConsumerState<ModernChatInput>
   static const double _compactActionGap = 4.0;
   // Pill button dimensions for send / voice-call in compact mode.
   static const double _pillButtonHeight = 36.0;
-  static const double _pillButtonMinWidth = 56.0;
 
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();

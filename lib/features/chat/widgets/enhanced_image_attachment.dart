@@ -12,7 +12,6 @@ import 'package:share_plus/share_plus.dart';
 import '../../../shared/theme/theme_extensions.dart';
 import 'package:jyotigptapp/l10n/app_localizations.dart';
 import '../../../core/providers/app_providers.dart';
-import '../../auth/providers/unified_auth_providers.dart';
 import '../../../core/utils/debug_logger.dart';
 import '../../../core/network/image_header_utils.dart';
 import '../../../core/services/worker_manager.dart';
