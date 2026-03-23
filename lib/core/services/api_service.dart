@@ -1704,7 +1704,7 @@ class ApiService {
     return const [];
   }
 
-  // Enhanced File Operations
+  // Enhanced WebFile Operations
   Future<List<FileInfo>> searchFiles({
     String? query,
     String? contentType,
@@ -3470,15 +3470,15 @@ class ApiService {
     _streamCancelTokens.remove(messageId);
   }
 
-  // File upload for RAG
+  // WebFile upload for RAG
   Future<String> uploadFile(String filePath, String fileName, {String? contentType}) async {
     _traceApi('Starting file upload: $fileName from $filePath');
 
     try {
       // Check if file exists
-      final file = File(filePath);
+      final file = WebFile(filePath);
       if (!await file.exists()) {
-        throw Exception('File does not exist: $filePath');
+        throw Exception('WebFile does not exist: $filePath');
       }
 
       // Determine content type from file extension if not provided
@@ -3504,7 +3504,7 @@ class ApiService {
 
       if (response.data is Map && response.data['id'] != null) {
         final fileId = response.data['id'] as String;
-        _traceApi('File uploaded successfully with ID: $fileId');
+        _traceApi('WebFile uploaded successfully with ID: $fileId');
         return fileId;
       } else {
         throw Exception('Invalid response format: missing file ID');

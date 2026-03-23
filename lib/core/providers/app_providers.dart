@@ -646,8 +646,18 @@ class CurrentUser extends _$CurrentUser {
     state = AsyncData(user);
     final storage = ref.read(optimizedStorageServiceProvider);
     unawaited(() async {
-      await storage.saveLocalUser(user);
-      await storage.saveLocalUserAvatar(user.profileImage);
+      try {
+        await storage.saveLocalUser(user);
+        await storage.saveLocalUserAvatar(user.profileImage);
+      } catch (error, stackTrace) {
+        DebugLogger.error(
+          'save-local-user-failed',
+          scope: 'auth',
+          error: error,
+          stackTrace: stackTrace,
+          data: {'userId': user.id},
+        );
+      }
     }());
   }
 

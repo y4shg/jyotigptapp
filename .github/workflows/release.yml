@@ -137,7 +137,7 @@ jobs:
 
         #5 Install a stable xcodeproj gem version that supports Xcode 16 projects
       - name: Install xcodeproj
-        run: sudo gem install xcodeproj
+        run: sudo gem install xcodeproj -v 1.27.0
 
         #6 Cache CocoaPods
       - name: Cache CocoaPods

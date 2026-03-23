@@ -81,7 +81,7 @@ class AndroidAssistantHandler {
       startNewChat(_ref);
 
       // Add screenshot as attachment
-      final file = File(screenshotPath);
+      final file = WebFile(screenshotPath);
       if (!await file.exists()) {
         DebugLogger.log(
           'Screenshot file not found: $screenshotPath',
@@ -92,9 +92,14 @@ class AndroidAssistantHandler {
 
       final svc = _ref.read(fileAttachmentServiceProvider);
       if (svc != null) {
+        int fileSize = 0;
+        try {
+          fileSize = await file.length();
+        } catch (_) {}
         final attachment = LocalAttachment(
           file: file,
           displayName: path.basename(screenshotPath),
+          sizeInBytes: fileSize,
         );
 
         _ref.read(attachedFilesProvider.notifier).addFiles([attachment]);

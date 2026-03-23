@@ -2366,11 +2366,8 @@ class _CompactComposerActions extends StatelessWidget {
   /// Primary button is now a circle (compactActionSize), secondary mic is also a circle (compactActionSize).
   double get trailingActionInset =>
       compactActionSize +
-      (voiceAvailable
-          ? compactActionSize +
-              compactActionGap +
-              compactActionEdgeInset
-          : 0);
+      compactActionEdgeInset +
+      (voiceAvailable ? compactActionSize + compactActionGap : 0);
 
   @override
   Widget build(BuildContext context) {

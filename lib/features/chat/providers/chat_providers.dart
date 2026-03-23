@@ -1004,11 +1004,16 @@ void startNewChat(dynamic ref) {
   final conversationId = activeConversation?.id;
   if (conversationId != null) {
     try {
-      ref
-          .read(taskQueueProvider.notifier)
-          .cancelByConversation(conversationId);
+      unawaited(
+        ref
+            .read(taskQueueProvider.notifier)
+            .cancelByConversation(conversationId),
+      );
     } catch (_) {}
   }
+  try {
+    unawaited(ref.read(taskQueueProvider.notifier).cancelUnboundUploads());
+  } catch (_) {}
 
   // Clear active conversation
   ref.read(activeConversationProvider.notifier).clear();

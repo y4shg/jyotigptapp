@@ -287,7 +287,7 @@ class AppIntentCoordinator extends _$AppIntentCoordinator {
         .launch(startNewConversation: true);
   }
 
-  Future<File> _materializeTempFile(
+  Future<WebFile> _materializeTempFile(
     String base64Data, {
     String? preferredName,
   }) async {
@@ -302,12 +302,12 @@ class AppIntentCoordinator extends _$AppIntentCoordinator {
         ? preferredName
         : 'jyotigptapp_image_${DateTime.now().millisecondsSinceEpoch}.jpg';
     final sanitizedName = safeName.replaceAll(RegExp(r'[^\w\.\-]'), '_');
-    final file = File(p.join(tempDir.path, sanitizedName));
+    final file = WebFile(p.join(tempDir.path, sanitizedName));
     await file.writeAsBytes(bytes, flush: true);
     return file;
   }
 
-  Future<void> _attachFiles(List<File> files) async {
+  Future<void> _attachFiles(List<WebFile> files) async {
     if (files.isEmpty) return;
     // Warm the attachment service to ensure dependencies are ready.
     final _ = ref.read(fileAttachmentServiceProvider);
@@ -315,9 +315,20 @@ class AppIntentCoordinator extends _$AppIntentCoordinator {
     final taskQueue = ref.read(taskQueueProvider.notifier);
     final activeConv = ref.read(activeConversationProvider);
 
-    final attachments = files
-        .map((f) => LocalAttachment(file: f, displayName: p.basename(f.path)))
-        .toList();
+    final attachments = <LocalAttachment>[];
+    for (final file in files) {
+      int fileSize = 0;
+      try {
+        fileSize = await file.length();
+      } catch (_) {}
+      attachments.add(
+        LocalAttachment(
+          file: file,
+          displayName: p.basename(file.path),
+          sizeInBytes: fileSize,
+        ),
+      );
+    }
 
     notifier.addFiles(attachments);
 

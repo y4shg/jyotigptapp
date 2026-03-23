@@ -128,11 +128,24 @@ SharedPayload _toPayload(dynamic media) {
   try {
     // Common field in share_handler: `content` (String?)
     text = (media as dynamic).content as String?;
-  } catch (_) {
+  } catch (e, stackTrace) {
+    DebugLogger.log(
+      'ShareReceiver: failed to read content field',
+      scope: 'share',
+      error: e,
+      stackTrace: stackTrace,
+    );
     try {
       // Some plugins use `text`
       text = (media as dynamic).text as String?;
-    } catch (_) {}
+    } catch (e, stackTrace) {
+      DebugLogger.log(
+        'ShareReceiver: failed to read text field',
+        scope: 'share',
+        error: e,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   try {
@@ -142,12 +155,24 @@ SharedPayload _toPayload(dynamic media) {
         try {
           final p = (att as dynamic).path as String?;
           if (p != null && p.isNotEmpty) filePaths.add(p);
-        } catch (_) {
-          // Ignore a malformed entry
+        } catch (e, stackTrace) {
+          DebugLogger.log(
+            'ShareReceiver: invalid attachment entry',
+            scope: 'share',
+            error: e,
+            stackTrace: stackTrace,
+            data: {'entry': att},
+          );
         }
       }
     }
-  } catch (_) {
+  } catch (e, stackTrace) {
+    DebugLogger.log(
+      'ShareReceiver: failed to read attachments',
+      scope: 'share',
+      error: e,
+      stackTrace: stackTrace,
+    );
     // Older plugins may call it files
     try {
       final list = (media as dynamic).files as List<dynamic>?;
@@ -156,10 +181,25 @@ SharedPayload _toPayload(dynamic media) {
           try {
             final p = (att as dynamic).path as String?;
             if (p != null && p.isNotEmpty) filePaths.add(p);
-          } catch (_) {}
+          } catch (e, stackTrace) {
+            DebugLogger.log(
+              'ShareReceiver: invalid files entry',
+              scope: 'share',
+              error: e,
+              stackTrace: stackTrace,
+              data: {'entry': att},
+            );
+          }
         }
       }
-    } catch (_) {}
+    } catch (e, stackTrace) {
+      DebugLogger.log(
+        'ShareReceiver: failed to read files',
+        scope: 'share',
+        error: e,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   return SharedPayload(text: text, filePaths: filePaths);
@@ -175,12 +215,21 @@ Future<void> _processPayload(Ref ref, SharedPayload payload) async {
       final svc = ref.read(fileAttachmentServiceProvider);
       if (svc != null) {
         // Add files to attachment list and kick off uploads, mirroring UI flow
-        final attachments = payload.filePaths
-            .map(
-              (p) =>
-                  LocalAttachment(file: File(p), displayName: path.basename(p)),
-            )
-            .toList();
+          final attachments = <LocalAttachment>[];
+          for (final filePath in payload.filePaths) {
+            final file = WebFile(filePath);
+            int fileSize = 0;
+            try {
+              fileSize = await file.length();
+            } catch (_) {}
+            attachments.add(
+              LocalAttachment(
+                file: file,
+                displayName: path.basename(filePath),
+                sizeInBytes: fileSize,
+              ),
+            );
+          }
         if (attachments.isNotEmpty) {
           ref.read(attachedFilesProvider.notifier).addFiles(attachments);
 
@@ -196,7 +245,15 @@ Future<void> _processPayload(Ref ref, SharedPayload payload) async {
                     fileName: attachment.displayName,
                     fileSize: await attachment.file.length(),
                   );
-            } catch (_) {}
+            } catch (e, stackTrace) {
+              DebugLogger.error(
+                'ShareReceiver: failed to enqueue upload',
+                scope: 'share',
+                error: e,
+                stackTrace: stackTrace,
+                data: {'file': attachment.displayName},
+              );
+            }
           }
         }
       }
@@ -212,10 +269,12 @@ Future<void> _processPayload(Ref ref, SharedPayload payload) async {
     }
     // Do NOT create a server chat here. The chat is created on first send
     // (with server syncing + title generation) in chat_providers.dart.
-  } catch (e) {
-    DebugLogger.log(
-      'ShareReceiver: failed to process payload: $e',
+  } catch (e, stackTrace) {
+    DebugLogger.error(
+      'ShareReceiver: failed to process payload',
       scope: 'share',
+      error: e,
+      stackTrace: stackTrace,
     );
   }
 }

@@ -27,6 +27,9 @@ class ProfileUserSettings extends _$ProfileUserSettings {
     if (sessionKey != _activeSessionKey) {
       _resetSession(sessionKey);
     }
+    if (sessionKey == null) {
+      return const <String, dynamic>{};
+    }
 
     final api = ref.watch(apiServiceProvider);
     if (api == null) {

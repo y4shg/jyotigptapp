@@ -116,7 +116,8 @@ class TaskWorker {
     Uint8List? imageBytes;
     if (isImage) {
       try {
-        imageBytes = await File(uploadPath).readAsBytes();
+        imageBytes =
+            Uint8List.fromList(await WebFile(uploadPath).readAsBytes());
       } catch (_) {}
     }
 
@@ -164,7 +165,7 @@ class TaskWorker {
           }
 
           final newState = FileUploadState(
-            file: File(task.filePath),
+            file: WebFile(task.filePath),
             fileName: displayFileName,
             fileSize: task.fileSize ?? existing.fileSize,
             progress: status == FileUploadStatus.completed
@@ -188,7 +189,7 @@ class TaskWorker {
           // Clean up temp file from image conversion
           if (tempFilePath != null) {
             try {
-              File(tempFilePath).parent.deleteSync(recursive: true);
+              WebFile(tempFilePath).parent.deleteSync(recursive: true);
             } catch (_) {}
           }
           completer.complete();
@@ -209,7 +210,7 @@ class TaskWorker {
         // Clean up temp file on timeout
         if (tempFilePath != null) {
           try {
-            File(tempFilePath).parent.deleteSync(recursive: true);
+            WebFile(tempFilePath).parent.deleteSync(recursive: true);
           } catch (_) {}
         }
 
@@ -220,7 +221,7 @@ class TaskWorker {
           if (idx != -1) {
             final existing = current[idx];
             final newState = FileUploadState(
-              file: File(task.filePath),
+              file: WebFile(task.filePath),
               fileName: displayFileName,
               fileSize: task.fileSize ?? existing.fileSize,
               progress: 0.0,
@@ -273,9 +274,9 @@ class TaskWorker {
   /// Convert image to WebP for upload if needed
   Future<String?> _convertImageForUpload(UploadMediaTask task) async {
     try {
-      final file = File(task.filePath);
+      final file = WebFile(task.filePath);
       final result = await FlutterImageCompress.compressWithFile(
-        file.absolute.path,
+        file.path,
         format: CompressFormat.webp,
         quality: 85,
       );
@@ -283,7 +284,7 @@ class TaskWorker {
       if (result != null && result.isNotEmpty) {
         // Write to temp file for upload
         final tempDir = await Directory.systemTemp.createTemp('jyotigptapp_img_');
-        final tempFile = File('${tempDir.path}/converted.webp');
+        final tempFile = WebFile('${tempDir.path}/converted.webp');
         await tempFile.writeAsBytes(result);
         
         DebugLogger.log(
@@ -397,7 +398,7 @@ class TaskWorker {
   Future<void> _performImageToDataUrl(ImageToDataUrlTask task) async {
     // Convert image to base64 data URL locally (matching web client behavior)
     try {
-      final file = File(task.filePath);
+      final file = WebFile(task.filePath);
       final worker = _ref.read(workerManagerProvider);
       final base64DataUrl = await convertImageFileToDataUrl(
         file,
@@ -449,7 +450,7 @@ class TaskWorker {
         if (idx != -1) {
           final existing = current[idx];
           final newState = FileUploadState(
-            file: File(task.filePath),
+            file: WebFile(task.filePath),
             fileName: task.fileName,
             fileSize: existing.fileSize,
             progress: 0.0,

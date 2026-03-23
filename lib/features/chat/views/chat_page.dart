@@ -414,7 +414,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
       }
     } catch (e) {
       if (!mounted) return;
-      DebugLogger.log('File selection failed: $e', scope: 'chat/page');
+      DebugLogger.log('WebFile selection failed: $e', scope: 'chat/page');
     }
   }
 
@@ -434,7 +434,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     final fileService = ref.read(fileAttachmentServiceProvider);
     if (fileService == null) {
       DebugLogger.log(
-        'File service is null - cannot proceed',
+        'WebFile service is null - cannot proceed',
         scope: 'chat/page',
       );
       return;
@@ -2045,7 +2045,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                                 children: [
                                   // Top padding for gradient fade area
                                   const SizedBox(height: Spacing.xl),
-                                  // File attachments
+                                  // WebFile attachments
                                   const FileAttachmentWidget(),
                                   const ContextAttachmentWidget(),
                                   // RepaintBoundary prevents BackdropFilter

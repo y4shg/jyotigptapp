@@ -994,7 +994,7 @@ class FullScreenImageViewer extends ConsumerWidget {
       final tempDir = await getTemporaryDirectory();
       final filePath =
           '${tempDir.path}/jyotigptapp_shared_${DateTime.now().millisecondsSinceEpoch}.$fileExtension';
-      final file = File(filePath);
+      final file = WebFile(filePath);
       await file.writeAsBytes(bytes);
 
       await SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));

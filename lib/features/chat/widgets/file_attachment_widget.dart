@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../shared/theme/theme_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jyotigptapp/shared/utils/platform_io.dart' show File, Platform;
+import 'package:jyotigptapp/shared/utils/platform_io.dart' show WebFile, Platform;
 import 'package:jyotigptapp/l10n/app_localizations.dart';
 import '../services/file_attachment_service.dart';
 import '../../../shared/services/tasks/task_queue.dart';
@@ -269,7 +269,7 @@ class _FileAttachmentCard extends ConsumerWidget {
             )
           : _buildPreviewPlaceholderContent(context);
     } else {
-      final File file = fileState.file;
+      final WebFile file = fileState.file;
       final bool fileExists = file.existsSync();
       basePreview = fileExists
           ? Image.file(

@@ -104,7 +104,7 @@ class AudioRecordingService {
   /// Returns null if recording was not active, the file doesn't exist,
   /// or the recording failed (file too small).
   /// Throws an exception if the recording captured no audio data.
-  Future<File?> stopRecording() async {
+  Future<WebFile?> stopRecording() async {
     if (!_isRecording || _currentFilePath == null) {
       return null;
     }
@@ -121,9 +121,9 @@ class AudioRecordingService {
       return null;
     }
 
-    final file = File(path);
+    final file = WebFile(path);
     if (!await file.exists()) {
-      debugPrint('AudioRecordingService: File does not exist at $path');
+      debugPrint('AudioRecordingService: WebFile does not exist at $path');
       return null;
     }
 
@@ -167,7 +167,7 @@ class AudioRecordingService {
 
     if (_currentFilePath != null) {
       try {
-        final file = File(_currentFilePath!);
+        final file = WebFile(_currentFilePath!);
         if (await file.exists()) {
           await file.delete();
           debugPrint('AudioRecordingService: Deleted cancelled recording');

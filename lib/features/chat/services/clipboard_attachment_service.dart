@@ -93,10 +93,18 @@ class ClipboardAttachmentService {
       final filePath = path.join(tempDir.path, fileName);
 
       // Write image data to file
-      final file = File(filePath);
+      final file = WebFile(filePath);
       await file.writeAsBytes(imageData);
+      int fileSize = 0;
+      try {
+        fileSize = await file.length();
+      } catch (_) {}
 
-      return LocalAttachment(file: file, displayName: fileName);
+      return LocalAttachment(
+        file: file,
+        displayName: fileName,
+        sizeInBytes: fileSize,
+      );
     } catch (e) {
       debugPrint('ClipboardAttachmentService: Failed to create attachment: $e');
       return null;

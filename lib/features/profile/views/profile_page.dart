@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -75,7 +76,7 @@ class ProfilePage extends HookConsumerWidget {
       () {
         final settingsAsync = ref.read(profileUserSettingsProvider);
         settingsAsync.whenData((settings) {
-          _hydrateBackendSettings(ref, settings);
+          unawaited(_hydrateBackendSettings(context, ref, settings));
           _syncAppSettingsFromBackend(ref, settings);
         });
         return null;
@@ -87,7 +88,7 @@ class ProfilePage extends HookConsumerWidget {
       profileUserSettingsProvider,
       (previous, next) {
         next.whenData((settings) {
-          _hydrateBackendSettings(ref, settings);
+          unawaited(_hydrateBackendSettings(context, ref, settings));
         });
       },
     );
@@ -508,7 +509,11 @@ class ProfilePage extends HookConsumerWidget {
     );
   }
 
-  void _hydrateBackendSettings(WidgetRef ref, Map<String, dynamic> settings) {
+  Future<void> _hydrateBackendSettings(
+    BuildContext context,
+    WidgetRef ref,
+    Map<String, dynamic> settings,
+  ) async {
     final settingsNotifier = ref.read(appSettingsProvider.notifier);
     final currentSettings = ref.read(appSettingsProvider);
 
@@ -529,11 +534,13 @@ class ProfilePage extends HookConsumerWidget {
         'enableNotifications',
         defaultValue: true,
       );
-      if (currentSettings.voiceCallNotificationsEnabled !=
-          notificationsEnabled) {
-        settingsNotifier.setVoiceCallNotificationsEnabled(
-          notificationsEnabled,
-        );
+      if (!notificationsEnabled) {
+        if (currentSettings.voiceCallNotificationsEnabled) {
+          settingsNotifier.setVoiceCallNotificationsEnabled(false);
+        }
+      } else if (!currentSettings.voiceCallNotificationsEnabled &&
+          context.mounted) {
+        await _toggleNotifications(context, ref, settings, true);
       }
     }
 
@@ -941,16 +948,13 @@ class ProfilePage extends HookConsumerWidget {
     }
 
     final notifier = ref.read(appLocaleProvider.notifier);
+    final persistedValue = selected.locale?.toLanguageTag();
     await notifier.setLocale(selected.locale);
     if (!context.mounted) {
       return;
     }
 
-    final resolvedLocale = selected.locale ?? Localizations.localeOf(context);
     try {
-      final persistedValue = selected.locale == null
-          ? null
-          : resolvedLocale.toLanguageTag();
       await ref
           .read(profileUserSettingsProvider.notifier)
           .updateSetting('language', persistedValue);

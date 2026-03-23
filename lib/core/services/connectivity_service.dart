@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:jyotigptapp/shared/utils/platform_io.dart';
+import 'dart:io' show HttpClient, X509Certificate;
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';

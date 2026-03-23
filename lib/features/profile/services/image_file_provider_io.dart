@@ -10,7 +10,7 @@ ImageFileProvider createImageFileProviderImpl() => _IoImageFileProvider();
 class _IoImageFileProvider implements ImageFileProvider {
   @override
   Future<Uint8List> readAsBytes(String path) async {
-    return File(path).readAsBytes();
+    return WebFile(path).readAsBytes();
   }
 
   @override
@@ -18,6 +18,6 @@ class _IoImageFileProvider implements ImageFileProvider {
     required List<int> bytes,
     required String filePath,
   }) async {
-    return convertImageFileToDataUrl(File(filePath));
+    return convertImageFileToDataUrl(WebFile(filePath));
   }
 }

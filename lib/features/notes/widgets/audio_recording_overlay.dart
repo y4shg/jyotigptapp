@@ -21,7 +21,7 @@ class AudioRecordingOverlay extends StatefulWidget {
   final VoidCallback onCancel;
 
   /// Called when the user confirms the recording with the audio file.
-  final void Function(File audioFile) onConfirm;
+  final void Function(WebFile audioFile) onConfirm;
 
   const AudioRecordingOverlay({
     super.key,

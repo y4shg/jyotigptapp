@@ -81,7 +81,7 @@ class NoteFileAttachment extends StatelessWidget {
           ),
           child: Row(
             children: [
-              // File icon
+              // WebFile icon
               Container(
                 width: 40,
                 height: 40,
@@ -111,7 +111,7 @@ class NoteFileAttachment extends StatelessWidget {
 
               const SizedBox(width: Spacing.sm),
 
-              // File info
+              // WebFile info
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
