@@ -681,5 +681,157 @@
   "temporaryChatByDefault": "Temporary Chat by Default",
   "temporaryChatByDefaultDescription": "New chats won't be saved to history unless you choose to save them",
   "chatSaved": "Chat saved to history",
-  "chatSaveFailed": "Failed to save chat"
+  "chatSaveFailed": "채팅을 저장하지 못했습니다",
+  "profileSectionTitle": "프로필",
+  "@profileSectionTitle": {
+    "description": "Section header for profile-related settings."
+  },
+  "profilePictureTitle": "프로필 사진",
+  "@profilePictureTitle": {
+    "description": "Title for the profile photo settings tile."
+  },
+  "profilePictureSubtitle": "이 기기에서 새 사진을 선택하세요.",
+  "@profilePictureSubtitle": {
+    "description": "Subtitle describing the local profile photo picker action."
+  },
+  "displayNameTitle": "표시 이름",
+  "@displayNameTitle": {
+    "description": "Title for the display name settings tile."
+  },
+  "displayNameUnset": "이름 설정",
+  "@displayNameUnset": {
+    "description": "Subtitle shown when the user has not configured a display name yet."
+  },
+  "emailTitle": "이메일",
+  "@emailTitle": {
+    "description": "Title for the email settings tile."
+  },
+  "profileSignedInAccount": "로그인된 계정",
+  "@profileSignedInAccount": {
+    "description": "Fallback subtitle for the signed-in account email tile when no email is available."
+  },
+  "appSectionTitle": "앱",
+  "@appSectionTitle": {
+    "description": "Section header for app-level settings."
+  },
+  "themeTitle": "테마",
+  "@themeTitle": {
+    "description": "Label above the theme mode selector on the profile page."
+  },
+  "languageTitle": "언어",
+  "@languageTitle": {
+    "description": "Title for the language settings tile."
+  },
+  "notificationsTitle": "알림",
+  "@notificationsTitle": {
+    "description": "Title for the notifications settings tile."
+  },
+  "notificationsSubtitle": "이 기기에서 알림과 음성 통화 제어를 사용합니다.",
+  "@notificationsSubtitle": {
+    "description": "Subtitle explaining the notifications toggle on the profile page."
+  },
+  "accountSettingsTitle": "계정 설정",
+  "@accountSettingsTitle": {
+    "description": "Section header for account settings synchronized with the backend."
+  },
+  "accountSoundsTitle": "사운드",
+  "@accountSoundsTitle": {
+    "description": "Title for the account sounds toggle."
+  },
+  "accountSoundsSubtitle": "계정 관련 상호작용에 소리를 재생합니다.",
+  "@accountSoundsSubtitle": {
+    "description": "Subtitle for the account sounds toggle."
+  },
+  "accountSettingsLoadError": "현재 계정 설정을 불러올 수 없습니다.",
+  "@accountSettingsLoadError": {
+    "description": "Error text shown when account settings cannot be loaded."
+  },
+  "accountSettingsLoading": "계정 설정을 불러오는 중...",
+  "@accountSettingsLoading": {
+    "description": "Progress text shown while account settings are loading."
+  },
+  "hapticsOffTitle": "햅틱 끔",
+  "@hapticsOffTitle": {
+    "description": "Title shown when tapping the tile will disable haptics."
+  },
+  "hapticsOnTitle": "햅틱 켬",
+  "@hapticsOnTitle": {
+    "description": "Title shown when tapping the tile will enable haptics."
+  },
+  "hapticsOffSubtitle": "이 기기에서 햅틱 피드백을 끕니다.",
+  "@hapticsOffSubtitle": {
+    "description": "Subtitle shown when haptics are currently enabled."
+  },
+  "hapticsOnSubtitle": "이 기기에서 햅틱 피드백을 켭니다.",
+  "@hapticsOnSubtitle": {
+    "description": "Subtitle shown when haptics are currently disabled."
+  },
+  "changeDisplayNameTitle": "표시 이름 변경",
+  "@changeDisplayNameTitle": {
+    "description": "Dialog title for editing the local display name."
+  },
+  "changeDisplayNameMessage": "앱에 표시되는 이름을 업데이트하세요.",
+  "@changeDisplayNameMessage": {
+    "description": "Dialog message for the display name editor."
+  },
+  "displayNamePlaceholder": "이름",
+  "@displayNamePlaceholder": {
+    "description": "Placeholder text for the display name input."
+  },
+  "profileUpdateFailed": "현재 프로필을 업데이트할 수 없습니다.",
+  "@profileUpdateFailed": {
+    "description": "Snackbar shown when a local profile update cannot be saved."
+  },
+  "displayNameUpdatedLocalOnly": "이 기기에서 표시 이름이 업데이트되었습니다. 서버 프로필 동기화는 아직 사용할 수 없습니다.",
+  "@displayNameUpdatedLocalOnly": {
+    "description": "Snackbar shown after updating the display name locally."
+  },
+  "profilePictureUpdatedLocalOnly": "이 기기에서 프로필 사진이 업데이트되었습니다. 서버 프로필 동기화는 아직 사용할 수 없습니다.",
+  "@profilePictureUpdatedLocalOnly": {
+    "description": "Snackbar shown after updating the profile picture locally."
+  },
+  "languageChangedLocalOnly": "언어가 로컬에서 변경되었지만 계정 동기화에 실패했습니다.",
+  "@languageChangedLocalOnly": {
+    "description": "Snackbar shown when the language changes locally but backend sync fails."
+  },
+  "languageUpdated": "언어가 업데이트되었습니다.",
+  "@languageUpdated": {
+    "description": "Snackbar shown after the language preference sync succeeds."
+  },
+  "systemDefaultLanguageOption": "시스템 기본값",
+  "@systemDefaultLanguageOption": {
+    "description": "Option label for following the operating system language."
+  },
+  "appLanguageTitle": "앱 언어",
+  "@appLanguageTitle": {
+    "description": "Title for the language picker sheet."
+  },
+  "notificationsNotEnabledMessage": "알림이 활성화되지 않았습니다. 필요하면 시스템 설정을 확인하세요.",
+  "@notificationsNotEnabledMessage": {
+    "description": "Snackbar shown when the user denies notification permissions."
+  },
+  "notificationsEnabledMessage": "알림이 활성화되었습니다.",
+  "@notificationsEnabledMessage": {
+    "description": "Snackbar shown after notifications are enabled successfully."
+  },
+  "settingUpdateFailed": "{setting}을(를) 현재 업데이트할 수 없습니다.",
+  "@settingUpdateFailed": {
+    "description": "Snackbar shown when a backend profile setting update fails.",
+    "placeholders": {
+      "setting": {
+        "type": "String",
+        "example": "notifications"
+      }
+    }
+  },
+  "systemDefaultLanguageLabel": "시스템 기본값 ({language})",
+  "@systemDefaultLanguageLabel": {
+    "description": "Label for the current system language option in the language picker.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  }
 }

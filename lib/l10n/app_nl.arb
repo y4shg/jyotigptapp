@@ -903,5 +903,157 @@
   "temporaryChatByDefault": "Temporary Chat by Default",
   "temporaryChatByDefaultDescription": "New chats won't be saved to history unless you choose to save them",
   "chatSaved": "Chat saved to history",
-  "chatSaveFailed": "Failed to save chat"
+  "chatSaveFailed": "Chat opslaan mislukt",
+  "profileSectionTitle": "Profiel",
+  "@profileSectionTitle": {
+    "description": "Section header for profile-related settings."
+  },
+  "profilePictureTitle": "Profielfoto",
+  "@profilePictureTitle": {
+    "description": "Title for the profile photo settings tile."
+  },
+  "profilePictureSubtitle": "Kies een nieuwe foto voor dit apparaat.",
+  "@profilePictureSubtitle": {
+    "description": "Subtitle describing the local profile photo picker action."
+  },
+  "displayNameTitle": "Weergavenaam",
+  "@displayNameTitle": {
+    "description": "Title for the display name settings tile."
+  },
+  "displayNameUnset": "Stel je naam in",
+  "@displayNameUnset": {
+    "description": "Subtitle shown when the user has not configured a display name yet."
+  },
+  "emailTitle": "Email",
+  "@emailTitle": {
+    "description": "Title for the email settings tile."
+  },
+  "profileSignedInAccount": "Aangemeld account",
+  "@profileSignedInAccount": {
+    "description": "Fallback subtitle for the signed-in account email tile when no email is available."
+  },
+  "appSectionTitle": "App",
+  "@appSectionTitle": {
+    "description": "Section header for app-level settings."
+  },
+  "themeTitle": "Thema",
+  "@themeTitle": {
+    "description": "Label above the theme mode selector on the profile page."
+  },
+  "languageTitle": "Taal",
+  "@languageTitle": {
+    "description": "Title for the language settings tile."
+  },
+  "notificationsTitle": "Meldingen",
+  "@notificationsTitle": {
+    "description": "Title for the notifications settings tile."
+  },
+  "notificationsSubtitle": "Schakel meldingen en spraakoproepbediening in voor dit apparaat.",
+  "@notificationsSubtitle": {
+    "description": "Subtitle explaining the notifications toggle on the profile page."
+  },
+  "accountSettingsTitle": "Accountinstellingen",
+  "@accountSettingsTitle": {
+    "description": "Section header for account settings synchronized with the backend."
+  },
+  "accountSoundsTitle": "Geluiden",
+  "@accountSoundsTitle": {
+    "description": "Title for the account sounds toggle."
+  },
+  "accountSoundsSubtitle": "Speel geluiden af voor accountinteracties.",
+  "@accountSoundsSubtitle": {
+    "description": "Subtitle for the account sounds toggle."
+  },
+  "accountSettingsLoadError": "Kan accountinstellingen momenteel niet laden.",
+  "@accountSettingsLoadError": {
+    "description": "Error text shown when account settings cannot be loaded."
+  },
+  "accountSettingsLoading": "Accountinstellingen laden...",
+  "@accountSettingsLoading": {
+    "description": "Progress text shown while account settings are loading."
+  },
+  "hapticsOffTitle": "Haptiek uit",
+  "@hapticsOffTitle": {
+    "description": "Title shown when tapping the tile will disable haptics."
+  },
+  "hapticsOnTitle": "Haptiek aan",
+  "@hapticsOnTitle": {
+    "description": "Title shown when tapping the tile will enable haptics."
+  },
+  "hapticsOffSubtitle": "Schakel tactiele feedback voor dit apparaat uit.",
+  "@hapticsOffSubtitle": {
+    "description": "Subtitle shown when haptics are currently enabled."
+  },
+  "hapticsOnSubtitle": "Schakel tactiele feedback voor dit apparaat in.",
+  "@hapticsOnSubtitle": {
+    "description": "Subtitle shown when haptics are currently disabled."
+  },
+  "changeDisplayNameTitle": "Weergavenaam wijzigen",
+  "@changeDisplayNameTitle": {
+    "description": "Dialog title for editing the local display name."
+  },
+  "changeDisplayNameMessage": "Werk de naam bij die in de app wordt weergegeven.",
+  "@changeDisplayNameMessage": {
+    "description": "Dialog message for the display name editor."
+  },
+  "displayNamePlaceholder": "Je naam",
+  "@displayNamePlaceholder": {
+    "description": "Placeholder text for the display name input."
+  },
+  "profileUpdateFailed": "Je profiel kan momenteel niet worden bijgewerkt.",
+  "@profileUpdateFailed": {
+    "description": "Snackbar shown when a local profile update cannot be saved."
+  },
+  "displayNameUpdatedLocalOnly": "Weergavenaam op dit apparaat bijgewerkt. Serversynchronisatie is nog niet beschikbaar.",
+  "@displayNameUpdatedLocalOnly": {
+    "description": "Snackbar shown after updating the display name locally."
+  },
+  "profilePictureUpdatedLocalOnly": "Profielfoto op dit apparaat bijgewerkt. Serversynchronisatie is nog niet beschikbaar.",
+  "@profilePictureUpdatedLocalOnly": {
+    "description": "Snackbar shown after updating the profile picture locally."
+  },
+  "languageChangedLocalOnly": "Taal lokaal gewijzigd, maar accountsynchronisatie mislukt.",
+  "@languageChangedLocalOnly": {
+    "description": "Snackbar shown when the language changes locally but backend sync fails."
+  },
+  "languageUpdated": "Taal bijgewerkt.",
+  "@languageUpdated": {
+    "description": "Snackbar shown after the language preference sync succeeds."
+  },
+  "systemDefaultLanguageOption": "Systeemstandaard",
+  "@systemDefaultLanguageOption": {
+    "description": "Option label for following the operating system language."
+  },
+  "appLanguageTitle": "App-taal",
+  "@appLanguageTitle": {
+    "description": "Title for the language picker sheet."
+  },
+  "notificationsNotEnabledMessage": "Meldingen zijn niet ingeschakeld. Controleer indien nodig de systeeminstellingen.",
+  "@notificationsNotEnabledMessage": {
+    "description": "Snackbar shown when the user denies notification permissions."
+  },
+  "notificationsEnabledMessage": "Meldingen ingeschakeld.",
+  "@notificationsEnabledMessage": {
+    "description": "Snackbar shown after notifications are enabled successfully."
+  },
+  "settingUpdateFailed": "Kan {setting} momenteel niet bijwerken.",
+  "@settingUpdateFailed": {
+    "description": "Snackbar shown when a backend profile setting update fails.",
+    "placeholders": {
+      "setting": {
+        "type": "String",
+        "example": "notifications"
+      }
+    }
+  },
+  "systemDefaultLanguageLabel": "Systeemstandaard ({language})",
+  "@systemDefaultLanguageLabel": {
+    "description": "Label for the current system language option in the language picker.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  }
 }

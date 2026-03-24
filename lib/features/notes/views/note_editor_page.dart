@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io' show File, Platform;
+import 'package:jyotigptapp/shared/utils/platform_io.dart' show WebFile, Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -591,7 +591,7 @@ class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
   }
 
   /// Uploads an audio file to the server and attaches it to the note.
-  Future<void> _uploadAudioFile(File audioFile) async {
+  Future<void> _uploadAudioFile(WebFile audioFile) async {
     final api = ref.read(apiServiceProvider);
     final l10n = AppLocalizations.of(context)!;
 
@@ -1246,7 +1246,7 @@ class _NoteEditorPageState extends ConsumerState<NoteEditorPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // File attachments section (if any)
+            // WebFile attachments section (if any)
             if (files.isNotEmpty) ...[
               NoteFilesSection(
                 files: files,

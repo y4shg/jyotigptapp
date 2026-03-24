@@ -11,44 +11,6 @@ class ContextAttachmentsNotifier extends Notifier<List<ChatContextAttachment>> {
     state = [...state, attachment];
   }
 
-  void addWeb({
-    required String displayName,
-    required String content,
-    required String url,
-    String? collectionName,
-  }) {
-    final id = const Uuid().v4();
-    add(
-      ChatContextAttachment(
-        id: id,
-        type: ChatContextAttachmentType.web,
-        displayName: displayName,
-        url: url,
-        content: content,
-        collectionName: collectionName,
-      ),
-    );
-  }
-
-  void addYoutube({
-    required String displayName,
-    required String content,
-    required String url,
-    String? collectionName,
-  }) {
-    final id = const Uuid().v4();
-    add(
-      ChatContextAttachment(
-        id: id,
-        type: ChatContextAttachmentType.youtube,
-        displayName: displayName,
-        url: url,
-        content: content,
-        collectionName: collectionName,
-      ),
-    );
-  }
-
   void addKnowledge({
     required String displayName,
     required String fileId,

@@ -24,7 +24,6 @@
 
     <!-- Fallback colors for pre-Android 12 -->
     <color name="widget_primary_fallback">#E53935</color>
-    <color name="widget_primary_dark_fallback">#B71C1C</color>
     <color name="widget_mic_background_fallback">#2A1B1D</color>
     <color name="widget_mic_icon_fallback">#F3D8D8</color>
     <color name="widget_secondary_container_fallback">#3A1F22</color>

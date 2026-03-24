@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+import 'package:jyotigptapp/shared/utils/platform_io.dart' show Platform;
 
 import 'package:jyotigptapp/l10n/app_localizations.dart';
 import 'package:flutter/cupertino.dart';

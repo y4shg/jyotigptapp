@@ -238,27 +238,27 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     // -----------------------------------------------------------------------
     GoRoute(
       path: '/login',
-      redirect: (_, __) => Routes.signIn,
+      redirect: (_, _) => Routes.signIn,
     ),
     GoRoute(
       path: '/authentication',
-      redirect: (_, __) => Routes.signIn,
+      redirect: (_, _) => Routes.signIn,
     ),
     GoRoute(
       path: '/server-connection',
-      redirect: (_, __) => Routes.signIn,
+      redirect: (_, _) => Routes.signIn,
     ),
     GoRoute(
       path: '/sso-auth',
-      redirect: (_, __) => Routes.signIn,
+      redirect: (_, _) => Routes.signIn,
     ),
     GoRoute(
       path: '/proxy-auth',
-      redirect: (_, __) => Routes.signIn,
+      redirect: (_, _) => Routes.signIn,
     ),
     GoRoute(
       path: '/profile/customization',
-      redirect: (_, __) => Routes.profile,
+      redirect: (_, _) => Routes.profile,
     ),
   ];
 

@@ -60,8 +60,9 @@ jobs:
         #5 Setup Keystore
       - name: Create Keystore
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > app/jyotigptapp-keystore.jks
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > app/jyotigptapp.jks
           echo "${{ secrets.ANDROID_KEY_PROPERTIES_BASE64 }}" | base64 --decode > key.properties
+          sed -i 's|^storeFile=.*|storeFile=jyotigptapp.jks|' key.properties
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           ANDROID_KEY_PROPERTIES_BASE64: ${{ secrets.ANDROID_KEY_PROPERTIES_BASE64 }}
@@ -100,7 +101,10 @@ jobs:
 
   build-ios:
     name: Build iOS
-    runs-on: macos-latest
+    # Pin `runs-on` to macos-26 so the workflow keeps using the Xcode 26 image
+    # for reproducible builds; update this runner manually when GitHub deprecates
+    # it, and re-evaluate the pin periodically alongside Xcode support changes.
+    runs-on: macos-26
     permissions:
       contents: write
 
@@ -129,9 +133,13 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest-stable
+          xcode-version: '26.3'
 
-        #5 Cache CocoaPods
+        #5 Install a stable xcodeproj gem version that supports Xcode 16 projects
+      - name: Install xcodeproj
+        run: sudo gem install xcodeproj -v 1.27.0
+
+        #6 Cache CocoaPods
       - name: Cache CocoaPods
         uses: actions/cache@v4
         with:
@@ -146,7 +154,7 @@ jobs:
           cd ios
           pod install --verbose
 
-        #6 Cache Xcode DerivedData
+        #7 Cache Xcode DerivedData
       - name: Cache Xcode DerivedData
         uses: actions/cache@v4
         with:
@@ -160,7 +168,7 @@ jobs:
         run: |
           flutter build ios --release --no-codesign
 
-        #7 Create IPA from App Bundle
+        #8 Create IPA from App Bundle
       - name: Create IPA
         run: |
           mkdir -p build/ios/ipa
@@ -170,7 +178,7 @@ jobs:
           zip -r ../ipa/jyotigptapp.ipa Payload
           cd ../ipa
 
-        #8 Upload Artifacts
+        #9 Upload Artifacts
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -178,7 +186,7 @@ jobs:
           path: |
             build/ios/ipa/*.ipa
 
-        #9 Update Release
+        #10 Update Release
       - name: Update Release with IPA
         if: github.ref_type == 'tag' || github.event_name == 'workflow_dispatch'
         uses: ncipollo/release-action@v1

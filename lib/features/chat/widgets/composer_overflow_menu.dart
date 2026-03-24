@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'dart:io' show Platform;
+import 'package:jyotigptapp/shared/utils/platform_io.dart' show Platform;
 
 import '../../../shared/theme/theme_extensions.dart';
+import '../../../shared/utils/platform_utils.dart';
 import '../../../shared/widgets/sheet_handle.dart';
 import '../../../shared/widgets/jyotigptapp_components.dart';
 import '../../../shared/widgets/modal_safe_area.dart';
 import '../../../core/models/tool.dart';
 import '../../../core/models/toggle_filter.dart';
 import '../../../core/providers/app_providers.dart';
+import '../../../core/services/settings_service.dart';
 import '../../tools/providers/tools_providers.dart';
 import '../providers/chat_providers.dart';
 import 'package:jyotigptapp/l10n/app_localizations.dart';
@@ -26,6 +27,7 @@ class ToggleTile extends StatelessWidget {
     required this.selected,
     required this.onToggle,
     required this.theme,
+    required this.hapticsEnabled,
   });
 
   final Widget glyph;
@@ -34,6 +36,7 @@ class ToggleTile extends StatelessWidget {
   final bool selected;
   final VoidCallback onToggle;
   final JyotiGPTappThemeExtension theme;
+  final bool hapticsEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,7 @@ class ToggleTile extends StatelessWidget {
       child: JyotiGPTappCard(
         padding: const EdgeInsets.all(Spacing.md),
         onTap: () {
-          HapticFeedback.selectionClick();
+          PlatformUtils.selectionHaptic(enabled: hapticsEnabled);
           onToggle();
         },
         child: Row(
@@ -121,13 +124,11 @@ class ComposerOverflowSheet extends ConsumerStatefulWidget {
     this.onFileAttachment,
     this.onImageAttachment,
     this.onCameraCapture,
-    this.onWebAttachment,
   });
 
   final VoidCallback? onFileAttachment;
   final VoidCallback? onImageAttachment;
   final VoidCallback? onCameraCapture;
-  final VoidCallback? onWebAttachment;
 
   @override
   ConsumerState<ComposerOverflowSheet> createState() =>
@@ -140,25 +141,18 @@ class _ComposerOverflowSheetState
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = context.jyotigptappTheme;
+    final hapticsEnabled = ref.watch(
+      appSettingsProvider.select((settings) => settings.hapticFeedback),
+    );
 
     final attachments = <Widget>[
-      _buildAction(
-        icon: Platform.isIOS ? CupertinoIcons.doc : Icons.attach_file,
-        label: l10n.file,
-        onTap: widget.onFileAttachment == null
-            ? null
-            : () {
-                HapticFeedback.lightImpact();
-                widget.onFileAttachment!();
-              },
-      ),
       _buildAction(
         icon: Platform.isIOS ? CupertinoIcons.photo : Icons.image,
         label: l10n.photo,
         onTap: widget.onImageAttachment == null
             ? null
             : () {
-                HapticFeedback.lightImpact();
+                PlatformUtils.lightHaptic(enabled: hapticsEnabled);
                 widget.onImageAttachment!();
               },
       ),
@@ -168,18 +162,18 @@ class _ComposerOverflowSheetState
         onTap: widget.onCameraCapture == null
             ? null
             : () {
-                HapticFeedback.lightImpact();
+                PlatformUtils.lightHaptic(enabled: hapticsEnabled);
                 widget.onCameraCapture!();
               },
       ),
       _buildAction(
-        icon: Icons.public,
-        label: l10n.webPage,
-        onTap: widget.onWebAttachment == null
+        icon: Platform.isIOS ? CupertinoIcons.doc : Icons.attach_file,
+        label: l10n.file,
+        onTap: widget.onFileAttachment == null
             ? null
             : () {
-                HapticFeedback.lightImpact();
-                widget.onWebAttachment!();
+                PlatformUtils.lightHaptic(enabled: hapticsEnabled);
+                widget.onFileAttachment!();
               },
       ),
     ];
@@ -194,6 +188,7 @@ class _ComposerOverflowSheetState
           title: l10n.webSearch,
           subtitle: l10n.webSearchDescription,
           value: webSearchEnabled,
+          hapticsEnabled: hapticsEnabled,
           onChanged: (v) =>
               ref.read(webSearchEnabledProvider.notifier).set(v),
         ),
@@ -209,6 +204,7 @@ class _ComposerOverflowSheetState
           title: l10n.imageGeneration,
           subtitle: l10n.imageGenerationDescription,
           value: imageGenEnabled,
+          hapticsEnabled: hapticsEnabled,
           onChanged: (v) =>
               ref.read(imageGenerationEnabledProvider.notifier).set(v),
         ),
@@ -232,6 +228,7 @@ class _ComposerOverflowSheetState
               isSelected ? current.remove(tool.id) : current.add(tool.id);
               ref.read(selectedToolIdsProvider.notifier).set(current);
             },
+            hapticsEnabled: hapticsEnabled,
           );
         }).toList();
         return Column(children: withVerticalSpacing(tiles, Spacing.xxs));
@@ -278,6 +275,7 @@ class _ComposerOverflowSheetState
           selected: isSelected,
           onToggle: () =>
               ref.read(selectedFilterIdsProvider.notifier).toggle(filter.id),
+          hapticsEnabled: hapticsEnabled,
         );
       }).toList();
       listItems
@@ -433,6 +431,7 @@ class _ComposerOverflowSheetState
     String? subtitle,
     required bool value,
     required ValueChanged<bool> onChanged,
+    required bool hapticsEnabled,
     String? iconUrl,
   }) {
     final theme = context.jyotigptappTheme;
@@ -446,6 +445,7 @@ class _ComposerOverflowSheetState
       selected: value,
       onToggle: () => onChanged(!value),
       theme: theme,
+      hapticsEnabled: hapticsEnabled,
     );
   }
 
@@ -453,6 +453,7 @@ class _ComposerOverflowSheetState
     required Tool tool,
     required bool selected,
     required VoidCallback onToggle,
+    required bool hapticsEnabled,
   }) {
     final theme = context.jyotigptappTheme;
     return ToggleTile(
@@ -466,6 +467,7 @@ class _ComposerOverflowSheetState
       selected: selected,
       onToggle: onToggle,
       theme: theme,
+      hapticsEnabled: hapticsEnabled,
     );
   }
 
@@ -473,6 +475,7 @@ class _ComposerOverflowSheetState
     required ToggleFilter filter,
     required bool selected,
     required VoidCallback onToggle,
+    required bool hapticsEnabled,
   }) {
     final theme = context.jyotigptappTheme;
     return ToggleTile(
@@ -486,6 +489,7 @@ class _ComposerOverflowSheetState
       selected: selected,
       onToggle: onToggle,
       theme: theme,
+      hapticsEnabled: hapticsEnabled,
     );
   }
 

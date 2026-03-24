@@ -1,0 +1,28 @@
+"widget_action_open_title" = "Open JyotiGPT";
+"widget_action_open_short_title" = "Open";
+
+"widget_action_chat_title" = "New Chat";
+"widget_action_chat_short_title" = "Chat";
+
+"widget_action_voice_title" = "Voice";
+"widget_action_voice_short_title" = "Voice";
+
+"widget_action_image_title" = "Image";
+"widget_action_image_short_title" = "Image";
+
+"widget_action_camera_title" = "Camera";
+"widget_action_camera_short_title" = "Camera";
+
+"widget_action_clipboard_title" = "Clipboard";
+"widget_action_clipboard_short_title" = "Clipboard";
+
+"widget_medium_prompt_title" = "Ask JyotiGPT";
+"widget_medium_open_camera" = "Open Camera";
+"widget_medium_open_photos" = "Open Photos";
+"widget_medium_start_voice" = "Start Voice";
+"widget_medium_paste_clipboard" = "Paste from Clipboard";
+
+"widget_display_name" = "JyotiGPT";
+"widget_gallery_description" = "Quick access to spiritual chat, camera, photos, and voice.";
+"widget_accessory_description" = "Open %@ in JyotiGPT.";
+"widget_accessory_open_description" = "Open JyotiGPT.";

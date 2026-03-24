@@ -1,9 +1,10 @@
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../shared/theme/theme_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:io' show File, Platform;
+import 'package:jyotigptapp/shared/utils/platform_io.dart' show WebFile, Platform;
 import 'package:jyotigptapp/l10n/app_localizations.dart';
 import '../services/file_attachment_service.dart';
 import '../../../shared/services/tasks/task_queue.dart';
@@ -255,17 +256,31 @@ class _FileAttachmentCard extends ConsumerWidget {
   }
 
   Widget _buildImagePreview(BuildContext context, Widget removeButton) {
-    final File file = fileState.file;
-    final bool fileExists = file.existsSync();
-    final Widget basePreview = fileExists
-        ? Image.file(
-            file,
-            fit: BoxFit.cover,
-            filterQuality: FilterQuality.medium,
-            errorBuilder: (context, error, stackTrace) =>
-                _buildPreviewPlaceholderContent(context),
-          )
-        : _buildPreviewPlaceholderContent(context);
+    final Widget basePreview;
+    if (kIsWeb) {
+      final dataUrl = fileState.base64DataUrl;
+      basePreview = dataUrl != null
+          ? Image.network(
+              dataUrl,
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.medium,
+              errorBuilder: (context, error, stackTrace) =>
+                  _buildPreviewPlaceholderContent(context),
+            )
+          : _buildPreviewPlaceholderContent(context);
+    } else {
+      final WebFile file = fileState.file;
+      final bool fileExists = file.existsSync();
+      basePreview = fileExists
+          ? Image.file(
+              file as dynamic,
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.medium,
+              errorBuilder: (context, error, stackTrace) =>
+                  _buildPreviewPlaceholderContent(context),
+            )
+          : _buildPreviewPlaceholderContent(context);
+    }
 
     return DecoratedBox(
       decoration: BoxDecoration(

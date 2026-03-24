@@ -897,11 +897,163 @@
   "failedToLoadAudio": "Error al cargar el audio",
   "webPage": "Página Web",
   "greetingTitle": "Hola, {username}",
-  "temporaryChat": "Temporary Chat",
-  "temporaryChatTooltip": "This chat won't appear in history",
-  "saveChat": "Save Chat",
-  "temporaryChatByDefault": "Temporary Chat by Default",
-  "temporaryChatByDefaultDescription": "New chats won't be saved to history unless you choose to save them",
-  "chatSaved": "Chat saved to history",
-  "chatSaveFailed": "Failed to save chat"
+  "temporaryChat": "Chat temporal",
+  "temporaryChatTooltip": "Este chat no aparecerá en el historial",
+  "saveChat": "Guardar chat",
+  "temporaryChatByDefault": "Chat temporal por defecto",
+  "temporaryChatByDefaultDescription": "Los chats nuevos no se guardarán en el historial a menos que elijas guardarlos",
+  "chatSaved": "Chat guardado en el historial",
+  "chatSaveFailed": "No se pudo guardar el chat",
+  "profileSectionTitle": "Perfil",
+  "@profileSectionTitle": {
+    "description": "Section header for profile-related settings."
+  },
+  "profilePictureTitle": "Foto de perfil",
+  "@profilePictureTitle": {
+    "description": "Title for the profile photo settings tile."
+  },
+  "profilePictureSubtitle": "Elige una nueva foto para este dispositivo.",
+  "@profilePictureSubtitle": {
+    "description": "Subtitle describing the local profile photo picker action."
+  },
+  "displayNameTitle": "Nombre para mostrar",
+  "@displayNameTitle": {
+    "description": "Title for the display name settings tile."
+  },
+  "displayNameUnset": "Establecer tu nombre",
+  "@displayNameUnset": {
+    "description": "Subtitle shown when the user has not configured a display name yet."
+  },
+  "emailTitle": "Correo electrónico",
+  "@emailTitle": {
+    "description": "Title for the email settings tile."
+  },
+  "profileSignedInAccount": "Cuenta con sesión iniciada",
+  "@profileSignedInAccount": {
+    "description": "Fallback subtitle for the signed-in account email tile when no email is available."
+  },
+  "appSectionTitle": "Aplicación",
+  "@appSectionTitle": {
+    "description": "Section header for app-level settings."
+  },
+  "themeTitle": "Tema",
+  "@themeTitle": {
+    "description": "Label above the theme mode selector on the profile page."
+  },
+  "languageTitle": "Idioma",
+  "@languageTitle": {
+    "description": "Title for the language settings tile."
+  },
+  "notificationsTitle": "Notificaciones",
+  "@notificationsTitle": {
+    "description": "Title for the notifications settings tile."
+  },
+  "notificationsSubtitle": "Habilita notificaciones y controles de llamadas de voz para este dispositivo.",
+  "@notificationsSubtitle": {
+    "description": "Subtitle explaining the notifications toggle on the profile page."
+  },
+  "accountSettingsTitle": "Configuración de la cuenta",
+  "@accountSettingsTitle": {
+    "description": "Section header for account settings synchronized with the backend."
+  },
+  "accountSoundsTitle": "Sonidos",
+  "@accountSoundsTitle": {
+    "description": "Title for the account sounds toggle."
+  },
+  "accountSoundsSubtitle": "Reproducir sonidos para las interacciones de la cuenta.",
+  "@accountSoundsSubtitle": {
+    "description": "Subtitle for the account sounds toggle."
+  },
+  "accountSettingsLoadError": "No se puede cargar la configuración de la cuenta ahora.",
+  "@accountSettingsLoadError": {
+    "description": "Error text shown when account settings cannot be loaded."
+  },
+  "accountSettingsLoading": "Cargando configuración de la cuenta...",
+  "@accountSettingsLoading": {
+    "description": "Progress text shown while account settings are loading."
+  },
+  "hapticsOffTitle": "Hápticos desactivados",
+  "@hapticsOffTitle": {
+    "description": "Title shown when tapping the tile will disable haptics."
+  },
+  "hapticsOnTitle": "Hápticos activados",
+  "@hapticsOnTitle": {
+    "description": "Title shown when tapping the tile will enable haptics."
+  },
+  "hapticsOffSubtitle": "Desactiva la retroalimentación háptica en este dispositivo.",
+  "@hapticsOffSubtitle": {
+    "description": "Subtitle shown when haptics are currently enabled."
+  },
+  "hapticsOnSubtitle": "Activa la retroalimentación háptica en este dispositivo.",
+  "@hapticsOnSubtitle": {
+    "description": "Subtitle shown when haptics are currently disabled."
+  },
+  "changeDisplayNameTitle": "Cambiar nombre para mostrar",
+  "@changeDisplayNameTitle": {
+    "description": "Dialog title for editing the local display name."
+  },
+  "changeDisplayNameMessage": "Actualiza el nombre que se muestra en la app.",
+  "@changeDisplayNameMessage": {
+    "description": "Dialog message for the display name editor."
+  },
+  "displayNamePlaceholder": "Tu nombre",
+  "@displayNamePlaceholder": {
+    "description": "Placeholder text for the display name input."
+  },
+  "profileUpdateFailed": "No se pudo actualizar tu perfil en este momento.",
+  "@profileUpdateFailed": {
+    "description": "Snackbar shown when a local profile update cannot be saved."
+  },
+  "displayNameUpdatedLocalOnly": "Nombre para mostrar actualizado en este dispositivo. La sincronización con el servidor aún no está disponible.",
+  "@displayNameUpdatedLocalOnly": {
+    "description": "Snackbar shown after updating the display name locally."
+  },
+  "profilePictureUpdatedLocalOnly": "Foto de perfil actualizada en este dispositivo. La sincronización con el servidor aún no está disponible.",
+  "@profilePictureUpdatedLocalOnly": {
+    "description": "Snackbar shown after updating the profile picture locally."
+  },
+  "languageChangedLocalOnly": "Idioma cambiado localmente, pero falló la sincronización de la cuenta.",
+  "@languageChangedLocalOnly": {
+    "description": "Snackbar shown when the language changes locally but backend sync fails."
+  },
+  "languageUpdated": "Idioma actualizado.",
+  "@languageUpdated": {
+    "description": "Snackbar shown after the language preference sync succeeds."
+  },
+  "systemDefaultLanguageOption": "Predeterminado del sistema",
+  "@systemDefaultLanguageOption": {
+    "description": "Option label for following the operating system language."
+  },
+  "appLanguageTitle": "Idioma de la aplicación",
+  "@appLanguageTitle": {
+    "description": "Title for the language picker sheet."
+  },
+  "notificationsNotEnabledMessage": "No se habilitaron las notificaciones. Revisa la configuración del sistema si es necesario.",
+  "@notificationsNotEnabledMessage": {
+    "description": "Snackbar shown when the user denies notification permissions."
+  },
+  "notificationsEnabledMessage": "Notificaciones habilitadas.",
+  "@notificationsEnabledMessage": {
+    "description": "Snackbar shown after notifications are enabled successfully."
+  },
+  "settingUpdateFailed": "No se pudo actualizar {setting} en este momento.",
+  "@settingUpdateFailed": {
+    "description": "Snackbar shown when a backend profile setting update fails.",
+    "placeholders": {
+      "setting": {
+        "type": "String",
+        "example": "notifications"
+      }
+    }
+  },
+  "systemDefaultLanguageLabel": "Predeterminado del sistema ({language})",
+  "@systemDefaultLanguageLabel": {
+    "description": "Label for the current system language option in the language picker.",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  }
 }

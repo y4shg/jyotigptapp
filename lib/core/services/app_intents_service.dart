@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'package:jyotigptapp/shared/utils/platform_io.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +12,6 @@ import '../providers/app_providers.dart';
 import '../utils/debug_logger.dart';
 import 'navigation_service.dart';
 import '../../features/chat/providers/chat_providers.dart';
-import '../../features/chat/providers/context_attachments_provider.dart';
 import '../../features/auth/providers/unified_auth_providers.dart';
 import '../../features/chat/voice_call/presentation/voice_call_launcher.dart';
 import '../../features/chat/services/file_attachment_service.dart';
@@ -178,77 +177,24 @@ class AppIntentCoordinator extends _$AppIntentCoordinator {
       return {'success': false, 'error': 'No URL provided.'};
     }
 
+    final parsedUri = Uri.tryParse(url);
+    final isValid = parsedUri != null &&
+        parsedUri.hasScheme &&
+        parsedUri.host.isNotEmpty &&
+        (parsedUri.scheme == 'http' || parsedUri.scheme == 'https');
+
+    if (!isValid) {
+      return {'success': false, 'error': 'Invalid URL provided.'};
+    }
+
     try {
-      // Determine if this is a YouTube URL
-      final isYoutube =
-          url.startsWith('https://www.youtube.com') ||
-          url.startsWith('https://youtu.be') ||
-          url.startsWith('https://youtube.com') ||
-          url.startsWith('https://m.youtube.com');
-
-      // Try to fetch the URL content first
-      String? content;
-      String? name;
-      String? collectionName;
-      final api = ref.read(apiServiceProvider);
-      if (api != null) {
-        final result = isYoutube
-            ? await api.processYoutube(url: url)
-            : await api.processWebpage(url: url);
-
-        final file = (result?['file'] as Map?)?.cast<String, dynamic>();
-        final fileData = (file?['data'] as Map?)?.cast<String, dynamic>();
-        content = fileData?['content']?.toString() ?? '';
-        final meta = (file?['meta'] as Map?)?.cast<String, dynamic>();
-        name = meta?['name']?.toString() ?? Uri.parse(url).host;
-        collectionName = result?['collection_name']?.toString();
-      }
-
-      final prompt = isYoutube
-          ? 'Please summarize or analyze this video:'
-          : 'Please summarize or analyze this page:';
-
-      // Reset chat first, then add attachments (startNewChat clears attachments)
       await _prepareChatWithOptions(
-        prompt: prompt,
+        prompt: url,
         focusComposer: true,
         resetChat: true,
       );
 
-      // Add attachments after reset so they aren't cleared
-      final bool contentAttached = content != null && content.isNotEmpty;
-      if (contentAttached) {
-        final notifier = ref.read(contextAttachmentsProvider.notifier);
-        if (isYoutube) {
-          notifier.addYoutube(
-            displayName: name ?? Uri.parse(url).host,
-            content: content,
-            url: url,
-            collectionName: collectionName,
-          );
-        } else {
-          notifier.addWeb(
-            displayName: name ?? Uri.parse(url).host,
-            content: content,
-            url: url,
-            collectionName: collectionName,
-          );
-        }
-      }
-
-      if (contentAttached) {
-        return {
-          'success': true,
-          'value': isYoutube
-              ? 'YouTube video attached in JyotiGPT'
-              : 'Webpage attached in JyotiGPT',
-        };
-      } else {
-        return {
-          'success': true,
-          'value': 'Opening JyotiGPT with URL (content could not be fetched)',
-        };
-      }
+      return {'success': true, 'value': 'Prefilled chat opened'};
     } catch (error, stackTrace) {
       DebugLogger.error(
         'app-intents-url',
@@ -341,7 +287,7 @@ class AppIntentCoordinator extends _$AppIntentCoordinator {
         .launch(startNewConversation: true);
   }
 
-  Future<File> _materializeTempFile(
+  Future<WebFile> _materializeTempFile(
     String base64Data, {
     String? preferredName,
   }) async {
@@ -356,12 +302,12 @@ class AppIntentCoordinator extends _$AppIntentCoordinator {
         ? preferredName
         : 'jyotigptapp_image_${DateTime.now().millisecondsSinceEpoch}.jpg';
     final sanitizedName = safeName.replaceAll(RegExp(r'[^\w\.\-]'), '_');
-    final file = File(p.join(tempDir.path, sanitizedName));
+    final file = WebFile(p.join(tempDir.path, sanitizedName));
     await file.writeAsBytes(bytes, flush: true);
     return file;
   }
 
-  Future<void> _attachFiles(List<File> files) async {
+  Future<void> _attachFiles(List<WebFile> files) async {
     if (files.isEmpty) return;
     // Warm the attachment service to ensure dependencies are ready.
     final _ = ref.read(fileAttachmentServiceProvider);
@@ -369,9 +315,20 @@ class AppIntentCoordinator extends _$AppIntentCoordinator {
     final taskQueue = ref.read(taskQueueProvider.notifier);
     final activeConv = ref.read(activeConversationProvider);
 
-    final attachments = files
-        .map((f) => LocalAttachment(file: f, displayName: p.basename(f.path)))
-        .toList();
+    final attachments = <LocalAttachment>[];
+    for (final file in files) {
+      int fileSize = 0;
+      try {
+        fileSize = await file.length();
+      } catch (_) {}
+      attachments.add(
+        LocalAttachment(
+          file: file,
+          displayName: p.basename(file.path),
+          sizeInBytes: fileSize,
+        ),
+      );
+    }
 
     notifier.addFiles(attachments);
 

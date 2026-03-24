@@ -13,7 +13,6 @@ class AuthCacheManager {
 
   static const Duration _shortCache = Duration(minutes: 2);
   static const Duration _mediumCache = Duration(minutes: 5);
-  static const Duration _longCache = Duration(minutes: 15);
 
   static const String _userDataKey = 'user_data';
   static const String _serverConnectionKey = 'server_connection';

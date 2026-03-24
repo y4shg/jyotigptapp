@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'package:jyotigptapp/shared/utils/platform_io.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http_parser/http_parser.dart';
@@ -293,22 +293,6 @@ class ApiService {
       this.onTokenInvalidated = onTokenInvalidated;
       _authInterceptor.onTokenInvalidated = onTokenInvalidated;
     }
-  }
-
-  Uri? _parseBaseUri(String baseUrl) {
-    final trimmed = baseUrl.trim();
-    if (trimmed.isEmpty) {
-      return null;
-    }
-    Uri? parsed = Uri.tryParse(trimmed);
-    if (parsed == null) {
-      return null;
-    }
-    if (!parsed.hasScheme) {
-      parsed =
-          Uri.tryParse('https://$trimmed') ?? Uri.tryParse('http://$trimmed');
-    }
-    return parsed;
   }
 
   /// Basic health check - just verifies the server is reachable.
@@ -1679,7 +1663,7 @@ class ApiService {
 
     // Try to determine the mime type from response headers; fallback to text/plain
     final contentType =
-        response.headers.value(HttpHeaders.contentTypeHeader) ?? '';
+        response.headers.value(Headers.contentTypeHeader) ?? '';
     String mimeType = 'text/plain';
     if (contentType.isNotEmpty) {
       // Strip charset if present
@@ -1720,7 +1704,7 @@ class ApiService {
     return const [];
   }
 
-  // Enhanced File Operations
+  // Enhanced WebFile Operations
   Future<List<FileInfo>> searchFiles({
     String? query,
     String? contentType,
@@ -2079,52 +2063,6 @@ class ApiService {
         }
       }
       rethrow;
-    }
-  }
-
-  Future<Map<String, dynamic>?> processWebpage({
-    required String url,
-    String? collectionName,
-  }) async {
-    _traceApi('Processing webpage: $url');
-    try {
-      final response = await _dio.post(
-        '/api/v1/retrieval/process/web',
-        data: {
-          'url': url,
-          'collection_name': ?collectionName,
-        },
-      );
-      if (response.data is Map<String, dynamic>) {
-        return response.data as Map<String, dynamic>;
-      }
-      return null;
-    } catch (e) {
-      _traceApi('Process webpage failed: $e');
-      return null;
-    }
-  }
-
-  Future<Map<String, dynamic>?> processYoutube({
-    required String url,
-    String? collectionName,
-  }) async {
-    _traceApi('Processing YouTube URL: $url');
-    try {
-      final response = await _dio.post(
-        '/api/v1/retrieval/process/youtube',
-        data: {
-          'url': url,
-          'collection_name': ?collectionName,
-        },
-      );
-      if (response.data is Map<String, dynamic>) {
-        return response.data as Map<String, dynamic>;
-      }
-      return null;
-    } catch (e) {
-      _traceApi('Process YouTube failed: $e');
-      return null;
     }
   }
 
@@ -3532,15 +3470,15 @@ class ApiService {
     _streamCancelTokens.remove(messageId);
   }
 
-  // File upload for RAG
+  // WebFile upload for RAG
   Future<String> uploadFile(String filePath, String fileName, {String? contentType}) async {
     _traceApi('Starting file upload: $fileName from $filePath');
 
     try {
       // Check if file exists
-      final file = File(filePath);
+      final file = WebFile(filePath);
       if (!await file.exists()) {
-        throw Exception('File does not exist: $filePath');
+        throw Exception('WebFile does not exist: $filePath');
       }
 
       // Determine content type from file extension if not provided
@@ -3566,7 +3504,7 @@ class ApiService {
 
       if (response.data is Map && response.data['id'] != null) {
         final fileId = response.data['id'] as String;
-        _traceApi('File uploaded successfully with ID: $fileId');
+        _traceApi('WebFile uploaded successfully with ID: $fileId');
         return fileId;
       } else {
         throw Exception('Invalid response format: missing file ID');

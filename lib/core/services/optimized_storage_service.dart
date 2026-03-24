@@ -7,7 +7,6 @@ import '../models/backend_config.dart';
 import '../models/conversation.dart';
 import '../models/folder.dart';
 import '../models/model.dart';
-import '../models/server_config.dart';
 import '../models/user.dart';
 import '../models/tool.dart';
 import '../models/socket_transport_availability.dart';

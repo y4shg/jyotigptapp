@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io' show Platform;
+import 'package:jyotigptapp/shared/utils/platform_io.dart' show Platform;
 
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +15,7 @@ import '../../auth/providers/unified_auth_providers.dart';
 import '../../../shared/theme/theme_extensions.dart';
 import '../../chat/providers/chat_providers.dart' as chat;
 import '../../chat/providers/context_attachments_provider.dart';
+import '../../chat/services/file_attachment_service.dart';
 import '../../../core/utils/debug_logger.dart';
 import '../../../core/services/navigation_service.dart';
 import '../../../shared/widgets/jyotigptapp_loading.dart';
@@ -1253,8 +1254,11 @@ class _ChatsDrawerState extends ConsumerState<ChatsDrawer> {
     ref.read(chat.chatMessagesProvider.notifier).clearMessages();
     ref.read(activeConversationProvider.notifier).clear();
 
-    // Clear context attachments (web pages, YouTube, knowledge base docs)
+    // Clear context attachments (knowledge base docs)
     ref.read(contextAttachmentsProvider.notifier).clear();
+
+    // Clear staged file uploads
+    ref.read(attachedFilesProvider.notifier).clearAll();
 
     // Reset to default model for new conversations (fixes #296)
     chat.restoreDefaultModel(ref);

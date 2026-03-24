@@ -416,37 +416,28 @@ void main() {
         'id': 'srv1',
         'name': 'Production',
         'url': 'https://api.example.com',
-        'apiKey': 'key123',
-        'customHeaders': {'X-Custom': 'value'},
-        'lastConnected': '2024-06-15T12:00:00.000Z',
-        'isActive': true,
-        'allowSelfSignedCertificates': false,
       };
 
       final config = ServerConfig.fromJson(json);
       check(config.id).equals('srv1');
       check(config.name).equals('Production');
       check(config.url).equals('https://api.example.com');
-      check(config.apiKey).equals('key123');
-      check(config.isActive).isTrue();
-      check(config.allowSelfSignedCertificates).isFalse();
 
       final output = config.toJson();
       check(output['id']).equals('srv1');
       check(output['name']).equals('Production');
       check(output['url']).equals('https://api.example.com');
-      check(output['isActive']).equals(true);
     });
 
-    test('defaults', () {
+    test('fromJson preserves provided values', () {
       final config = ServerConfig.fromJson({
         'id': 's2',
         'name': 'Dev',
         'url': 'http://localhost',
       });
-      check(config.isActive).isFalse();
-      check(config.allowSelfSignedCertificates).isFalse();
-      check(config.customHeaders).deepEquals({});
+      check(config.id).equals('s2');
+      check(config.name).equals('Dev');
+      check(config.url).equals('http://localhost');
     });
   });
 
@@ -470,37 +461,53 @@ void main() {
 
     test('fromJson/toJson round-trip', () {
       final json = {
-        'showReadReceipts': false,
-        'enableNotifications': false,
-        'enableSounds': true,
+        'show_read_receipts': false,
+        'enable_notifications': false,
+        'enable_sounds': true,
         'theme': 'dark',
         'temperature': 0.9,
-        'maxTokens': 4096,
-        'streamResponses': true,
-        'webSearchEnabled': true,
-        'saveConversations': false,
-        'shareUsageData': true,
+        'max_tokens': 4096,
+        'stream_responses': true,
+        'web_search_enabled': true,
+        'save_conversations': false,
+        'share_usage_data': true,
         'density': 'compact',
-        'fontSize': 16.0,
+        'font_size': 16.0,
         'language': 'fr',
-        'reduceMotion': true,
-        'hapticFeedback': false,
-        'defaultModelId': 'gpt-4',
-        'customSettings': {'key': 'val'},
+        'reduce_motion': true,
+        'haptic_feedback': false,
+        'default_model_id': 'gpt-4',
+        'custom_settings': {'key': 'val'},
       };
 
       final settings = UserSettings.fromJson(json);
+      check(settings.showReadReceipts).isFalse();
+      check(settings.enableNotifications).isFalse();
       check(settings.theme).equals('dark');
       check(settings.temperature).equals(0.9);
       check(settings.maxTokens).equals(4096);
+      check(settings.streamResponses).isTrue();
+      check(settings.webSearchEnabled).isTrue();
+      check(settings.saveConversations).isFalse();
+      check(settings.shareUsageData).isTrue();
+      check(settings.reduceMotion).isTrue();
+      check(settings.hapticFeedback).isFalse();
       check(settings.defaultModelId).equals('gpt-4');
 
       final output = settings.toJson();
+      check(output['show_read_receipts']).equals(false);
+      check(output['enable_notifications']).equals(false);
       check(output['theme']).equals('dark');
       check(output['temperature']).equals(0.9);
-      check(output['maxTokens']).equals(4096);
-      check(output['defaultModelId']).equals('gpt-4');
-      check(output['customSettings'] as Map)
+      check(output['max_tokens']).equals(4096);
+      check(output['stream_responses']).equals(true);
+      check(output['web_search_enabled']).equals(true);
+      check(output['save_conversations']).equals(false);
+      check(output['share_usage_data']).equals(true);
+      check(output['reduce_motion']).equals(true);
+      check(output['haptic_feedback']).equals(false);
+      check(output['default_model_id']).equals('gpt-4');
+      check(output['custom_settings'] as Map)
           .deepEquals({'key': 'val'});
     });
   });

@@ -7,7 +7,7 @@ import '../../../core/services/api_service.dart';
 import 'enhanced_image_attachment.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:io';
+import 'package:jyotigptapp/shared/utils/platform_io.dart';
 import 'dart:convert';
 import '../../../core/services/worker_manager.dart';
 
@@ -94,7 +94,7 @@ class _EnhancedAttachmentState extends ConsumerState<EnhancedAttachment> {
   }
 
   Future<String?> _ensureLocalFile() async {
-    if (_localFilePath != null && await File(_localFilePath!).exists()) {
+    if (_localFilePath != null && await WebFile(_localFilePath!).exists()) {
       return _localFilePath;
     }
     try {
@@ -115,12 +115,12 @@ class _EnhancedAttachmentState extends ConsumerState<EnhancedAttachment> {
             content,
             debugLabel: 'attachment_decode_bytes',
           );
-          await File(filePath).writeAsBytes(bytes, flush: true);
+          await WebFile(filePath).writeAsBytes(bytes, flush: true);
         } else {
-          await File(filePath).writeAsString(content, flush: true);
+          await WebFile(filePath).writeAsString(content, flush: true);
         }
       } catch (_) {
-        await File(filePath).writeAsString(content, flush: true);
+        await WebFile(filePath).writeAsString(content, flush: true);
       }
 
       _localFilePath = filePath;
@@ -209,7 +209,7 @@ class _EnhancedAttachmentState extends ConsumerState<EnhancedAttachment> {
       );
     }
 
-    final filename = (_fileInfo?['filename'] ?? _fileInfo?['name'] ?? 'File')
+    final filename = (_fileInfo?['filename'] ?? _fileInfo?['name'] ?? 'WebFile')
         .toString();
     final size = _fileInfo?['size'];
     final sizeLabel = size is num ? _formatSize(size.toInt()) : null;

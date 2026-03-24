@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io' show File, Platform;
+import 'package:jyotigptapp/shared/utils/platform_io.dart' show WebFile, Platform;
 
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:dio/dio.dart';
@@ -59,7 +59,7 @@ class _AudioPlayerDialogState extends State<AudioPlayerDialog> {
   bool _hasError = false;
   Duration _position = Duration.zero;
   Duration _duration = Duration.zero;
-  File? _tempFile;
+  WebFile? _tempFile;
 
   StreamSubscription<PlayerState>? _stateSub;
   StreamSubscription<Duration>? _positionSub;
@@ -91,7 +91,7 @@ class _AudioPlayerDialogState extends State<AudioPlayerDialog> {
       final tempDir = await getTemporaryDirectory();
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final tempPath = '${tempDir.path}/audio_${widget.fileId}_$timestamp$extension';
-      _tempFile = File(tempPath);
+      _tempFile = WebFile(tempPath);
 
       // Fetch file content through API (authenticated)
       final response = await widget.api.dio.get(

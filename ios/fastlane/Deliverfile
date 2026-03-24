@@ -4,9 +4,9 @@
 submit_for_review(true)
 skip_metadata(false)
 release_notes({
-  'default' => "https://github.com/y4shg/jyotigptapp/releases/tag/v26.4.14",
+  'default' => "Rollback: reverted commit 9f118da that reset pubspec versioning.\nhttps://github.com/y4shg/jyotigptapp/releases/tag/v26.3.24",
 })
-promotional_text({'default' => "https://github.com/y4shg/jyotigptapp/releases/tag/v26.4.14"})
+promotional_text({'default' => "https://github.com/y4shg/jyotigptapp/releases/tag/v26.3.24"})
 skip_screenshots(true)
 run_precheck_before_submit(false)
 ipa("../build/ios/ipa/jyotigptapp.ipa")

@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:jyotigptapp/shared/utils/platform_io.dart';
 import 'dart:convert';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
@@ -105,7 +105,7 @@ Future<String> _encodeToDataUrl(
 ///
 /// Returns null if conversion fails for formats requiring conversion.
 Future<String?> convertImageFileToDataUrl(
-  File imageFile, {
+  WebFile imageFile, {
   WorkerManager? worker,
 }) async {
   try {
@@ -180,10 +180,10 @@ Future<String?> convertImageFileToDataUrl(
 
 /// Converts an image file to WebP bytes using flutter_image_compress.
 /// WebP provides better compression than JPEG while maintaining quality.
-Future<List<int>?> _convertToWebP(File imageFile) async {
+Future<List<int>?> _convertToWebP(WebFile imageFile) async {
   try {
-    final result = await FlutterImageCompress.compressWithFile(
-      imageFile.absolute.path,
+      final result = await FlutterImageCompress.compressWithFile(
+        imageFile.path,
       format: CompressFormat.webp,
       quality: 85,
     );
@@ -241,12 +241,15 @@ String _timestampedName({required String prefix, required String extension}) {
 
 /// Represents a locally selected attachment with a user-facing display name.
 class LocalAttachment {
-  LocalAttachment({required this.file, required this.displayName});
+  LocalAttachment({
+    required this.file,
+    required this.displayName,
+    required this.sizeInBytes,
+  });
 
-  final File file;
+  final WebFile file;
   final String displayName;
-
-  int get sizeInBytes => file.lengthSync();
+  final int sizeInBytes;
 
   String get extension {
     final fromName = path.extension(displayName);
@@ -280,17 +283,28 @@ class FileAttachmentService {
         return [];
       }
 
-      return result.files.where((file) => file.path != null).map((file) {
+      final attachments = <LocalAttachment>[];
+      for (final file in result.files) {
+        if (file.path == null) continue;
         final displayName = _deriveDisplayName(
           preferredName: file.name,
           filePath: file.path!,
           fallbackPrefix: 'attachment',
         );
-        return LocalAttachment(
-          file: File(file.path!),
-          displayName: displayName,
+        final webFile = WebFile(file.path!);
+        int fileSize = 0;
+        try {
+          fileSize = await webFile.length();
+        } catch (_) {}
+        attachments.add(
+          LocalAttachment(
+            file: webFile,
+            displayName: displayName,
+            sizeInBytes: fileSize,
+          ),
         );
-      }).toList();
+      }
+      return attachments;
     } catch (e) {
       throw Exception('Failed to pick files: $e');
     }
@@ -312,9 +326,15 @@ class FileAttachmentService {
             filePath: platformFile.path!,
             fallbackPrefix: 'photo',
           );
+          final webFile = WebFile(platformFile.path!);
+          int fileSize = 0;
+          try {
+            fileSize = await webFile.length();
+          } catch (_) {}
           return LocalAttachment(
-            file: File(platformFile.path!),
+            file: webFile,
             displayName: displayName,
+            sizeInBytes: fileSize,
           );
         }
       }
@@ -332,13 +352,21 @@ class FileAttachmentService {
       );
 
       if (image == null) return null;
-      final file = File(image.path);
+      final file = WebFile(image.path);
+      int fileSize = 0;
+      try {
+        fileSize = await file.length();
+      } catch (_) {}
       final displayName = _deriveDisplayName(
         preferredName: image.name,
         filePath: image.path,
         fallbackPrefix: 'photo',
       );
-      return LocalAttachment(file: file, displayName: displayName);
+      return LocalAttachment(
+        file: file,
+        displayName: displayName,
+        sizeInBytes: fileSize,
+      );
     } catch (e) {
       throw Exception('Failed to pick image: $e');
     }
@@ -353,13 +381,21 @@ class FileAttachmentService {
       );
 
       if (photo == null) return null;
-      final file = File(photo.path);
+      final file = WebFile(photo.path);
+      int fileSize = 0;
+      try {
+        fileSize = await file.length();
+      } catch (_) {}
       final displayName = _deriveDisplayName(
         preferredName: photo.name,
         filePath: photo.path,
         fallbackPrefix: 'photo',
       );
-      return LocalAttachment(file: file, displayName: displayName);
+      return LocalAttachment(
+        file: file,
+        displayName: displayName,
+        sizeInBytes: fileSize,
+      );
     } catch (e) {
       throw Exception('Failed to take photo: $e');
     }
@@ -465,7 +501,7 @@ class FileAttachmentService {
 
   // Convert image file to base64 data URL with optional compression
   Future<String?> convertImageToDataUrl(
-    File imageFile, {
+    WebFile imageFile, {
     bool enableCompression = false,
     int? maxWidth,
     int? maxHeight,
@@ -496,9 +532,9 @@ class FileAttachmentService {
   }
 }
 
-// File upload state
+// WebFile upload state
 class FileUploadState {
-  final File file;
+  final WebFile file;
   final String fileName;
   final int fileSize;
   final double progress;
@@ -557,17 +593,28 @@ class MockFileAttachmentService {
         return [];
       }
 
-      return result.files.where((file) => file.path != null).map((file) {
+      final attachments = <LocalAttachment>[];
+      for (final file in result.files) {
+        if (file.path == null) continue;
         final displayName = _deriveDisplayName(
           preferredName: file.name,
           filePath: file.path!,
           fallbackPrefix: 'attachment',
         );
-        return LocalAttachment(
-          file: File(file.path!),
-          displayName: displayName,
+        final webFile = WebFile(file.path!);
+        int fileSize = 0;
+        try {
+          fileSize = await webFile.length();
+        } catch (_) {}
+        attachments.add(
+          LocalAttachment(
+            file: webFile,
+            displayName: displayName,
+            sizeInBytes: fileSize,
+          ),
         );
-      }).toList();
+      }
+      return attachments;
     } catch (e) {
       throw Exception('Failed to pick files: $e');
     }
@@ -580,13 +627,21 @@ class MockFileAttachmentService {
         imageQuality: 85,
       );
       if (image == null) return null;
-      final file = File(image.path);
+      final file = WebFile(image.path);
+      int fileSize = 0;
+      try {
+        fileSize = await file.length();
+      } catch (_) {}
       final displayName = _deriveDisplayName(
         preferredName: image.name,
         filePath: image.path,
         fallbackPrefix: 'photo',
       );
-      return LocalAttachment(file: file, displayName: displayName);
+      return LocalAttachment(
+        file: file,
+        displayName: displayName,
+        sizeInBytes: fileSize,
+      );
     } catch (e) {
       throw Exception('Failed to pick image: $e');
     }
@@ -599,13 +654,21 @@ class MockFileAttachmentService {
         imageQuality: 85,
       );
       if (photo == null) return null;
-      final file = File(photo.path);
+      final file = WebFile(photo.path);
+      int fileSize = 0;
+      try {
+        fileSize = await file.length();
+      } catch (_) {}
       final displayName = _deriveDisplayName(
         preferredName: photo.name,
         filePath: photo.path,
         fallbackPrefix: 'photo',
       );
-      return LocalAttachment(file: file, displayName: displayName);
+      return LocalAttachment(
+        file: file,
+        displayName: displayName,
+        sizeInBytes: fileSize,
+      );
     } catch (e) {
       throw Exception('Failed to take photo: $e');
     }

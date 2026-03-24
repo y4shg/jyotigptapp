@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'package:jyotigptapp/shared/utils/platform_io.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -280,7 +280,7 @@ class HomeWidgetCoordinator extends _$HomeWidgetCoordinator {
       );
 
       if (image != null) {
-        await _attachFile(File(image.path));
+        await _attachFile(WebFile(image.path));
       }
     } catch (error, stackTrace) {
       DebugLogger.error(
@@ -317,7 +317,7 @@ class HomeWidgetCoordinator extends _$HomeWidgetCoordinator {
 
       if (images.isNotEmpty) {
         for (final image in images) {
-          await _attachFile(File(image.path));
+          await _attachFile(WebFile(image.path));
         }
       }
     } catch (error, stackTrace) {
@@ -375,7 +375,7 @@ class HomeWidgetCoordinator extends _$HomeWidgetCoordinator {
     await Future<void>.delayed(const Duration(milliseconds: 50));
   }
 
-  Future<void> _attachFile(File file) async {
+  Future<void> _attachFile(WebFile file) async {
     if (!ref.mounted) return;
 
     // Warm the attachment service
@@ -384,9 +384,14 @@ class HomeWidgetCoordinator extends _$HomeWidgetCoordinator {
     final taskQueue = ref.read(taskQueueProvider.notifier);
     final activeConv = ref.read(activeConversationProvider);
 
+    int fileSize = 0;
+    try {
+      fileSize = await file.length();
+    } catch (_) {}
     final attachment = LocalAttachment(
       file: file,
       displayName: path.basename(file.path),
+      sizeInBytes: fileSize,
     );
 
     notifier.addFiles([attachment]);
@@ -449,4 +454,3 @@ final homeWidgetInitializerProvider = Provider<void>((ref) {
   // Initialize the coordinator which sets up widget click handling
   ref.watch(homeWidgetCoordinatorProvider);
 });
-

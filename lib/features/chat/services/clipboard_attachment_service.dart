@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'package:jyotigptapp/shared/utils/platform_io.dart';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
@@ -93,10 +93,23 @@ class ClipboardAttachmentService {
       final filePath = path.join(tempDir.path, fileName);
 
       // Write image data to file
-      final file = File(filePath);
+      final file = WebFile(filePath);
       await file.writeAsBytes(imageData);
+      int fileSize = imageData.length;
+      try {
+        fileSize = await file.length();
+      } catch (error) {
+        debugPrint(
+          'ClipboardAttachmentService: Failed to read file size, '
+          'falling back to imageData.length: $error',
+        );
+      }
 
-      return LocalAttachment(file: file, displayName: fileName);
+      return LocalAttachment(
+        file: file,
+        displayName: fileName,
+        sizeInBytes: fileSize,
+      );
     } catch (e) {
       debugPrint('ClipboardAttachmentService: Failed to create attachment: $e');
       return null;

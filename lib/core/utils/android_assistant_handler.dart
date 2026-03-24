@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'package:jyotigptapp/shared/utils/platform_io.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as path;
@@ -81,7 +81,7 @@ class AndroidAssistantHandler {
       startNewChat(_ref);
 
       // Add screenshot as attachment
-      final file = File(screenshotPath);
+      final file = WebFile(screenshotPath);
       if (!await file.exists()) {
         DebugLogger.log(
           'Screenshot file not found: $screenshotPath',
@@ -92,9 +92,14 @@ class AndroidAssistantHandler {
 
       final svc = _ref.read(fileAttachmentServiceProvider);
       if (svc != null) {
+        int fileSize = 0;
+        try {
+          fileSize = await file.length();
+        } catch (_) {}
         final attachment = LocalAttachment(
           file: file,
           displayName: path.basename(screenshotPath),
+          sizeInBytes: fileSize,
         );
 
         _ref.read(attachedFilesProvider.notifier).addFiles([attachment]);

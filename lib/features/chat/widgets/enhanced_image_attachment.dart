@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'package:jyotigptapp/shared/utils/platform_io.dart';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +12,6 @@ import 'package:share_plus/share_plus.dart';
 import '../../../shared/theme/theme_extensions.dart';
 import 'package:jyotigptapp/l10n/app_localizations.dart';
 import '../../../core/providers/app_providers.dart';
-import '../../auth/providers/unified_auth_providers.dart';
 import '../../../core/utils/debug_logger.dart';
 import '../../../core/network/image_header_utils.dart';
 import '../../../core/services/worker_manager.dart';
@@ -995,7 +994,7 @@ class FullScreenImageViewer extends ConsumerWidget {
       final tempDir = await getTemporaryDirectory();
       final filePath =
           '${tempDir.path}/jyotigptapp_shared_${DateTime.now().millisecondsSinceEpoch}.$fileExtension';
-      final file = File(filePath);
+      final file = WebFile(filePath);
       await file.writeAsBytes(bytes);
 
       await SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));

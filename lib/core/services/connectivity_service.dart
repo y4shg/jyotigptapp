@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:io' show HttpClient, X509Certificate;
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
@@ -338,7 +338,7 @@ class ConnectivityService with WidgetsBindingObserver {
             return requestPort == port;
           };
 
-      return client;
+      return client as dynamic;
     };
   }
 

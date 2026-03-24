@@ -46,10 +46,6 @@ class ContextAttachmentWidget extends ConsumerWidget {
 
   IconData _iconForType(ChatContextAttachmentType type) {
     switch (type) {
-      case ChatContextAttachmentType.web:
-        return Icons.public;
-      case ChatContextAttachmentType.youtube:
-        return Icons.play_circle_outline;
       case ChatContextAttachmentType.knowledge:
         return Icons.folder_outlined;
     }

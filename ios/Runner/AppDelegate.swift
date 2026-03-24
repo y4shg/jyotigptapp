@@ -68,7 +68,7 @@ final class VoiceBackgroundAudioManager {
                     .playAndRecord,
                     mode: .voiceChat,
                     options: [
-                        .allowBluetooth,
+                        .allowBluetoothHFP,
                         .allowBluetoothA2DP,
                         .mixWithOthers,
                         .defaultToSpeaker,
@@ -114,6 +114,10 @@ final class VoiceBackgroundAudioManager {
 }
 
 // Background streaming handler class
+// @MainActor ensures all UIApplication.shared accesses occur on the main thread,
+// which is required by Swift 5.10+ (Xcode 16+) strict concurrency enforcement.
+// Flutter method channels already deliver calls on the main thread, so this is safe.
+@MainActor
 class BackgroundStreamingHandler: NSObject {
     private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     private var bgProcessingTask: BGTask?
@@ -427,17 +431,23 @@ class BackgroundStreamingHandler: NSObject {
         }
     }
 
-
     deinit {
         NotificationCenter.default.removeObserver(self)
-        endBackgroundTask()
-        VoiceBackgroundAudioManager.shared.deactivate()
-  }
+        // deinit cannot be @MainActor, so capture state and dispatch cleanup to main actor.
+        // This ensures UIApplication.shared and the audio manager are accessed safely.
+        let taskToEnd = backgroundTask
+        Task { @MainActor in
+            if taskToEnd != .invalid {
+                UIApplication.shared.endBackgroundTask(taskToEnd)
+            }
+            VoiceBackgroundAudioManager.shared.deactivate()
+        }
+    }
 }
 
 /// Manages the method channel for App Intent invocations to Flutter.
 /// Native Swift intents call this to invoke Flutter-side business logic.
-final class AppIntentMethodChannel {
+@MainActor final class AppIntentMethodChannel {
     static var shared: AppIntentMethodChannel?
 
     private let channel: FlutterMethodChannel
@@ -506,7 +516,8 @@ struct AskJyotiGPTappIntent: AppIntent {
     func perform() async throws
         -> some IntentResult & ReturnsValue<String> & OpensIntent
     {
-        guard let channel = AppIntentMethodChannel.shared else {
+        let channel = await MainActor.run { AppIntentMethodChannel.shared }
+        guard let channel else {
             throw AppIntentError.executionFailed("App not ready")
         }
 
@@ -541,7 +552,8 @@ struct StartVoiceCallIntent: AppIntent {
     func perform() async throws
         -> some IntentResult & ReturnsValue<String> & OpensIntent
     {
-        guard let channel = AppIntentMethodChannel.shared else {
+        let channel = await MainActor.run { AppIntentMethodChannel.shared }
+        guard let channel else {
             throw AppIntentError.executionFailed("App not ready")
         }
 
@@ -579,7 +591,8 @@ struct JyotiGPTappSendTextIntent: AppIntent {
     func perform() async throws
         -> some IntentResult & ReturnsValue<String> & OpensIntent
     {
-        guard let channel = AppIntentMethodChannel.shared else {
+        let channel = await MainActor.run { AppIntentMethodChannel.shared }
+        guard let channel else {
             throw AppIntentError.executionFailed("App not ready")
         }
 
@@ -617,7 +630,8 @@ struct JyotiGPTappSendUrlIntent: AppIntent {
     func perform() async throws
         -> some IntentResult & ReturnsValue<String> & OpensIntent
     {
-        guard let channel = AppIntentMethodChannel.shared else {
+        let channel = await MainActor.run { AppIntentMethodChannel.shared }
+        guard let channel else {
             throw AppIntentError.executionFailed("App not ready")
         }
 
@@ -654,7 +668,8 @@ struct JyotiGPTappSendImageIntent: AppIntent {
     func perform() async throws
         -> some IntentResult & ReturnsValue<String> & OpensIntent
     {
-        guard let channel = AppIntentMethodChannel.shared else {
+        let channel = await MainActor.run { AppIntentMethodChannel.shared }
+        guard let channel else {
             throw AppIntentError.executionFailed("App not ready")
         }
 
@@ -664,9 +679,9 @@ struct JyotiGPTappSendImageIntent: AppIntent {
             )
         }
 
-        let data = try image.data
+        let data = image.data
         let base64 = data.base64EncodedString()
-        let name = image.filename ?? "shared_image.jpg"
+        let name = image.filename
 
         let result = await channel.invokeIntent(
             identifier: "app.y4shg.jyotigptapp.send_image",
@@ -748,6 +763,19 @@ struct AppShortcuts: AppShortcutsProvider {
 
     // Exact match or subdomain match
     return host == cleanDomain || host.hasSuffix(".\(cleanDomain)")
+  }
+
+  override func application(
+    _ application: UIApplication,
+    configurationForConnecting connectingSceneSession: UISceneSession,
+    options: UIScene.ConnectionOptions
+  ) -> UISceneConfiguration {
+    let configuration = UISceneConfiguration(
+      name: "Default Configuration",
+      sessionRole: connectingSceneSession.role
+    )
+    configuration.delegateClass = FlutterSceneDelegate.self
+    return configuration
   }
 
   override func application(

@@ -590,51 +590,82 @@ final apiTokenUpdaterProvider = Provider<void>((ref) {
 });
 
 @Riverpod(keepAlive: true)
-Future<User?> currentUser(Ref ref) async {
-  final api = ref.read(apiServiceProvider);
-  final authState = ref.watch(authStateManagerProvider);
-  final isAuthenticated = authState.maybeWhen(
-    data: (state) => state.isAuthenticated,
-    orElse: () => false,
-  );
+class CurrentUser extends _$CurrentUser {
+  @override
+  Future<User?> build() async {
+    final authState = ref.watch(authStateManagerProvider);
+    final isAuthenticated = authState.maybeWhen(
+      data: (state) => state.isAuthenticated,
+      orElse: () => false,
+    );
 
-  if (api == null || !isAuthenticated) return null;
+    if (!isAuthenticated) return null;
 
-  // Fast path: use user already in auth state.
-  final authUser = authState.maybeWhen(
-    data: (state) => state.user,
-    orElse: () => null,
-  );
-  if (authUser != null) return authUser;
+    final api = ref.watch(apiServiceProvider);
+    final storage = ref.read(optimizedStorageServiceProvider);
+    final cachedUser = await _getCachedUserWithAvatar(storage);
 
-  // Next: try cached user from storage, then refresh in the background.
-  final storage = ref.read(optimizedStorageServiceProvider);
-  final cachedUser = await _getCachedUserWithAvatar(storage);
-  if (cachedUser != null) {
+    // Use user already in auth state, but merge cached overrides.
+    final authUser = authState.maybeWhen(
+      data: (state) => state.user,
+      orElse: () => null,
+    );
+    final mergedUser =
+        authUser == null
+            ? null
+            : _mergeUserWithLocalOverrides(authUser, cachedUser);
+    if (api == null) {
+      return mergedUser;
+    }
+
     final lastRefresh = ref.read(_lastUserRefreshProvider);
     final now = DateTime.now();
     final shouldRefresh =
+        authUser == null ||
         lastRefresh == null ||
         now.difference(lastRefresh) > const Duration(minutes: 5);
 
     if (shouldRefresh) {
       Future.microtask(() async {
-        final fresh = await _refreshCurrentUser(ref);
+        final fresh = await _refreshCurrentUser(
+          ref,
+          api,
+          cachedUser: cachedUser,
+        );
         if (fresh != null && ref.mounted) {
           ref.read(_lastUserRefreshProvider.notifier).set(now);
-          ref.invalidate(currentUserProvider);
+          state = AsyncData(fresh);
         }
       });
     }
-    return cachedUser;
+
+    return mergedUser;
   }
 
-  // Fallback: fetch fresh.
-  final fresh = await _refreshCurrentUser(ref);
-  if (fresh != null) {
-    ref.read(_lastUserRefreshProvider.notifier).set(DateTime.now());
+  void setLocalUser(User user) {
+    state = AsyncData(user);
+    final storage = ref.read(optimizedStorageServiceProvider);
+    unawaited(() async {
+      try {
+        await storage.saveLocalUser(user);
+        await storage.saveLocalUserAvatar(user.profileImage);
+      } catch (error, stackTrace) {
+        DebugLogger.error(
+          'save-local-user-failed',
+          scope: 'auth',
+          error: error,
+          stackTrace: stackTrace,
+          data: {'userId': user.id},
+        );
+      }
+    }());
   }
-  return fresh;
+
+  void clearLocalUser() {
+    state = const AsyncData(null);
+    final storage = ref.read(optimizedStorageServiceProvider);
+    unawaited(storage.saveLocalUser(null));
+  }
 }
 
 Future<User?> _getCachedUserWithAvatar(OptimizedStorageService storage) async {
@@ -649,18 +680,53 @@ Future<User?> _getCachedUserWithAvatar(OptimizedStorageService storage) async {
   return cachedUser.copyWith(profileImage: cachedAvatar);
 }
 
-Future<User?> _refreshCurrentUser(Ref ref) async {
-  final api = ref.read(apiServiceProvider);
-  if (api == null) return null;
+User? _mergeUserWithLocalOverrides(User? baseUser, User? cachedUser) {
+  if (baseUser == null) return cachedUser;
+  if (cachedUser == null) return baseUser;
+  if (!_isSameUserIdentity(baseUser, cachedUser)) {
+    return baseUser;
+  }
 
+  final cachedName = cachedUser.name;
+  final cachedAvatar = cachedUser.profileImage;
+  final mergedName =
+      cachedName != null && cachedName.trim().isNotEmpty
+          ? cachedName
+          : baseUser.name;
+  final mergedAvatar =
+      cachedAvatar != null && cachedAvatar.trim().isNotEmpty
+          ? cachedAvatar
+          : baseUser.profileImage;
+
+  return baseUser.copyWith(name: mergedName, profileImage: mergedAvatar);
+}
+
+bool _isSameUserIdentity(User baseUser, User cachedUser) {
+  if (baseUser.id.isNotEmpty && cachedUser.id.isNotEmpty) {
+    return baseUser.id == cachedUser.id;
+  }
+  final baseEmail = baseUser.email.trim().toLowerCase();
+  final cachedEmail = cachedUser.email.trim().toLowerCase();
+  if (baseEmail.isNotEmpty && cachedEmail.isNotEmpty) {
+    return baseEmail == cachedEmail;
+  }
+  return false;
+}
+
+Future<User?> _refreshCurrentUser(
+  Ref ref,
+  ApiService api, {
+  User? cachedUser,
+}) async {
   try {
     final user = await api.getCurrentUser();
+    final mergedUser = _mergeUserWithLocalOverrides(user, cachedUser);
     final storage = ref.read(optimizedStorageServiceProvider);
-    await storage.saveLocalUser(user);
-    if (user.profileImage != null && user.profileImage!.isNotEmpty) {
-      await storage.saveLocalUserAvatar(user.profileImage);
+    if (mergedUser != null) {
+      await storage.saveLocalUser(mergedUser);
+      await storage.saveLocalUserAvatar(mergedUser.profileImage);
     }
-    return user;
+    return mergedUser;
   } catch (_) {
     return null;
   }

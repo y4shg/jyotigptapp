@@ -20,6 +20,7 @@ import '../../../core/utils/debug_logger.dart';
 import '../../../core/utils/tool_calls_parser.dart';
 import '../models/chat_context_attachment.dart';
 import '../providers/context_attachments_provider.dart';
+import '../services/file_attachment_service.dart';
 import '../../../shared/services/tasks/task_queue.dart';
 import '../../tools/providers/tools_providers.dart';
 import '../services/reviewer_mode_service.dart';
@@ -998,20 +999,45 @@ String? _extractSystemPromptFromSettings(Map<String, dynamic>? settings) {
 
 // Start a new chat (unified function for both "New Chat" button and home screen)
 void startNewChat(dynamic ref) {
+  // Capture current conversation id to cancel any queued work.
+  final activeConversation = ref.read(activeConversationProvider);
+  final conversationId = activeConversation?.id;
+  if (conversationId != null) {
+    try {
+      unawaited(
+        ref
+            .read(taskQueueProvider.notifier)
+            .cancelByConversation(conversationId),
+      );
+    } catch (_) {}
+  }
+  try {
+    unawaited(ref.read(taskQueueProvider.notifier).cancelUnboundUploads());
+  } catch (_) {}
+
   // Clear active conversation
   ref.read(activeConversationProvider.notifier).clear();
 
   // Clear messages
   ref.read(chatMessagesProvider.notifier).clearMessages();
 
-  // Clear context attachments (web pages, YouTube, knowledge base docs)
+  // Clear context attachments (knowledge base docs)
   ref.read(contextAttachmentsProvider.notifier).clear();
+
+  // Clear attached files
+  ref.read(attachedFilesProvider.notifier).clearAll();
 
   // Clear any pending folder selection
   ref.read(pendingFolderIdProvider.notifier).clear();
 
   // Reset to default model for new conversations (fixes #296)
   restoreDefaultModel(ref);
+
+  // Reset temporary chat state based on user preference
+  final settings = ref.read(appSettingsProvider);
+  ref
+      .read(temporaryChatEnabledProvider.notifier)
+      .set(settings.temporaryChatByDefault);
 }
 
 /// Restores the selected model to the user's configured default model.
@@ -1205,7 +1231,7 @@ Future<Map<String, dynamic>> _buildMessagePayloadWithAttachments({
           // JyotiGPT now stores just the file ID, not the full URL path
           'url': attachmentId,
           'name': fileName,
-          'size': ?fileSize,
+          if (fileSize != null) 'size': fileSize!,
         });
       }
     } catch (_) {
@@ -1241,39 +1267,6 @@ List<Map<String, dynamic>> _contextAttachmentsToFiles(
 ) {
   return attachments.map((attachment) {
     switch (attachment.type) {
-      case ChatContextAttachmentType.web:
-        // Web pages use type 'text' with file data nested under 'file' key
-        return {
-          'type': 'text',
-          'name': attachment.url ?? attachment.displayName,
-          if (attachment.url != null) 'url': attachment.url,
-          if (attachment.collectionName != null)
-            'collection_name': attachment.collectionName,
-          'file': {
-            'data': {'content': attachment.content ?? ''},
-            'meta': {
-              'name': attachment.displayName,
-              if (attachment.url != null) 'source': attachment.url,
-            },
-          },
-        };
-      case ChatContextAttachmentType.youtube:
-        // YouTube uses type 'text' with context 'full' for full transcript
-        return {
-          'type': 'text',
-          'name': attachment.url ?? attachment.displayName,
-          if (attachment.url != null) 'url': attachment.url,
-          'context': 'full',
-          if (attachment.collectionName != null)
-            'collection_name': attachment.collectionName,
-          'file': {
-            'data': {'content': attachment.content ?? ''},
-            'meta': {
-              'name': attachment.displayName,
-              if (attachment.url != null) 'source': attachment.url,
-            },
-          },
-        };
       case ChatContextAttachmentType.knowledge:
         // Knowledge base files use type 'file' with id for lookup
         final map = <String, dynamic>{
@@ -1910,8 +1903,8 @@ Future<void> _sendMessageInternal(
           // JyotiGPT now stores just the file ID, not the full URL path
           // The frontend resolves it when displaying
           'url': fileId,
-          'size': ?fileSize,
-          'collection_name': ?collectionName,
+          if (fileSize != null) 'size': fileSize!,
+          if (collectionName != null) 'collection_name': collectionName!,
           if (contentType.isNotEmpty) 'content_type': contentType,
         };
       } catch (_) {

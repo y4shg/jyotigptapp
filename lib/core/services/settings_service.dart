@@ -65,6 +65,9 @@ class SettingsService {
   static Box<dynamic> _preferencesBox() =>
       Hive.box<dynamic>(HiveBoxNames.preferences);
 
+  static bool _isPreferencesBoxOpen() =>
+      Hive.isBoxOpen(HiveBoxNames.preferences);
+
   /// Get reduced motion preference
   static Future<bool> getReduceMotion() {
     final value = _preferencesBox().get(_reduceMotionKey) as bool?;
@@ -86,6 +89,15 @@ class SettingsService {
   static Future<void> setAnimationSpeed(double value) {
     final sanitized = value.clamp(0.5, 2.0).toDouble();
     return _preferencesBox().put(_animationSpeedKey, sanitized);
+  }
+
+  /// Whether haptic feedback is currently enabled.
+  static bool get isHapticFeedbackEnabled {
+    if (!_isPreferencesBoxOpen()) {
+      return true;
+    }
+
+    return (_preferencesBox().get(_hapticFeedbackKey) as bool?) ?? true;
   }
 
   /// Get haptic feedback preference
