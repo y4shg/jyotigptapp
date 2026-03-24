@@ -36,7 +36,11 @@ class WebFile {
 
   int lengthSync() => throw _unsupported();
 
-  Directory get parent => Directory(path);
+  Directory get parent {
+    final lastSep = path.lastIndexOf('/');
+    if (lastSep <= 0) return Directory('/');
+    return Directory(path.substring(0, lastSep));
+  }
 
   Future<Uint8List> readAsBytes() =>
       Future<Uint8List>.error(_unsupported());
