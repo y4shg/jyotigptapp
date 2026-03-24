@@ -95,10 +95,15 @@ class ClipboardAttachmentService {
       // Write image data to file
       final file = WebFile(filePath);
       await file.writeAsBytes(imageData);
-      int fileSize = 0;
+      int fileSize = imageData.length;
       try {
         fileSize = await file.length();
-      } catch (_) {}
+      } catch (error) {
+        debugPrint(
+          'ClipboardAttachmentService: Failed to read file size, '
+          'falling back to imageData.length: $error',
+        );
+      }
 
       return LocalAttachment(
         file: file,
