@@ -34,7 +34,7 @@ void main() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         unawaited(
           TeXRenderingServer.start().catchError((e, st) {
-            DebugLogger.warning(
+            DebugLogger.error(
               'tex-init-failed',
               scope: 'app/startup',
               error: e,
