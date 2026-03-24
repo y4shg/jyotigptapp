@@ -2,6 +2,7 @@
 ///
 /// These classes exist so code can compile on the web when `dart:io` is
 /// unavailable. All blocking I/O operations throw [UnsupportedError].
+library;  // ← add this line
 import 'dart:typed_data';
 
 /// Web-only stub for platform detection.

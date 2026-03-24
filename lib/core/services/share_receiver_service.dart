@@ -89,7 +89,7 @@ final shareReceiverInitializerProvider = Provider<void>((ref) {
           maybeProcessPending();
         }
       } catch (e) {
-        DebugLogger.log(
+        DebugLogger.error(
           'ShareReceiver: failed to get initial shared media: $e',
           scope: 'share',
         );
@@ -105,7 +105,7 @@ final shareReceiverInitializerProvider = Provider<void>((ref) {
           maybeProcessPending();
         }
       } catch (e) {
-        DebugLogger.log(
+        DebugLogger.error(
           'ShareReceiver: failed to parse shared media: $e',
           scope: 'share',
         );
@@ -139,7 +139,7 @@ SharedPayload _toPayload(dynamic media) {
       // Some plugins use `text`
       text = (media as dynamic).text as String?;
     } catch (e, stackTrace) {
-      DebugLogger.log(
+      DebugLogger.error(
         'ShareReceiver: failed to read text field',
         scope: 'share',
         error: e,
@@ -156,7 +156,7 @@ SharedPayload _toPayload(dynamic media) {
           final p = (att as dynamic).path as String?;
           if (p != null && p.isNotEmpty) filePaths.add(p);
         } catch (e, stackTrace) {
-          DebugLogger.log(
+          DebugLogger.error(
             'ShareReceiver: invalid attachment entry',
             scope: 'share',
             error: e,
@@ -167,7 +167,7 @@ SharedPayload _toPayload(dynamic media) {
       }
     }
   } catch (e, stackTrace) {
-    DebugLogger.log(
+    DebugLogger.error(
       'ShareReceiver: failed to read attachments',
       scope: 'share',
       error: e,
@@ -182,7 +182,7 @@ SharedPayload _toPayload(dynamic media) {
             final p = (att as dynamic).path as String?;
             if (p != null && p.isNotEmpty) filePaths.add(p);
           } catch (e, stackTrace) {
-            DebugLogger.log(
+            DebugLogger.error(
               'ShareReceiver: invalid files entry',
               scope: 'share',
               error: e,
@@ -193,7 +193,7 @@ SharedPayload _toPayload(dynamic media) {
         }
       }
     } catch (e, stackTrace) {
-      DebugLogger.log(
+      DebugLogger.error(
         'ShareReceiver: failed to read files',
         scope: 'share',
         error: e,
@@ -221,7 +221,15 @@ Future<void> _processPayload(Ref ref, SharedPayload payload) async {
             int fileSize = 0;
             try {
               fileSize = await file.length();
-            } catch (_) {}
+            } catch (e, stackTrace) {
+              DebugLogger.error(
+                'ShareReceiver: failed to read shared file size',
+                scope: 'share',
+                error: e,
+                stackTrace: stackTrace,
+                data: {'file': filePath},
+              );
+            }
             attachments.add(
               LocalAttachment(
                 file: file,
@@ -243,7 +251,7 @@ Future<void> _processPayload(Ref ref, SharedPayload payload) async {
                     conversationId: activeConv?.id,
                     filePath: attachment.file.path,
                     fileName: attachment.displayName,
-                    fileSize: await attachment.file.length(),
+                    fileSize: attachment.sizeInBytes,
                   );
             } catch (e, stackTrace) {
               DebugLogger.error(
