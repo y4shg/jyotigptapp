@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tex/flutter_tex.dart';
+import 'features/navigation/views/splash_launcher_page.dart';
 import 'core/widgets/error_boundary.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -29,7 +30,19 @@ void main() {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
-      await TeXRenderingServer.start();
+      // Do not block startup on TeX; schedule it post-frame and ignore failures.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(
+          TeXRenderingServer.start().catchError((e, st) {
+            DebugLogger.warning(
+              'tex-init-failed',
+              scope: 'app/startup',
+              error: e,
+              stackTrace: st,
+            );
+          }),
+        );
+      });
 
       // Global error handlers
       FlutterError.onError = (FlutterErrorDetails details) {
@@ -246,8 +259,8 @@ class _JyotiGPTappAppState extends ConsumerState<JyotiGPTappApp> {
               );
             });
           }
-          final safeChild =
-              child ?? const SizedBox.shrink();
+          // Show a tiny spinner instead of a blank frame on the very first build.
+          final safeChild = child ?? const SplashLauncherPage();
 
           // On iOS, AdaptiveApp creates CupertinoApp which
           // doesn't propagate Material ThemeExtensions.
